@@ -58,9 +58,12 @@ namespace ApiTrackers
                 new SqlAttribut("id", "id", typeSql.tInt),
                 new SqlAttribut(sqlTableTrackers, "idTracker", "idTracker", typeSql.tInt),
                 new SqlAttribut(sqlTableSamples, "idSample", "idSample", typeSql.tInt),
+                new SqlAttribut("idPiste","idPiste", typeSql.tInt),
                 new SqlAttribut("frequence","frequence", typeSql.tDouble),
                 new SqlAttribut("effect","effect", typeSql.tInt),
                 new SqlAttribut("volume","volume", typeSql.tDouble),
+                new SqlAttribut("positionKey","positionKey", typeSql.tVarchar),
+                new SqlAttribut("position","position", typeSql.tDouble),
             }));
 
             sqlTables.Add(sqlTableRightMusics=new SqlTable("RightMusics", new List<SqlAttribut> {

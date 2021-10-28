@@ -1,4 +1,6 @@
 ﻿
+using ApiCells.Services;
+using ApiSamples.Services;
 using ApiTrackers.Services;
 
 namespace ApiTrackers
@@ -10,6 +12,7 @@ namespace ApiTrackers
         public BDD_TrackerService bddTracker;
         public BDD_UserService bddUser;
         public BDD_SampleService bddSamples;
+        public BDD_CellService bddCells;
 
         public MainService()
         {
@@ -17,6 +20,7 @@ namespace ApiTrackers
             bddTracker = new BDD_TrackerService(this);
             bddUser = new BDD_UserService(this);
             bddSamples = new BDD_SampleService(this);
+            bddCells = new BDD_CellService(this);
         }
     }
 }

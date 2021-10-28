@@ -156,5 +156,17 @@ namespace ApiTrackers
             if (value == null) return 0;
             return Convert.ToInt32(value);
         }
+        internal static double convertToDouble(object value)
+        {
+            if (value == null) return 1;
+            try
+            {
+                return Convert.ToDouble(value);
+            }
+            catch
+            {
+                return 1;
+            }
+        }
     }
 }

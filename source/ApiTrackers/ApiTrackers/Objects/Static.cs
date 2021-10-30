@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ApiTrackers.Exceptions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -129,43 +130,38 @@ namespace ApiTrackers
                 + "}";
             return json;
         }
-        public class JsonAttribute
-        {
-            public string name;
-            public object value;
-        }
-        public class JsonRespRootMessage
-        {
-            public int status;
-            public string message;
-            public object response;
-        }
-        public class JsonRespRoot
-        {
-            public int status;
-            public object response;
-        }
 
         internal static string convertToString(object value)
         {
-            if (value == null) return "";
-            return value.ToString();
+            try { 
+                if (value == null) return "";
+                //if (value.GetType().Name == "String")
+                return value.ToString();
+            }
+            catch { }
+            throw new OwnException();
         }
         internal static int convertToInteger(object value)
         {
-            if (value == null) return 0;
-            return Convert.ToInt32(value);
+            try { 
+                if (value == null) throw new OwnException();
+                return Convert.ToInt32(value);
+            }
+            catch
+            {
+                throw new OwnException();
+            }
         }
         internal static double convertToDouble(object value)
         {
-            if (value == null) return 1;
+            if (value == null) throw new OwnException();
             try
             {
                 return Convert.ToDouble(value);
             }
             catch
             {
-                return 1;
+                throw new OwnException();
             }
         }
     }

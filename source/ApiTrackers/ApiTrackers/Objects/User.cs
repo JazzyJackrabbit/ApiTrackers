@@ -27,6 +27,7 @@ namespace ApiTrackers.Objects
         [JsonProperty(PropertyName = "recoverMails")]
         public int recoverMails = 1; // 0=false  1=true
 
+
         public User(string _pseudo, string _mail, string _passwordHash)
         {
             setUser(_pseudo, _mail, _passwordHash);

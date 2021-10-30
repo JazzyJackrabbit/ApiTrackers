@@ -1,4 +1,5 @@
-﻿using ApiTrackers.Objects;
+﻿using ApiTrackers.Exceptions;
+using ApiTrackers.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace ApiTrackers.Services
         }
         public User selectUser(int _id)
         {
-            SqlRow row = bdd.select(bdd.sqlTableUsers, true, _id);
+            SqlRow row = bdd.selectOnlyRow(bdd.sqlTableUsers, true, _id);
             User user = convertSQLToUser(row);
             return user;
         }
@@ -62,12 +63,7 @@ namespace ApiTrackers.Services
             int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableUsers);
 
-            //definition data
-            bdd.setAttribute(sqlRowToInsert, "recoverMails", _userModel.recoverMails);
-            bdd.setAttribute(sqlRowToInsert, "mail", _userModel.mail);
-            bdd.setAttribute(sqlRowToInsert, "passwordHash", _userModel.passwordHash);
-            bdd.setAttribute(sqlRowToInsert, "pseudo", _userModel.pseudo);
-           
+            sqlRowToInsert = convertUserToSQL(sqlRowToInsert, _userModel);
             bdd.setAttribute(sqlRowToInsert, "id", id);
 
             if (bdd.insert(bdd.sqlTableUsers, sqlRowToInsert))
@@ -81,28 +77,23 @@ namespace ApiTrackers.Services
         }
         public User updateUser(User _userModel, int id)
         {
-            SqlRow sqlRowToUpdate = bdd.select(bdd.sqlTableUsers, true, id);
+            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.sqlTableUsers, true, id);
             if (sqlRowToUpdate == null) return null;
 
-            //definition data
-            bdd.setAttribute(sqlRowToUpdate, "recoverMails", _userModel.recoverMails);
-            bdd.setAttribute(sqlRowToUpdate, "mail", _userModel.mail);
-            bdd.setAttribute(sqlRowToUpdate, "passwordHash", _userModel.passwordHash);
-            bdd.setAttribute(sqlRowToUpdate, "pseudo", _userModel.pseudo);
-
+            sqlRowToUpdate = convertUserToSQL(sqlRowToUpdate, _userModel);
             bdd.setAttribute(sqlRowToUpdate, "id", id);
 
             bool checkUpdateCorrectly = bdd.update(bdd.sqlTableUsers, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
 
-            SqlRow sqlRowCheck = bdd.select(bdd.sqlTableUsers, true, id);
+            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.sqlTableUsers, true, id);
             User userUpdated = convertSQLToUser(sqlRowCheck);
 
             return userUpdated;
         }
         public User deleteUser(int _id)
         {
-            SqlRow rowToDelete = bdd.select(bdd.sqlTableUsers, true, _id);
+            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.sqlTableUsers, true, _id);
             User user = convertSQLToUser(rowToDelete);
             if (user != null)
                 bdd.delete(bdd.sqlTableUsers, _id); //delete now
@@ -132,9 +123,24 @@ namespace ApiTrackers.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("BDDService - convertSQLToTracker - err: " + ex);
-                return null;
+                Console.WriteLine("convertSQLTo<<Object>> - err: " + ex);
+                throw new OwnException();
             }
+        }
+        private SqlRow convertUserToSQL(SqlRow _sqlDest, User _user)
+        {
+            try { 
+                bdd.setAttribute(_sqlDest, "recoverMails", _user.recoverMails);
+                bdd.setAttribute(_sqlDest, "mail", _user.mail);
+                bdd.setAttribute(_sqlDest, "passwordHash", _user.passwordHash);
+                bdd.setAttribute(_sqlDest, "pseudo", _user.pseudo);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("convert<<Object>>ToSQL - err: " + ex);
+                throw new OwnException();
+            }
+            return _sqlDest;
         }
 
         #endregion

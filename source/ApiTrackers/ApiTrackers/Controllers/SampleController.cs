@@ -4,11 +4,12 @@ using ApiTrackers.Objects;
 using ApiTrackers;
 using ApiTrackers.Exceptions;
 using ApiTrackers.DTO_ApiParameters;
+using System.Collections.Generic;
 
 namespace ApiSamples.Controllers
 {
     [ApiController]
-    [Route("Sample")]
+    [Route("Samples")]
     public class SampleController : ControllerBase
     {
         public MainService mainService; //
@@ -18,60 +19,111 @@ namespace ApiSamples.Controllers
             mainService = _mainService;
         }
 
+        [HttpGet]
+        [Route("")]
+        public ContentResult GetSamples()
+        {
+            try { 
+                List<Sample> samples = mainService.bddSamples.selectSamples();
+
+                if (samples != null)
+                {
+                    return new ContentResult()
+                    {
+                        StatusCode = 200,
+                        Content = Static.jsonResponseArray(200, typeof(Sample), samples)
+                    };
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        StatusCode = 404,
+                        Content = Static.jsonResponseError(404, "error getting samples")
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ContentResult()
+                {
+                    StatusCode = 500,
+                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                };
+            }
+        }
 
         [HttpGet]
         [Route("{id}")]
         public ContentResult GetSample(int id)
         {
-            Sample sample = mainService.bddSamples.selectSample(id);
+            try { 
+                Sample sample = mainService.bddSamples.selectSample(id);
 
-            if (sample != null)
+                if (sample != null)
+                    return new ContentResult()
+                    {
+                        StatusCode = 200,
+                        Content = Static.jsonResponseObject(200, typeof(Sample), sample)
+                    };
+                else
+                    return new ContentResult()
+                    {
+                        StatusCode = 404,
+                        Content = Static.jsonResponseError(404, "unfounded sample")
+                    };
+            }
+            catch (Exception ex)
+            {
                 return new ContentResult()
                 {
-                    StatusCode = 200,
-                    Content = Static.jsonResponseObject(200, typeof(Sample), sample)
+                    StatusCode = 500,
+                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
-            else
-                return new ContentResult()
-                {
-                    StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "unfounded sample")
-                };
-
+            }
         }
 
-        [Route("Create")]
+        [Route("")]
         [HttpPost]
         public ContentResult CreateSample([FromBody] SampleCreateDTO dto)
         {
-            Sample sampleToInsert = dto.toSample();
+            try { 
+                Sample sampleToInsert = dto.toSample();
 
-            Sample sampleResp = mainService.bddSamples.insertSample(sampleToInsert);
+                Sample sampleResp = mainService.bddSamples.insertSample(sampleToInsert);
 
-            if (sampleResp != null)
+                if (sampleResp != null)
+                    return new ContentResult()
+                    {
+                        StatusCode = 200,
+                        Content = Static.jsonResponseObject(200, typeof(Sample), sampleResp)
+                    };
+                else
+                    return new ContentResult()
+                    {
+                        StatusCode = 404,
+                        Content = Static.jsonResponseError(404, "error creation sample")
+                    };
+            }
+            catch (Exception ex)
+            {
                 return new ContentResult()
                 {
-                    StatusCode = 200,
-                    Content = Static.jsonResponseObject(200, typeof(Sample), sampleResp)
+                    StatusCode = 500,
+                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
-            else
-                return new ContentResult()
-                {
-                    StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "error creation sample")
-                };
-
+            }
         }
 
-        [HttpPost]
-        [Route("Delete")]
+        [HttpDelete]
+        [Route("")]
         public ContentResult DeleteSample([FromBody] SampleDeleteDTO dto)
         {
             try
             {
-                int idUser = 8;
+                int idUser = 1;
                 //TODO AUTHENT TOKEN
-
+                    
                 Sample sample = mainService.bddSamples.deleteSample(dto.id, idUser);
 
                 if (sample != null)
@@ -104,26 +156,38 @@ namespace ApiSamples.Controllers
                 };
             }
         }
-        [HttpPost]
-        [Route("Update")]
+        [HttpPut]
+        [Route("")]
         public ContentResult UpdateSample([FromBody] SampleUpdateDTO dto)
         {
-            Sample sampleToInsert = dto.toSample();
-             Sample sampleResp = mainService.bddSamples.updateSample(sampleToInsert, dto.id);
+            try { 
+                Sample sampleToInsert = dto.toSample();
+                 Sample sampleResp = mainService.bddSamples.updateSample(sampleToInsert, dto.id);
 
-            if (sampleResp != null)
+                if (sampleResp != null)
+                    return new ContentResult()
+                    {
+                        StatusCode = 200,
+                        Content = Static.jsonResponseObject(200, typeof(Sample), sampleResp)
+                    };
+                else
+                    return new ContentResult()
+                    {
+                        StatusCode = 404,
+                        Content = Static.jsonResponseError(404, "error modifying sample")
+                    };
+            }
+            catch (Exception ex)
+            {
                 return new ContentResult()
                 {
-                    StatusCode = 200,
-                    Content = Static.jsonResponseObject(200, typeof(Sample), sampleResp)
+                    StatusCode = 500,
+                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
-            else
-                return new ContentResult()
-                {
-                    StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "error modifying sample")
-                };
+            }
         }
 
+
     }
+
 }

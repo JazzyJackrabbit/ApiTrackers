@@ -40,7 +40,7 @@ namespace ApiSamples.Services
         }
         public Sample selectSample(int _id)
         {
-            SqlRow row = bdd.select(bdd.sqlTableSamples, true, _id);
+            SqlRow row = bdd.selectOnlyRow(bdd.sqlTableSamples, true, _id);
             Sample sample = convertSQLToSample(row);
             return sample;
         }
@@ -53,12 +53,7 @@ namespace ApiSamples.Services
             int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableSamples);
 
-            //definition data
-            bdd.setAttribute(sqlRowToInsert, "idLogo", _sampleModel.idLogo);
-            bdd.setAttribute(sqlRowToInsert, "linkSample", _sampleModel.linkSample);
-            bdd.setAttribute(sqlRowToInsert, "color", _sampleModel.color);
-            bdd.setAttribute(sqlRowToInsert, "name", _sampleModel.name);
-
+            sqlRowToInsert = convertSampleToSQL(sqlRowToInsert, _sampleModel);
             bdd.setAttribute(sqlRowToInsert, "id", id);
 
             if (_canControlSamples == 1)
@@ -77,23 +72,18 @@ namespace ApiSamples.Services
             //TODO //TODO //TODO
             int _canControlSamples = 1;
 
-            SqlRow sqlRowToUpdate = bdd.select(bdd.sqlTableSamples, true, id);
+            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.sqlTableSamples, true, id);
             if (sqlRowToUpdate == null) return null;
 
             if (_canControlSamples != 1) return null;
 
-            //definition data
-            bdd.setAttribute(sqlRowToUpdate, "idLogo", _sampleModel.idLogo);
-            bdd.setAttribute(sqlRowToUpdate, "linkSample", _sampleModel.linkSample);
-            bdd.setAttribute(sqlRowToUpdate, "color", _sampleModel.color);
-            bdd.setAttribute(sqlRowToUpdate, "name", _sampleModel.name);
-
+            sqlRowToUpdate = convertSampleToSQL(sqlRowToUpdate, _sampleModel);
             bdd.setAttribute(sqlRowToUpdate, "id", id);
 
             bool checkUpdateCorrectly = bdd.update(bdd.sqlTableSamples, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
 
-            SqlRow sqlRowCheck = bdd.select(bdd.sqlTableSamples, true, id);
+            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.sqlTableSamples, true, id);
             Sample sampleUpdated = convertSQLToSample(sqlRowCheck);
 
             return sampleUpdated;
@@ -103,7 +93,7 @@ namespace ApiSamples.Services
             //TODO //TODO //TODO
             int _canControlSamples = 1;
 
-            SqlRow rowToDelete = bdd.select(bdd.sqlTableSamples, true, _id);
+            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.sqlTableSamples, true, _id);
             Sample sample = convertSQLToSample(rowToDelete);
             
             if (_canControlSamples == 1)
@@ -140,9 +130,25 @@ namespace ApiSamples.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("BDDService - convertSQLToSample - err: " + ex);
+                Console.WriteLine("convertSQLTo<<Object>> - err: " + ex);
                 return null;
             }
+        }
+        private SqlRow convertSampleToSQL(SqlRow _sqlDest, Sample _smpl)
+        {
+            try
+            {
+                bdd.setAttribute(_sqlDest, "idLogo", _smpl.idLogo);
+                bdd.setAttribute(_sqlDest, "linkSample", _smpl.linkSample);
+                bdd.setAttribute(_sqlDest, "color", _smpl.color);
+                bdd.setAttribute(_sqlDest, "name", _smpl.name);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("convert<<Object>>ToSQL - err: " + ex);
+                throw new OwnException();
+            }
+            return _sqlDest;
         }
 
         #endregion

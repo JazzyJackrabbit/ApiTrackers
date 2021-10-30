@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+
 using System.Threading.Tasks;
 
 namespace ApiTrackers.Objects
 {
     public class Surround
     {
+
+        [JsonIgnore]
         public int id;
+
+        [JsonIgnore]
         public List<Output> outputs = new List<Output>();  
 
         public Surround setStereo()
@@ -20,7 +26,11 @@ namespace ApiTrackers.Objects
     }
     public class Output
     {
+
+        [JsonIgnore]
         public int id;
+
+        [JsonIgnore]
         public double volume;
 
         public Output(double _volume)

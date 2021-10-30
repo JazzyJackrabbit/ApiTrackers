@@ -150,10 +150,16 @@ namespace ApiTrackers
                 string values = "( ";
                 foreach (SqlAttribut sqlAttr in _sqlRow.attributs)
                 {
-                    if(sqlAttr.bdd_insert == true) { 
-                        columns += "`" + sqlAttr.name + "`,";
-                        values += " '" + sqlAttr.value + "',";
+
+                    string value = "" + sqlAttr.value;
+                    if (double.TryParse(value, out var parsedNumber))
+                    {
+                        value = value.Replace(',', '.');
                     }
+               
+                    columns += "`" + sqlAttr.name + "`,";
+                    values += " '" + value + "',";
+                    
                 }
                 columns = Static.removeLastCharacter(columns);
                 values = Static.removeLastCharacter(values);
@@ -172,6 +178,36 @@ namespace ApiTrackers
         }
         public List<SqlRow> select(SqlTable _sqlTable, bool _allColumns)
         {
+            return select(_sqlTable, _allColumns, false, 0, "", false, 0, "");
+        }
+        public SqlRow selectOnlyRow(SqlTable _sqlTable, bool _allColumns, int _id)
+        {
+            return selectOnlyRow(_sqlTable, _allColumns, _id, "id");
+        }
+        public SqlRow selectOnlyRow(SqlTable _sqlTable, bool _allColumns, int _filterAttr, string filterAttr_nametable)
+        {
+            return selectOnlyRow(_sqlTable, _allColumns, true, _filterAttr, filterAttr_nametable, false, 0, "");
+        }
+        public SqlRow selectOnlyRow(SqlTable _sqlTable, bool _allColumns, int _filterAttr1, string filterAttr1_nametable, int _filterAttr2, string filterAttr2_nametable)
+        {
+            return selectOnlyRow(_sqlTable, _allColumns, true, _filterAttr1, filterAttr1_nametable, true, _filterAttr2, filterAttr2_nametable);
+        }
+        public SqlRow selectOnlyRow(SqlTable _sqlTable, bool _allColumns, bool hasFilter1, int _filterAttr1, string filterAttr1_nametable, bool hasFilter2, int _filterAttr2, string filterAttr2_nametable)
+        {
+            List<SqlRow> sqlRows = select(_sqlTable, _allColumns, hasFilter1, _filterAttr1, filterAttr1_nametable, hasFilter2, _filterAttr2, filterAttr2_nametable);
+            if (sqlRows != null && sqlRows.Count > 0) return sqlRows[0];
+            return null;
+        }
+        public List<SqlRow> select(SqlTable _sqlTable, bool _allColumns, int _filterAttr, string filterAttr_nametable)
+        {
+            return select(_sqlTable, _allColumns, true, _filterAttr, filterAttr_nametable, false, 0, "");
+        }
+        public List<SqlRow> select(SqlTable _sqlTable, bool _allColumns, int _filterAttr1, string filterAttr1_nametable, int _filterAttr2, string filterAttr2_nametable)
+        {
+            return select(_sqlTable, _allColumns, true, _filterAttr1, filterAttr1_nametable, true, _filterAttr2, filterAttr2_nametable);
+        }
+        public List<SqlRow> select(SqlTable _sqlTable, bool _allColumns, bool _hasFilter1, int _filterAttr1, string filterAttr1_nametable, bool _hasFilter2, int _filterAttr2, string filterAttr2_nametable)
+        {
             try
             {
                 string sqlTableName = _sqlTable.tableName;
@@ -185,62 +221,57 @@ namespace ApiTrackers
                 {
                     foreach (SqlAttribut sqlAttr in sqlAttributsModel)
                     {
-                        if (sqlAttr.bdd_select == true)
-                            columns += "`" + sqlAttr.name + "`,";
+                         columns += "`" + sqlAttr.name + "`,";
                     }
                     columns = Static.removeLastCharacter(columns);
                 }
                 columns += " ";
                 string commandString = "SELECT " + columns + " FROM " + sqlTableName + " ";
-
-                List<SqlRow> sqlRow = executeReader(commandString, _sqlTable);
-
-                return sqlRow;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public SqlRow select(SqlTable _sqlTable, bool _allColumns, int _id)
-        {
-            try
-            {
-                string sqlTableName = _sqlTable.tableName;
-                List<SqlAttribut> sqlAttributsModel = _sqlTable.attributesModels;
-
-                string columns = " ";
-
-                if (_allColumns)
-                    columns += "*";
-                else
+                if (_hasFilter1)
                 {
-                    foreach (SqlAttribut sqlAttr in sqlAttributsModel)
-                    {
-                        if (sqlAttr.bdd_select == true)
-                            columns += "`" + sqlAttr.name + "`,";
-                    }
-                    columns = Static.removeLastCharacter(columns);
+                    commandString += "WHERE " + filterAttr1_nametable + " = " + _filterAttr1 + " ";
+                    if (_hasFilter2)
+                        commandString += " AND " + filterAttr2_nametable + " = " + _filterAttr2 + " ";
                 }
-                columns += " ";
-                string commandString = "SELECT " + columns + " FROM " + sqlTableName + " WHERE id = " + _id + " ";
 
                 List<SqlRow> rows = executeReader(commandString, _sqlTable);
-                if (rows != null && rows.Count > 0) return rows[0];
-                return null;
+
+                return rows;
             }
             catch
             {
                 return null;
             }
-
         }
+
         public bool delete(SqlTable _sqlTable, int _id)
+        {
+            return delete(_sqlTable, _id, "id");
+        }
+        public bool delete(SqlTable _sqlTable, int _whereValue1, string _whereTableName1)
+        {
+            return delete(_sqlTable, true, _whereValue1, _whereTableName1, false, 0, "");
+        }
+        public bool delete(SqlTable _sqlTable, int _whereValue1, string _whereTableName1, int _whereValue2, string _whereTableName2)
+        {
+            return delete(_sqlTable, true, _whereValue1, _whereTableName1, true, _whereValue2, _whereTableName2);
+        }
+        public bool delete(SqlTable _sqlTable, 
+            bool _hasWhereValue1, int _whereValue1, string _whereTableName1, 
+            bool _hasWhereValue2, int _whereValue2, string _whereTableName2)
         {
             try
             {
                 string sqlTableName = _sqlTable.tableName;
-                string commandString = "DELETE FROM " + sqlTableName + " WHERE id = "+ _id +" ";
+
+                string commandString = "DELETE FROM " + sqlTableName;
+
+                if (_hasWhereValue1)
+                {
+                    commandString += " WHERE " + _whereTableName1 + " = " + _whereValue1 + " ";
+                    if (_hasWhereValue2)
+                        commandString += " AND " + _whereTableName2 + " = " + _whereValue2 + " ";
+                }
 
                 executeNonQuery(commandString);
 
@@ -251,8 +282,20 @@ namespace ApiTrackers
                 return false;
             }
         }
-
         public bool update(SqlTable _sqlTable, SqlRow _sqlRow, int _id)
+        {
+            return update(_sqlTable, _sqlRow, _id, "id");
+        }
+        public bool update(SqlTable _sqlTable, SqlRow _sqlRow, int _filterAttr1, string _filterAttr1_nametable)
+        {
+            return update(_sqlTable, _sqlRow, true, _filterAttr1, _filterAttr1_nametable, false, 0, "");
+        }
+
+        public bool update(SqlTable _sqlTable, SqlRow _sqlRow, int _filterAttr1, string _filterAttr1_nametable, int _filterAttr2, string _filterAttr2_nametable)
+        {
+            return update(_sqlTable, _sqlRow, true, _filterAttr1, _filterAttr1_nametable, true, _filterAttr2, _filterAttr2_nametable);
+        }
+        public bool update(SqlTable _sqlTable, SqlRow _sqlRow, bool _hasfilter1, int _filterAttr1, string _filterAttr1_nametable, bool _hasfilter2, int _filterAttr2, string _filterAttr2_nametable)
         {
             try
             {
@@ -264,14 +307,23 @@ namespace ApiTrackers
 
                 foreach (SqlAttribut sqlAttr in _sqlRow.attributs)
                 {
-                    if (sqlAttr.bdd_update == true)
+                    
+                    string value = "" + sqlAttr.value;
+                    if (double.TryParse(value, out var parsedNumber))
                     {
-                        commandString += ""+sqlAttr.name + " = '" + sqlAttr.value + "',";
+                        value = value.Replace(',', '.');
                     }
+                    commandString += ""+sqlAttr.name + " = '" + value + "',";
+                    
                 }
                 commandString = Static.removeLastCharacter(commandString);
 
-                commandString += " WHERE id = '" + _id + "'";
+                if (_hasfilter1)
+                {
+                    commandString += " WHERE " + _filterAttr1_nametable + " = '" + _filterAttr1 + "'";
+                    if(_hasfilter2)
+                        commandString += " AND " + _filterAttr2_nametable + " = '" + _filterAttr2 + "'";
+                }
 
                 executeNonQuery(commandString);
                 return true;
@@ -284,7 +336,7 @@ namespace ApiTrackers
 
         public int selectLastID(SqlTable _sqlTable)
         {
-            List<SqlRow> sqlRows = select(_sqlTable, true);
+            List<SqlRow> sqlRows = select(_sqlTable, false);
             int id = -1;
             if (sqlRows == null) return id;
             if (sqlRows.Count > 0)
@@ -342,34 +394,12 @@ namespace ApiTrackers
             public SqlAttribut(SqlTable _foreignKeyReference, string _jsonName, string _name, typeSql _typ, object _defaultValue)
             { jsonName = _jsonName; name = _name; typ = _typ; value = _defaultValue; foreignKeyReference = _foreignKeyReference; }
 
-            public SqlAttribut bddSelect(bool _bdd_select)
-            { bdd_select = _bdd_select; return this; }
-            public SqlAttribut bddInsert(bool _bdd_insert)
-            { bdd_insert = _bdd_insert; return this; }
-            public SqlAttribut bddUpdate(bool _bdd_update)
-            { bdd_update = _bdd_update; return this; }
-            public SqlAttribut bddDelete(bool _bdd_delete)
-            { bdd_delete = _bdd_delete; return this; }
-            public SqlAttribut bddSelectFalse()
-            { bdd_select = false; return this; }
-            public SqlAttribut bddInsertFalse()
-            { bdd_insert = false; return this; }
-            public SqlAttribut bddUpdateFalse()
-            { bdd_update = false; return this; }
-            public SqlAttribut bddDeleteFalse()
-            { bdd_delete = false; return this; }
-
 
             public string name;
             public object value = null;
             public typeSql typ;
             public string jsonName = null;
             public SqlTable foreignKeyReference = null;
-
-            public bool bdd_select = true;
-            public bool bdd_insert = true;
-            public bool bdd_update = true;
-            public bool bdd_delete = true;
 
         }
 

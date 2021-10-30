@@ -29,45 +29,39 @@ namespace ApiCells.Services
 
         #region ******** public methods ********
 
-        public List<Note> selectCells()
+        public List<Note> selectCells(int _idTracker)
         {
-            List<SqlRow> rows = bdd.select(bdd.sqlTableCells, true);
+            List<SqlRow> rows = bdd.select(bdd.sqlTableCells, false, _idTracker, "idTracker");
             List<Note> cells = new List<Note>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
                 cells.Add(convertSQLToCell(row));
             return cells;
         }
-        public Note selectCell(int _id)
+        public Note selectCell(int _id, int _idTracker)
         {
-            SqlRow row = bdd.select(bdd.sqlTableCells, true, _id);
+            SqlRow row = bdd.selectOnlyRow(bdd.sqlTableCells, false, _id, "id", _idTracker, "idTracker");
             Note cell = convertSQLToCell(row);
             return cell;
         }
 
         public Note insertCell(Note _cellModel)
-        {
-            //TODO //TODO //TODO
-
+        { 
             int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableCells);
 
-            //definition data
-            bdd.setAttribute(sqlRowToInsert, "idTracker", _cellModel.parentTracker); //todo convert here
-            bdd.setAttribute(sqlRowToInsert, "idSample", _cellModel.sample); //todo convert here
-            bdd.setAttribute(sqlRowToInsert, "idPiste", _cellModel.piste);
-            bdd.setAttribute(sqlRowToInsert, "position", _cellModel.position);
-            bdd.setAttribute(sqlRowToInsert, "volume", _cellModel.volume);
-            bdd.setAttribute(sqlRowToInsert, "effect", _cellModel.effect);
-            bdd.setAttribute(sqlRowToInsert, "frequence", _cellModel.freqSample);
-            bdd.setAttribute(sqlRowToInsert, "positionKey", _cellModel.key);
+            sqlRowToInsert = convertCellToSQL(sqlRowToInsert, _cellModel);
 
             bdd.setAttribute(sqlRowToInsert, "id", id);
+            
+            int idTracker =  Static.convertToInteger(
+                bdd.getAttribute(sqlRowToInsert, "idTracker").value
+                );
 
             if (bdd.insert(bdd.sqlTableCells, sqlRowToInsert))
             {
                 int id2 = getLastId();
-                Note checkCell = selectCell(id2);
+                Note checkCell = selectCell(id2, idTracker);
                 if (checkCell != null)
                     return checkCell;
             }
@@ -76,27 +70,24 @@ namespace ApiCells.Services
 
         public Note updateCell(Note _cellModel, int id)
         {
-            //TODO //TODO //TODO
+            //TODO
 
-            SqlRow sqlRowToUpdate = bdd.select(bdd.sqlTableCells, true, id);
+            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.sqlTableCells, false, id);
             if (sqlRowToUpdate == null) return null;
 
-            //definition data
-            bdd.setAttribute(sqlRowToUpdate, "idTracker", _cellModel.parentTracker); //todo convert here
-            bdd.setAttribute(sqlRowToUpdate, "idSample", _cellModel.sample); //todo convert here
-            bdd.setAttribute(sqlRowToUpdate, "idPiste", _cellModel.piste);
-            bdd.setAttribute(sqlRowToUpdate, "position", _cellModel.position);
-            bdd.setAttribute(sqlRowToUpdate, "volume", _cellModel.volume);
-            bdd.setAttribute(sqlRowToUpdate, "effect", _cellModel.effect);
-            bdd.setAttribute(sqlRowToUpdate, "frequence", _cellModel.freqSample);
-            bdd.setAttribute(sqlRowToUpdate, "positionKey", _cellModel.key);
-
             bdd.setAttribute(sqlRowToUpdate, "id", id);
+            
+            sqlRowToUpdate = convertCellToSQL(sqlRowToUpdate, _cellModel);
+
+            // TODO REWORK 
+
+           /* Note cellToUpdate = convertSQLToCell(sqlRowToUpdate);
+            SqlRow sqlRowToUpdate_2 = convertCellToSQL(sqlRowToUpdate, cellToUpdate);*/
 
             bool checkUpdateCorrectly = bdd.update(bdd.sqlTableCells, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
 
-            SqlRow sqlRowCheck = bdd.select(bdd.sqlTableCells, true, id);
+            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.sqlTableCells, false, id);
             Note cellUpdated = convertSQLToCell(sqlRowCheck);
 
             return cellUpdated;
@@ -105,7 +96,7 @@ namespace ApiCells.Services
         {
             //TODO //TODO //TODO
 
-            SqlRow rowToDelete = bdd.select(bdd.sqlTableCells, true, _id);
+            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.sqlTableCells, false, _id);
             Note cell = convertSQLToCell(rowToDelete);
             
             if (cell != null)   
@@ -138,7 +129,7 @@ namespace ApiCells.Services
                 cell.piste = new Piste();
                 cell.piste.name = "unknown";
                 cell.parentTracker = new Tracker();
-                cell.piste.name = "unknown";
+                cell.parentTracker.trackerContent.pistes = new List<Piste>();
 
                 cell.id = Static.convertToInteger(bdd.getAttribute(_sqlrow, "id").value);
                 cell.parentTracker.idTracker = Static.convertToInteger(bdd.getAttribute(_sqlrow, "idTracker").value);   //todo
@@ -154,9 +145,30 @@ namespace ApiCells.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("BDDService - convertSQLToCell - err: " + ex);
+                Console.WriteLine("convertSQLTo<<Object>> - err: " + ex);
                 return null;
             }
+        }
+        private SqlRow convertCellToSQL(SqlRow _sqlDest, Note _smpl)
+        {
+            try
+            {
+                //definition data
+                bdd.setAttribute(_sqlDest, "idTracker", _smpl.parentTracker.idTracker); //todo convert here
+                bdd.setAttribute(_sqlDest, "idSample", _smpl.sample.id); //todo convert here
+                bdd.setAttribute(_sqlDest, "idPiste", _smpl.piste.id);
+                bdd.setAttribute(_sqlDest, "position", _smpl.position);
+                bdd.setAttribute(_sqlDest, "volume", _smpl.volume);
+                bdd.setAttribute(_sqlDest, "effect", _smpl.effect.id);
+                bdd.setAttribute(_sqlDest, "frequence", _smpl.freqSample);
+                bdd.setAttribute(_sqlDest, "positionKey", _smpl.key);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("convert<<Object>>ToSQL - err: " + ex);
+                throw new OwnException();
+            }
+            return _sqlDest;
         }
 
         #endregion

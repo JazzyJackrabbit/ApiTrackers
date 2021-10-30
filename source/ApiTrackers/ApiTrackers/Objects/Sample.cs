@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,18 @@ namespace ApiTrackers.Objects
 {
     public class Sample
     {
+        [JsonProperty(PropertyName = "id")]
+        public int id;
+        [JsonProperty(PropertyName = "name")]
+        public string name;
+        [JsonProperty(PropertyName = "linkSample")]
+        public string linkSample;
+
+        [JsonProperty(PropertyName = "color")]
+        public string color;
+        [JsonProperty(PropertyName = "idLogo")]
+        public int idLogo;
+
         public Sample()
         {
             id = 0;
@@ -31,12 +44,5 @@ namespace ApiTrackers.Objects
             color = _color;
             idLogo = _idLogo;
         }
-
-        public int id;
-        public string name;
-        public string linkSample;
-
-        public string color;
-        public int idLogo;
     }
 }

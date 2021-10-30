@@ -38,26 +38,18 @@ namespace ApiTrackers.Services
         }
         public Tracker selectTracker(int _id)
         {
-            SqlRow row = bdd.select(bdd.sqlTableTrackers, true, _id);
+            SqlRow row = bdd.selectOnlyRow(bdd.sqlTableTrackers, true, _id);
             Tracker tracker = convertSQLToTracker(row);
             return tracker;
         }
 
         public Tracker insertTracker(Tracker _trackerModel)
         {
-            //TODO //TODO //TODO
-    
-
+            
             int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableTrackers);
 
-            //definition data
-            bdd.setAttribute(sqlRowToInsert, "bpm", _trackerModel.trackerContent.BPM);
-            bdd.setAttribute(sqlRowToInsert, "artist", _trackerModel.trackerMetadata.artist);
-            bdd.setAttribute(sqlRowToInsert, "title", _trackerModel.trackerMetadata.title);
-            bdd.setAttribute(sqlRowToInsert, "comments", _trackerModel.trackerMetadata.comments);
-            bdd.setAttribute(sqlRowToInsert, "copyrightInformation", _trackerModel.trackerMetadata.copyrightInformation);
-
+            sqlRowToInsert = convertTrackerToSQL(sqlRowToInsert, _trackerModel);
             bdd.setAttribute(sqlRowToInsert, "id", id);
             bdd.setAttribute(sqlRowToInsert, "idUser", _trackerModel.idUser);
 
@@ -71,40 +63,50 @@ namespace ApiTrackers.Services
             return null;
         }
 
-        public Tracker updateTracker(Tracker _trackerModel, int id)
+        public Tracker updateTracker(Tracker _trackerModel, int id, int _idUser)
         {
-            SqlRow sqlRowToUpdate = bdd.select(bdd.sqlTableTrackers, true, id);
+            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.sqlTableTrackers, true, id);
             if (sqlRowToUpdate == null) return null;
 
-            //definition data
-            bdd.setAttribute(sqlRowToUpdate, "bpm", _trackerModel.trackerContent.BPM);
-            bdd.setAttribute(sqlRowToUpdate, "artist", _trackerModel.trackerMetadata.artist);
-            bdd.setAttribute(sqlRowToUpdate, "title", _trackerModel.trackerMetadata.title);
-            bdd.setAttribute(sqlRowToUpdate, "comments", _trackerModel.trackerMetadata.comments);
-            bdd.setAttribute(sqlRowToUpdate, "copyrightInformation", _trackerModel.trackerMetadata.copyrightInformation);
+            sqlRowToUpdate = convertTrackerToSQL(sqlRowToUpdate, _trackerModel);
 
-            bdd.setAttribute(sqlRowToUpdate, "id", id);
+            Tracker _trackerToUpdate = convertSQLToTracker(sqlRowToUpdate);
+
+            bdd.setAttribute(sqlRowToUpdate, "id", id); 
+            bdd.setAttribute(sqlRowToUpdate, "idUser", _trackerToUpdate.idUser);
+
+            if (_trackerToUpdate == null) 
+                throw new Exception();
+
+            if (_trackerToUpdate.idUser != _idUser)
+                //if ()  //TODO rightMusics users
+                throw new ForbiddenException();
 
             bool checkUpdateCorrectly = bdd.update(bdd.sqlTableTrackers, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
 
-            SqlRow sqlRowCheck = bdd.select(bdd.sqlTableTrackers, true, id);
+            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.sqlTableTrackers, true, id);
             Tracker trackerUpdated = convertSQLToTracker(sqlRowCheck);
 
             return trackerUpdated;
         }
         public Tracker deleteTracker(int _id, int _idUser)
         {
-            SqlRow rowToDelete = bdd.select(bdd.sqlTableTrackers, true, _id);
+            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.sqlTableTrackers, true, _id);
             Tracker tracker = convertSQLToTracker(rowToDelete);
 
-            if (tracker != null)
-                if (tracker.idUser == _idUser)
-                {
-                    bdd.delete(bdd.sqlTableTrackers, _id); //delete now
-                }
-                else
-                    throw new ForbiddenException(); 
+            if (tracker == null)
+                throw new Exception();
+
+            // ? >> bdd.setAttribute(rowToDelete, "id", _id);
+            bdd.setAttribute(rowToDelete, "idUser", tracker.idUser);
+
+            if (tracker.idUser == _idUser)
+            {
+                bdd.delete(bdd.sqlTableTrackers, _id); //delete now
+            }
+            else
+                throw new ForbiddenException();
             return tracker;
         }
 
@@ -133,11 +135,28 @@ namespace ApiTrackers.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("BDDService - convertSQLToTracker - err: " + ex);
+                Console.WriteLine("convertSQLTo<<Object>> - err: " + ex);
                 return null;
             }
         }
-
+        private SqlRow convertTrackerToSQL(SqlRow _sqlDest, Tracker _tracker)
+        {
+            try { 
+                //definition data
+                bdd.setAttribute(_sqlDest, "bpm", _tracker.trackerContent.BPM);
+                bdd.setAttribute(_sqlDest, "artist", _tracker.trackerMetadata.artist);
+                bdd.setAttribute(_sqlDest, "title", _tracker.trackerMetadata.title);
+                bdd.setAttribute(_sqlDest, "comments", _tracker.trackerMetadata.comments);
+                bdd.setAttribute(_sqlDest, "copyrightInformation", _tracker.trackerMetadata.copyrightInformation);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("convert<<Object>>ToSQL - err: " + ex);
+                throw new OwnException();
+            }
+            return _sqlDest;
+        }
         #endregion
+
     }
 }

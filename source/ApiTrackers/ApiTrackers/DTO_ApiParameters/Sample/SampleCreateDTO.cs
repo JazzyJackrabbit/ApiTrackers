@@ -13,6 +13,8 @@ namespace ApiTrackers.DTO_ApiParameters
         public int idLogo { get; set; }
         public string name { get; set; }
 
+        public int idUser { get; set; }
+
         public Sample toSample()
         {
             var sampleToInsert = new Sample();

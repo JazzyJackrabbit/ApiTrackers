@@ -127,14 +127,32 @@ namespace ApiTrackers.Controllers
 
         [HttpDelete]
         [Route("")]
-        public ContentResult DeleteTracker([FromBody] TrackerDeleteDTO dto)
+        public ContentResult DeleteTracker([FromQuery] int id = -1, [FromQuery] int idUser = -1)
         {
-            try {
-
-                int idUser = dto.idUser;
+            try
+            {
                 //TODO AUTHENT TOKEN
 
-                Tracker tracker = mainService.bddTracker.deleteTracker(dto.id, idUser);
+                if (idUser < 0 && id < 0) return new ContentResult()
+                {
+                    StatusCode = 404,
+                    Content = Static.jsonResponseError(404, "id and idUser attributes missing.")
+                };
+
+                if (idUser < 0) return new ContentResult()
+                {
+                    StatusCode = 404,
+                    Content = Static.jsonResponseError(404, "idUser attribute missing.")
+                };
+
+
+                if (id < 0) return new ContentResult()
+                {
+                    StatusCode = 404,
+                    Content = Static.jsonResponseError(404, "id attribute missing.")
+                };
+
+                Tracker tracker = mainService.bddTracker.deleteTracker(id, idUser);
 
                 if (tracker != null)
                     return new ContentResult()

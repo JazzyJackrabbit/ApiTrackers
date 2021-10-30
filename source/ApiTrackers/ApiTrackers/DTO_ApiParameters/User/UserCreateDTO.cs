@@ -10,6 +10,8 @@ namespace ApiTrackers.DTO_ApiParameters
         public int wantReceiveMails { get; set; }
         public int isEnable { get; set; }
 
+        public int idUser { get; set; }
+
         public User toUser()
         {
             User user = new User(pseudo, mail, passwordHash);

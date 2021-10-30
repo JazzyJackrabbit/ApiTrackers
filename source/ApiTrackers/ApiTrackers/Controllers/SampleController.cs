@@ -117,14 +117,20 @@ namespace ApiSamples.Controllers
 
         [HttpDelete]
         [Route("")]
-        public ContentResult DeleteSample([FromBody] SampleDeleteDTO dto)
+        public ContentResult DeleteSample([FromQuery] int id = -1)
         {
             try
             {
                 int idUser = 1;
                 //TODO AUTHENT TOKEN
-                    
-                Sample sample = mainService.bddSamples.deleteSample(dto.id, idUser);
+
+                if (id < 0) return new ContentResult()
+                {
+                    StatusCode = 404,
+                    Content = Static.jsonResponseError(404, "id attribute missing.")
+                };
+
+                Sample sample = mainService.bddSamples.deleteSample(id, idUser);
 
                 if (sample != null)
                     return new ContentResult()

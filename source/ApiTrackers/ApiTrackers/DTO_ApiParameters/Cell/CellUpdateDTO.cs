@@ -14,6 +14,8 @@ namespace ApiCells.Controllers
         public double position { get; set; }
         public string key { get; set; }
 
+        public int idUser { get; set; }
+
         public Note toCell()
         {
             var cellToInsert = new Note();

@@ -123,23 +123,29 @@ namespace ApiTrackers.Controllers
         }
         [HttpDelete]
         [Route("")]
-        public ContentResult DeleteUser([FromBody] UserDeleteDTO dto)
+        public ContentResult DeleteUser([FromQuery] int id = -1)
         {
-            try { 
-            User user = mainService.bddUser.deleteUser(dto.id);
-
-            if (user != null)
-                return new ContentResult()
-                {
-                    StatusCode = 200,
-                    Content = Static.jsonResponseObject(200, typeof(User), user)
-                };
-            else
-                return new ContentResult()
+            try {
+                if (id < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "unfounded user")
+                    Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
+
+                User user = mainService.bddUser.deleteUser(id);
+
+                if (user != null)
+                    return new ContentResult()
+                    {
+                        StatusCode = 200,
+                        Content = Static.jsonResponseObject(200, typeof(User), user)
+                    };
+                else
+                    return new ContentResult()
+                    {
+                        StatusCode = 404,
+                        Content = Static.jsonResponseError(404, "unfounded user")
+                    };
             }
             catch (Exception ex)
             {

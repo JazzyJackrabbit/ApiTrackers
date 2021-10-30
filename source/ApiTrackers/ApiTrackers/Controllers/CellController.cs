@@ -112,7 +112,7 @@ namespace ApiCells.Controllers
 
         [HttpDelete]
         [Route("")]
-        public ContentResult DeleteCell([FromBody] CellDeleteDTO dto)
+        public ContentResult DeleteCell([FromQuery] int id = -1)
         {
             //TODO idTracker
 
@@ -121,7 +121,13 @@ namespace ApiCells.Controllers
                 int idUser = 1;
                 //TODO AUTHENT TOKEN
 
-                Note cell = mainService.bddCells.deleteCell(dto.id, idUser);
+                if(id<0) return new ContentResult()
+                {
+                    StatusCode = 404,
+                    Content = Static.jsonResponseError(404, "id attribute missing.")
+                };
+
+                Note cell = mainService.bddCells.deleteCell(id, idUser);
 
                 int idTracker = cell.parentTracker.idTracker;
 

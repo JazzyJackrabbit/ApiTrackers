@@ -19,7 +19,7 @@ namespace ApiTrackers.Services
             main = _main;
             bdd = _main.bdd;
 
-            lastId = main.bdd.selectLastID(bdd.sqlTableUsers);
+            lastId = bdd.sqlTableUsers.selectLastID(_main);
         }
 
         public int getLastId(){return lastId;}
@@ -47,7 +47,7 @@ namespace ApiTrackers.Services
             int id = getNextId();//selectLastIDPlusOne(bdd.sqlTableUsers);
             SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableUsers);
 
-            bdd.setAttribute(sqlRowToInsert, "id", id);
+            sqlRowToInsert.setAttribute("id", id);
 
             if (bdd.insert(bdd.sqlTableUsers, sqlRowToInsert))
             {
@@ -64,7 +64,7 @@ namespace ApiTrackers.Services
             SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableUsers);
 
             sqlRowToInsert = convertUserToSQL(sqlRowToInsert, _userModel);
-            bdd.setAttribute(sqlRowToInsert, "id", id);
+            sqlRowToInsert.setAttribute("id", id);
 
             if (bdd.insert(bdd.sqlTableUsers, sqlRowToInsert))
             {
@@ -81,7 +81,7 @@ namespace ApiTrackers.Services
             if (sqlRowToUpdate == null) return null;
 
             sqlRowToUpdate = convertUserToSQL(sqlRowToUpdate, _userModel);
-            bdd.setAttribute(sqlRowToUpdate, "id", id);
+            sqlRowToUpdate.setAttribute("id", id);
 
             bool checkUpdateCorrectly = bdd.update(bdd.sqlTableUsers, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
@@ -105,19 +105,20 @@ namespace ApiTrackers.Services
         #region ******** convertions ******** 
         private User convertSQLToUser(SqlRow _sqlrow)
         {
+            if (_sqlrow == null) return null;
             try
             {
                 User user = new User();
-                user.id = Static.convertToInteger(bdd.getAttribute(_sqlrow, "id").value);
+                user.id = Static.convertToInteger(_sqlrow.getAttribute( "id").value);
 
                 //test id
-                string idTest = Static.convertToString(bdd.getAttribute(_sqlrow, "id").value);
+                string idTest = Static.convertToString(_sqlrow.getAttribute( "id").value);
                 if (!int.TryParse(idTest, out _)) return null;
 
-                user.mail = Static.convertToString(bdd.getAttribute(_sqlrow, "mail").value);
-                user.passwordHash = Static.convertToString(bdd.getAttribute(_sqlrow, "passwordHash").value);
-                user.pseudo = Static.convertToString(bdd.getAttribute(_sqlrow, "pseudo").value);
-                user.recoverMails = Static.convertToInteger(bdd.getAttribute(_sqlrow, "recoverMails").value);
+                user.mail = Static.convertToString(_sqlrow.getAttribute( "mail").value);
+                user.passwordHash = Static.convertToString(_sqlrow.getAttribute( "passwordHash").value);
+                user.pseudo = Static.convertToString(_sqlrow.getAttribute( "pseudo").value);
+                user.recoverMails = Static.convertToInteger(_sqlrow.getAttribute( "recoverMails").value);
                     
                 return user;
             }
@@ -129,11 +130,15 @@ namespace ApiTrackers.Services
         }
         private SqlRow convertUserToSQL(SqlRow _sqlDest, User _user)
         {
-            try { 
-                bdd.setAttribute(_sqlDest, "recoverMails", _user.recoverMails);
-                bdd.setAttribute(_sqlDest, "mail", _user.mail);
-                bdd.setAttribute(_sqlDest, "passwordHash", _user.passwordHash);
-                bdd.setAttribute(_sqlDest, "pseudo", _user.pseudo);
+            try
+            {
+                if (_sqlDest == null) return null;
+                if (_user == null) return null;
+
+                _sqlDest.setAttribute( "recoverMails", _user.recoverMails);
+                _sqlDest.setAttribute( "mail", _user.mail);
+                _sqlDest.setAttribute( "passwordHash", _user.passwordHash);
+                _sqlDest.setAttribute( "pseudo", _user.pseudo);
             }
             catch (Exception ex)
             {

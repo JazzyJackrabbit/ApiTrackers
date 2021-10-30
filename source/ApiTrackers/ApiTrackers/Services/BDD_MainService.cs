@@ -334,49 +334,7 @@ namespace ApiTrackers
             }
         }
 
-        public int selectLastID(SqlTable _sqlTable)
-        {
-            List<SqlRow> sqlRows = select(_sqlTable, false);
-            int id = -1;
-            if (sqlRows == null) return id;
-            if (sqlRows.Count > 0)
-                foreach (SqlRow sqlRow in sqlRows)
-                {
-                    SqlAttribut attrId = getAttribute(sqlRow, "id");
-                    if (attrId != null)
-                        id = Math.Max(id, (int)attrId.value);
-                }
-            else
-                return 0;
-            return id;
-        }
-
-        public int selectLastIDPlusOne(SqlTable _sqlTable)
-        {
-            return selectLastID(_sqlTable) + 1;
-        }
-
-        public SqlAttribut getAttribute(SqlRow _sqlRow, string _attributeName)
-        {
-            if (_sqlRow == null) return new SqlAttribut("", null);
-            foreach (SqlAttribut sqlAttr in _sqlRow.attributs)
-                if (sqlAttr.name == _attributeName)
-                    if (sqlAttr == null)
-                        return new SqlAttribut("", null);
-                    else
-                        return sqlAttr;
-            return new SqlAttribut("", null);
-        }
-        public bool setAttribute(SqlRow _sqlRow, string _attributeName, object _value)
-        {
-            if (_sqlRow == null) return false;
-            foreach (SqlAttribut sqlAttr in _sqlRow.attributs)
-                if (sqlAttr.name == _attributeName) { 
-                    sqlAttr.value = _value;
-                    return true;
-                }
-            return false;
-        }
+      
 
         #region ******** classes *********
         public class SqlAttribut
@@ -412,6 +370,29 @@ namespace ApiTrackers
             }
 
             public List<SqlAttribut> attributs = new List<SqlAttribut>();
+
+            public SqlAttribut getAttribute(string _attributeName)
+            {
+                //if (_sqlRow == null) return new SqlAttribut("", null);
+                foreach (SqlAttribut sqlAttr in attributs)
+                    if (sqlAttr.name == _attributeName)
+                        if (sqlAttr == null)
+                            return new SqlAttribut("", null);
+                        else
+                            return sqlAttr;
+                return new SqlAttribut("", null);
+            }
+            public bool setAttribute(string _attributeName, object _value)
+            {
+                //if (_sqlRow == null) return false;
+                foreach (SqlAttribut sqlAttr in attributs)
+                    if (sqlAttr.name == _attributeName)
+                    {
+                        sqlAttr.value = _value;
+                        return true;
+                    }
+                return false;
+            }
         }
 
         public class SqlTable
@@ -425,6 +406,30 @@ namespace ApiTrackers
             public string tableName;
             public List<SqlRow> rows = new List<SqlRow>();
             public List<SqlAttribut> attributesModels = new List<SqlAttribut>();
+
+
+            public int selectLastID(MainService _mainService)
+            {
+                List<SqlRow> sqlRows = _mainService.bdd.select(this, false);
+                int id = -1;
+                if (sqlRows == null) return id;
+                if (sqlRows.Count > 0)
+                    foreach (SqlRow sqlRow in sqlRows)
+                    {
+                        SqlAttribut attrId = sqlRow.getAttribute("id");
+                        if (attrId != null)
+                            id = Math.Max(id, (int)attrId.value);
+                    }
+                else
+                    return 0;
+                return id;
+            }
+
+            public int selectLastIDPlusOne(MainService _mainService)
+            {
+                return this.selectLastID(_mainService) + 1;
+            }
+
         }
         public enum typeSql
         {

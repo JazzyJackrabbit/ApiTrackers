@@ -21,27 +21,48 @@ namespace ApiCells.Controllers
 
         [HttpGet]
         [Route("")]
-        public ContentResult GetCells([FromQuery] int idTracker = -1)
+        public ContentResult GetCells([FromQuery] int idTracker = -1, [FromQuery] int id = -1)
         {
             //TODO idTracker
-            try { 
-                List<Note> cells = mainService.bddCells.selectCells(idTracker);
+            try {
 
-                if (cells != null)
+                if (id < 0)
                 {
-                    return new ContentResult()
+                    List<Note> cells = mainService.bddCells.selectCells(idTracker);
+
+                    if (cells != null)
                     {
-                        StatusCode = 200,
-                        Content = Static.jsonResponseArray(200, typeof(Note), cells)
-                    };
+                        return new ContentResult()
+                        {
+                            StatusCode = 200,
+                            Content = Static.jsonResponseArray(200, typeof(Note), cells)
+                        };
+                    }
+                    else
+                    {
+                        return new ContentResult()
+                        {
+                            StatusCode = 404,
+                            Content = Static.jsonResponseError(404, "error getting cells")
+                        };
+                    }
                 }
                 else
                 {
-                    return new ContentResult()
-                    {
-                        StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error getting cells")
-                    };
+                    Note cell = mainService.bddCells.selectCell(id, idTracker);
+
+                    if (cell != null)
+                        return new ContentResult()
+                        {
+                            StatusCode = 200,
+                            Content = Static.jsonResponseObject(200, typeof(Note), cell)
+                        };
+                    else
+                        return new ContentResult()
+                        {
+                            StatusCode = 404,
+                            Content = Static.jsonResponseError(404, "unfounded cell")
+                        };
                 }
             }
             catch (Exception ex)
@@ -54,36 +75,6 @@ namespace ApiCells.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public ContentResult GetCell(int id = -1, [FromQuery] int idTracker = -1)
-        {
-            //TODO idTracker
-            try { 
-                Note cell = mainService.bddCells.selectCell(id, idTracker);
-
-                if (cell != null)
-                    return new ContentResult()
-                    {
-                        StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Note), cell)
-                    };
-                else
-                    return new ContentResult()
-                    {
-                        StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "unfounded cell")
-                    };
-            }
-            catch (Exception ex)
-            {
-                return new ContentResult()
-                {
-                    StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
-                };
-            }
-        }
         [Route("")]
         [HttpPost]
         public ContentResult CreateCell([FromBody] CellCreateDTO dto)

@@ -21,7 +21,7 @@ namespace ApiCells.Services
             main = _main;
             bdd = _main.bdd;
 
-            lastId = main.bdd.selectLastID(bdd.sqlTableCells);
+            lastId = bdd.sqlTableCells.selectLastID(_main);
         }
 
         public int getLastId() { return lastId; }
@@ -52,10 +52,10 @@ namespace ApiCells.Services
 
             sqlRowToInsert = convertCellToSQL(sqlRowToInsert, _cellModel);
 
-            bdd.setAttribute(sqlRowToInsert, "id", id);
+            sqlRowToInsert.setAttribute("id", id);
             
             int idTracker =  Static.convertToInteger(
-                bdd.getAttribute(sqlRowToInsert, "idTracker").value
+                sqlRowToInsert.getAttribute("idTracker").value
                 );
 
             if (bdd.insert(bdd.sqlTableCells, sqlRowToInsert))
@@ -75,7 +75,7 @@ namespace ApiCells.Services
             SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.sqlTableCells, false, id);
             if (sqlRowToUpdate == null) return null;
 
-            bdd.setAttribute(sqlRowToUpdate, "id", id);
+            sqlRowToUpdate.setAttribute("id", id);
             
             sqlRowToUpdate = convertCellToSQL(sqlRowToUpdate, _cellModel);
 
@@ -112,14 +112,16 @@ namespace ApiCells.Services
 
         private Note convertSQLToCell(SqlRow _sqlrow)
         {
+            if (_sqlrow == null) return null;
             try
             {
+
                 Note cell = new Note();
 
-                cell.id = Static.convertToInteger(bdd.getAttribute(_sqlrow, "id").value);
+                cell.id = Static.convertToInteger(_sqlrow.getAttribute("id").value);
 
                 //test id
-                string idTest = Static.convertToString(bdd.getAttribute(_sqlrow, "id").value);
+                string idTest = Static.convertToString(_sqlrow.getAttribute("id").value);
                 if (!int.TryParse(idTest, out _)) return null;
 
                 cell.effect = new Effect();
@@ -131,15 +133,15 @@ namespace ApiCells.Services
                 cell.parentTracker = new Tracker();
                 cell.parentTracker.trackerContent.pistes = new List<Piste>();
 
-                cell.id = Static.convertToInteger(bdd.getAttribute(_sqlrow, "id").value);
-                cell.parentTracker.idTracker = Static.convertToInteger(bdd.getAttribute(_sqlrow, "idTracker").value);   //todo
-                cell.sample.id = Static.convertToInteger(bdd.getAttribute(_sqlrow, "idSample").value);    //todo           
-                cell.piste.id = Static.convertToInteger(bdd.getAttribute(_sqlrow, "idPiste").value);         //todo
-                cell.position = Static.convertToInteger(bdd.getAttribute(_sqlrow, "position").value);
-                cell.volume = Static.convertToDouble(bdd.getAttribute(_sqlrow, "volume").value);
-                cell.effect.id = Static.convertToInteger(bdd.getAttribute(_sqlrow, "effect").value);         //todo
-                cell.freqSample = Static.convertToDouble(bdd.getAttribute(_sqlrow, "frequence").value);
-                cell.key = Static.convertToString(bdd.getAttribute(_sqlrow, "positionKey").value);
+                cell.id = Static.convertToInteger(_sqlrow.getAttribute("id").value);
+                cell.parentTracker.idTracker = Static.convertToInteger(_sqlrow.getAttribute("idTracker").value);   //todo
+                cell.sample.id = Static.convertToInteger(_sqlrow.getAttribute("idSample").value);    //todo           
+                cell.piste.id = Static.convertToInteger(_sqlrow.getAttribute("idPiste").value);         //todo
+                cell.position = Static.convertToInteger(_sqlrow.getAttribute("position").value);
+                cell.volume = Static.convertToDouble(_sqlrow.getAttribute("volume").value);
+                cell.effect.id = Static.convertToInteger(_sqlrow.getAttribute("effect").value);         //todo
+                cell.freqSample = Static.convertToDouble(_sqlrow.getAttribute("frequence").value);
+                cell.key = Static.convertToString(_sqlrow.getAttribute("positionKey").value);
 
                 return cell;
             }
@@ -149,19 +151,22 @@ namespace ApiCells.Services
                 return null;
             }
         }
-        private SqlRow convertCellToSQL(SqlRow _sqlDest, Note _smpl)
+        private SqlRow convertCellToSQL(SqlRow _sqlDest, Note _cell)
         {
             try
             {
+                if (_sqlDest == null) return null;
+                if (_cell == null) return null;
+
                 //definition data
-                bdd.setAttribute(_sqlDest, "idTracker", _smpl.parentTracker.idTracker); //todo convert here
-                bdd.setAttribute(_sqlDest, "idSample", _smpl.sample.id); //todo convert here
-                bdd.setAttribute(_sqlDest, "idPiste", _smpl.piste.id);
-                bdd.setAttribute(_sqlDest, "position", _smpl.position);
-                bdd.setAttribute(_sqlDest, "volume", _smpl.volume);
-                bdd.setAttribute(_sqlDest, "effect", _smpl.effect.id);
-                bdd.setAttribute(_sqlDest, "frequence", _smpl.freqSample);
-                bdd.setAttribute(_sqlDest, "positionKey", _smpl.key);
+                _sqlDest.setAttribute("idTracker", _cell.parentTracker.idTracker); //todo convert here
+                _sqlDest.setAttribute("idSample", _cell.sample.id); //todo convert here
+                _sqlDest.setAttribute("idPiste", _cell.piste.id);
+                _sqlDest.setAttribute("position", _cell.position);
+                _sqlDest.setAttribute("volume", _cell.volume);
+                _sqlDest.setAttribute("effect", _cell.effect.id);
+                _sqlDest.setAttribute("frequence", _cell.freqSample);
+                _sqlDest.setAttribute("positionKey", _cell.key);
             }
             catch (Exception ex)
             {

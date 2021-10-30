@@ -21,7 +21,7 @@ namespace ApiSamples.Services
             main = _main;
             bdd = _main.bdd;
 
-            lastId = main.bdd.selectLastID(bdd.sqlTableSamples);
+            lastId = bdd.sqlTableSamples.selectLastID(_main);
         }
 
         public int getLastId() { return lastId; }
@@ -54,7 +54,7 @@ namespace ApiSamples.Services
             SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableSamples);
 
             sqlRowToInsert = convertSampleToSQL(sqlRowToInsert, _sampleModel);
-            bdd.setAttribute(sqlRowToInsert, "id", id);
+            sqlRowToInsert.setAttribute("id", id);
 
             if (_canControlSamples == 1)
                 if (bdd.insert(bdd.sqlTableSamples, sqlRowToInsert))
@@ -78,7 +78,7 @@ namespace ApiSamples.Services
             if (_canControlSamples != 1) return null;
 
             sqlRowToUpdate = convertSampleToSQL(sqlRowToUpdate, _sampleModel);
-            bdd.setAttribute(sqlRowToUpdate, "id", id);
+            sqlRowToUpdate.setAttribute("id", id);
 
             bool checkUpdateCorrectly = bdd.update(bdd.sqlTableSamples, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
@@ -112,20 +112,21 @@ namespace ApiSamples.Services
 
         private Sample convertSQLToSample(SqlRow _sqlrow)
         {
+            if (_sqlrow == null) return null;
             try
             {
                 Sample sample = new Sample();
-                sample.id = Static.convertToInteger(bdd.getAttribute(_sqlrow, "id").value);
+                sample.id = Static.convertToInteger(_sqlrow.getAttribute("id").value);
 
                 //test id
-                string idTest = Static.convertToString(bdd.getAttribute(_sqlrow, "id").value);
+                string idTest = Static.convertToString(_sqlrow.getAttribute("id").value);
                 if (!int.TryParse(idTest, out _)) return null;
 
-                sample.id = Static.convertToInteger(bdd.getAttribute(_sqlrow, "id").value);
-                sample.color = Static.convertToString(bdd.getAttribute(_sqlrow, "color").value);
-                sample.idLogo = Static.convertToInteger(bdd.getAttribute(_sqlrow, "idLogo").value);
-                sample.linkSample = Static.convertToString(bdd.getAttribute(_sqlrow, "linkSample").value);
-                sample.name = Static.convertToString(bdd.getAttribute(_sqlrow, "name").value);
+                sample.id = Static.convertToInteger(_sqlrow.getAttribute("id").value);
+                sample.color = Static.convertToString(_sqlrow.getAttribute("color").value);
+                sample.idLogo = Static.convertToInteger(_sqlrow.getAttribute("idLogo").value);
+                sample.linkSample = Static.convertToString(_sqlrow.getAttribute("linkSample").value);
+                sample.name = Static.convertToString(_sqlrow.getAttribute("name").value);
                 return sample;
             }
             catch (Exception ex)
@@ -138,10 +139,13 @@ namespace ApiSamples.Services
         {
             try
             {
-                bdd.setAttribute(_sqlDest, "idLogo", _smpl.idLogo);
-                bdd.setAttribute(_sqlDest, "linkSample", _smpl.linkSample);
-                bdd.setAttribute(_sqlDest, "color", _smpl.color);
-                bdd.setAttribute(_sqlDest, "name", _smpl.name);
+                if (_sqlDest == null) return null;
+                if (_smpl == null) return null;
+
+                _sqlDest.setAttribute("idLogo", _smpl.idLogo);
+                _sqlDest.setAttribute("linkSample", _smpl.linkSample);
+                _sqlDest.setAttribute("color", _smpl.color);
+                _sqlDest.setAttribute("name", _smpl.name);
             }
             catch (Exception ex)
             {

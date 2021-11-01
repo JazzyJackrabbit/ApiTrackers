@@ -6,16 +6,30 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using ApiTrackers.Objects;
+using Newtonsoft.Json.Linq;
 
 namespace ApiTrackers
 {
     public class Tracker
     {
+        public Tracker()
+        {
+            trackerContent = new TrackerContent();
+            trackerMetadata = new TrackerMetadata();
+
+            trackerContent.pistes = new List<Piste>();
+
+            trackerContent.pistes.Add(new Piste());
+            trackerContent.pistes[0].id = 1;
+            trackerContent.pistes[0].name = "default";
+            trackerContent.pistes[0].color = "#FFFFFF";
+            trackerContent.pistes[0].notes = new List<Note>();
+        }
 
         [JsonProperty(PropertyName = Static.JsonClassIndicator + "metadata")]
-        public TrackerMetadata trackerMetadata = new TrackerMetadata();
+        public TrackerMetadata trackerMetadata;
         [JsonProperty(PropertyName = Static.JsonClassIndicator + "content")]
-        public TrackerContent trackerContent = new TrackerContent();
+        public TrackerContent trackerContent;
         [JsonProperty(PropertyName = "id")]
         public int idTracker;
         [JsonProperty(PropertyName = "idUser")]
@@ -36,7 +50,22 @@ namespace ApiTrackers
     {
         [JsonProperty(PropertyName = "bpm")]
         public string BPM;
-        [JsonProperty(PropertyName = "cells")]
-        public IList<Piste> pistes;
+        [JsonIgnore]
+        public IList<Piste> pistes { get; set; }
+
+
+        [JsonProperty(PropertyName = "notes", NullValueHandling = NullValueHandling.Include)]
+        public JArray noteArray { 
+            get {
+                string json = Static.ArrayToJsonString_Converter((new Note()).GetType(), pistes[0].notes);
+                return (JArray)JsonConvert.DeserializeObject(json);
+            } set {
+                string json = Static.ArrayToJsonString_Converter((new Note()).GetType(), pistes[0].notes);
+                noteArray = (JArray)JsonConvert.DeserializeObject(json);
+                /*JArray ja = new JArray();
+                foreach (Piste p in pistes)
+                    ja.Add(p);*/
+            }
+        }
     }
 }

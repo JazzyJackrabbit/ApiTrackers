@@ -24,17 +24,37 @@ namespace ApiTrackers
             return str.Substring(1);
         }
 
-
+        public static string ObjectToJsonString_Converter(Type _type, object _obj)
+        {
+            IContractResolver resolver = new DefaultContractResolver();
+            string json = resolver.StringifyJsonObjectProperties(_type, _obj);
+            json.Replace("\n", "");
+            json.Replace("  ", " ");
+            return json;
+        }
+        public static string ArrayToJsonString_Converter(Type _type, object _obj)
+        {
+            IContractResolver resolver = new DefaultContractResolver();
+            string json = resolver.StringifyJsonArrayProperties(_type, _obj);
+            json.Replace("\n", "");
+            json.Replace("  ", " ");
+            return json;
+        }
+        
         internal static string jsonResponseObject(int _status, Type _type, object _obj)
         {
             IContractResolver resolver = new DefaultContractResolver();
             string json = resolver.StringifyJsonObjectProperties(_type, _obj);
+            json.Replace("\n", "");
+            json.Replace("  ", " ");
             return Static.jsonResp(_status, json);
         }
         internal static string jsonResponseArray(int _status, Type _type, object _obj)
         {
             IContractResolver resolver = new DefaultContractResolver();
             string json = resolver.StringifyJsonArrayProperties(_type, _obj);
+            json.Replace("\n", "");
+            json.Replace("  ", " ");
             return Static.jsonResp(_status, json);
         }
 
@@ -52,7 +72,7 @@ namespace ApiTrackers
             return result;
         }
 
-        public static string StringifyJsonArrayProperties(this IContractResolver resolver, Type typeChild, object list_objs)
+        private static string StringifyJsonArrayProperties(this IContractResolver resolver, Type typeChild, object list_objs)
         {
             List<object> listObjsConvrt = castListObject(list_objs);
             string arrayJson = "[ ";
@@ -94,7 +114,10 @@ namespace ApiTrackers
                 }
                 else
                 {
-                    stringifyProperties += ("\"" + name + "\":\"" + value + "\"");
+                    if( type.Name.ToUpper()=="TRACKERCONTENT" && name.ToUpper() == "NOTES" )
+                        stringifyProperties += ("\"" + name + "\":" + value + "");
+                    else
+                        stringifyProperties += ("\"" + name + "\":\"" + value + "\"");
                     stringifyProperties += ",";
                 }
      

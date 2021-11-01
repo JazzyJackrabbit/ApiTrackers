@@ -1,4 +1,5 @@
 ﻿using ApiTrackers.Exceptions;
+using ApiTrackers.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,6 +133,12 @@ namespace ApiTrackers.Services
                 tracker.trackerMetadata.title = Static.convertToString(_sqlrow.getAttribute("title").value);
                 tracker.trackerMetadata.comments = Static.convertToString(_sqlrow.getAttribute("comments").value);
                 tracker.trackerMetadata.copyrightInformation = Static.convertToString(_sqlrow.getAttribute("copyrightInformation").value);
+
+                // get pistes
+                List<Piste> pistes = new List<Piste>();
+                List<Note> notes = main.bddCells.selectCells(tracker.idTracker);
+                tracker.trackerContent.pistes[0].notes = notes;
+
                 return tracker;
             }
             catch (Exception ex)

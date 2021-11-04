@@ -4,22 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static ApiTrackers.BDD_MainService;
+using static ApiTrackers.DB_MainService;
 
 namespace ApiTrackers.Services
 {
-    public class BDD_UserService
+    public class DB_UserService
     {
-        BDD_MainService bdd;
+        DB_MainService bdd;
         MainService main;
         private int lastId = -1;
 
-        public BDD_UserService(MainService _main)
+        public DB_UserService(MainService _main)
         {
             main = _main;
             bdd = _main.bdd;
 
-            lastId = bdd.sqlTableUsers.selectLastID(_main);
+            lastId = bdd.db_config.sqlTableUsers.selectLastID(_main);
         }
 
         public int getLastId(){return lastId;}
@@ -29,7 +29,7 @@ namespace ApiTrackers.Services
 
         public List<User> selectUsers()
         {
-            List<SqlRow> rows = bdd.select(bdd.sqlTableUsers, true);
+            List<SqlRow> rows = bdd.select(bdd.db_config.sqlTableUsers, true);
             List<User> users = new List<User>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
@@ -38,18 +38,18 @@ namespace ApiTrackers.Services
         }
         public User selectUser(int _id)
         {
-            SqlRow row = bdd.selectOnlyRow(bdd.sqlTableUsers, true, _id);
+            SqlRow row = bdd.selectOnlyRow(bdd.db_config.sqlTableUsers, true, _id);
             User user = convertSQLToUser(row);
             return user;
         }
         public User insertUser()
         {
             int id = getNextId();//selectLastIDPlusOne(bdd.sqlTableUsers);
-            SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableUsers);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableUsers);
 
             sqlRowToInsert.setAttribute("id", id);
 
-            if (bdd.insert(bdd.sqlTableUsers, sqlRowToInsert))
+            if (bdd.insert(bdd.db_config.sqlTableUsers, sqlRowToInsert))
             {
                 User checkUser = selectUser(id);
                 if (checkUser != null)
@@ -61,12 +61,12 @@ namespace ApiTrackers.Services
         public User insertUser(User _userModel)
         {
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableUsers);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableUsers);
 
             sqlRowToInsert = convertUserToSQL(sqlRowToInsert, _userModel);
             sqlRowToInsert.setAttribute("id", id);
 
-            if (bdd.insert(bdd.sqlTableUsers, sqlRowToInsert))
+            if (bdd.insert(bdd.db_config.sqlTableUsers, sqlRowToInsert))
             {
                 int id2 = getLastId();
                 User checkUser = selectUser(id2);
@@ -77,26 +77,26 @@ namespace ApiTrackers.Services
         }
         public User updateUser(User _userModel, int id)
         {
-            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.sqlTableUsers, true, id);
+            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableUsers, true, id);
             if (sqlRowToUpdate == null) return null;
 
             sqlRowToUpdate = convertUserToSQL(sqlRowToUpdate, _userModel);
             sqlRowToUpdate.setAttribute("id", id);
 
-            bool checkUpdateCorrectly = bdd.update(bdd.sqlTableUsers, sqlRowToUpdate, id);
+            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableUsers, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
 
-            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.sqlTableUsers, true, id);
+            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.db_config.sqlTableUsers, true, id);
             User userUpdated = convertSQLToUser(sqlRowCheck);
 
             return userUpdated;
         }
         public User deleteUser(int _id)
         {
-            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.sqlTableUsers, true, _id);
+            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.db_config.sqlTableUsers, true, _id);
             User user = convertSQLToUser(rowToDelete);
             if (user != null)
-                bdd.delete(bdd.sqlTableUsers, _id); //delete now
+                bdd.delete(bdd.db_config.sqlTableUsers, _id); //delete now
             return user;
         }
 

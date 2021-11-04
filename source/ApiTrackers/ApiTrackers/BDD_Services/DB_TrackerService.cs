@@ -4,23 +4,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static ApiTrackers.BDD_MainService;
+using static ApiTrackers.DB_MainService;
 
 namespace ApiTrackers.Services
 {
-    public class BDD_TrackerService
+    public class DB_TrackerService
     {
 
-        BDD_MainService bdd;
+        DB_MainService bdd;
         MainService main;
         private int lastId = -1;
 
-        public BDD_TrackerService(MainService _main)
+        public DB_TrackerService(MainService _main)
         {
             main = _main;
             bdd = _main.bdd;
 
-            lastId = bdd.sqlTableTrackers.selectLastID(_main);
+            lastId = bdd.db_config.sqlTableTrackers.selectLastID(_main);
         }
 
         public int getLastId() { return lastId; }
@@ -30,7 +30,7 @@ namespace ApiTrackers.Services
 
         public List<Tracker> selectTrackers()
         {
-            List<SqlRow> rows = bdd.select(bdd.sqlTableTrackers, true);
+            List<SqlRow> rows = bdd.select(bdd.db_config.sqlTableTrackers, true);
             List<Tracker> trackers = new List<Tracker>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
@@ -39,7 +39,7 @@ namespace ApiTrackers.Services
         }
         public Tracker selectTracker(int _id)
         {
-            SqlRow row = bdd.selectOnlyRow(bdd.sqlTableTrackers, true, _id);
+            SqlRow row = bdd.selectOnlyRow(bdd.db_config.sqlTableTrackers, true, _id);
             Tracker tracker = convertSQLToTracker(row);
             return tracker;
         }
@@ -48,13 +48,13 @@ namespace ApiTrackers.Services
         {
             
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableTrackers);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableTrackers);
 
             sqlRowToInsert = convertTrackerToSQL(sqlRowToInsert, _trackerModel);
             sqlRowToInsert.setAttribute("id", id);
             sqlRowToInsert.setAttribute("idUser", _trackerModel.idUser);
 
-            if (bdd.insert(bdd.sqlTableTrackers, sqlRowToInsert))
+            if (bdd.insert(bdd.db_config.sqlTableTrackers, sqlRowToInsert))
             {
                 int id2 = getLastId();
                 Tracker checkTracker = selectTracker(id2);
@@ -66,7 +66,7 @@ namespace ApiTrackers.Services
 
         public Tracker updateTracker(Tracker _trackerModel, int id, int _idUser)
         {
-            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.sqlTableTrackers, true, id);
+            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableTrackers, true, id);
             if (sqlRowToUpdate == null) return null;
 
             sqlRowToUpdate = convertTrackerToSQL(sqlRowToUpdate, _trackerModel);
@@ -83,17 +83,17 @@ namespace ApiTrackers.Services
                 //if ()  //TODO rightMusics users
                 throw new ForbiddenException();
 
-            bool checkUpdateCorrectly = bdd.update(bdd.sqlTableTrackers, sqlRowToUpdate, id);
+            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableTrackers, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
 
-            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.sqlTableTrackers, true, id);
+            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.db_config.sqlTableTrackers, true, id);
             Tracker trackerUpdated = convertSQLToTracker(sqlRowCheck);
 
             return trackerUpdated;
         }
         public Tracker deleteTracker(int _id, int _idUser)
         {
-            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.sqlTableTrackers, true, _id);
+            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.db_config.sqlTableTrackers, true, _id);
             Tracker tracker = convertSQLToTracker(rowToDelete);
 
             if (tracker == null)
@@ -104,7 +104,7 @@ namespace ApiTrackers.Services
 
             if (tracker.idUser == _idUser)
             {
-                bdd.delete(bdd.sqlTableTrackers, _id); //delete now
+                bdd.delete(bdd.db_config.sqlTableTrackers, _id); //delete now
             }
             else
                 throw new ForbiddenException();

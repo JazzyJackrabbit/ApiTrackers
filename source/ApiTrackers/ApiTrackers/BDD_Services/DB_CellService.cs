@@ -6,22 +6,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static ApiTrackers.BDD_MainService;
+using static ApiTrackers.DB_MainService;
 
 namespace ApiCells.Services
 {
-    public class BDD_CellService
+    public class DB_CellService
     {
-        BDD_MainService bdd;
+        DB_MainService bdd;
         MainService main;
         private int lastId = -1;
 
-        public BDD_CellService(MainService _main)
+        public DB_CellService(MainService _main)
         {
             main = _main;
             bdd = _main.bdd;
 
-            lastId = bdd.sqlTableCells.selectLastID(_main);
+            lastId = bdd.db_config.sqlTableCells.selectLastID(_main);
         }
 
         public int getLastId() { return lastId; }
@@ -31,7 +31,7 @@ namespace ApiCells.Services
 
         public List<Note> selectCells(int _idTracker)
         {
-            List<SqlRow> rows = bdd.select(bdd.sqlTableCells, false, _idTracker, "idTracker");
+            List<SqlRow> rows = bdd.select(bdd.db_config.sqlTableCells, false, _idTracker, "idTracker");
             List<Note> cells = new List<Note>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
@@ -40,7 +40,7 @@ namespace ApiCells.Services
         }
         public Note selectCell(int _id, int _idTracker)
         {
-            SqlRow row = bdd.selectOnlyRow(bdd.sqlTableCells, false, _id, "id", _idTracker, "idTracker");
+            SqlRow row = bdd.selectOnlyRow(bdd.db_config.sqlTableCells, false, _id, "id", _idTracker, "idTracker");
             Note cell = convertSQLToCell(row);
             return cell;
         }
@@ -48,7 +48,7 @@ namespace ApiCells.Services
         public Note insertCell(Note _cellModel)
         { 
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableCells);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableCells);
 
             sqlRowToInsert = convertCellToSQL(sqlRowToInsert, _cellModel);
 
@@ -58,7 +58,7 @@ namespace ApiCells.Services
                 sqlRowToInsert.getAttribute("idTracker").value
                 );
 
-            if (bdd.insert(bdd.sqlTableCells, sqlRowToInsert))
+            if (bdd.insert(bdd.db_config.sqlTableCells, sqlRowToInsert))
             {
                 int id2 = getLastId();
                 Note checkCell = selectCell(id2, idTracker);
@@ -72,7 +72,7 @@ namespace ApiCells.Services
         {
             //TODO
 
-            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.sqlTableCells, false, id);
+            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableCells, false, id);
             if (sqlRowToUpdate == null) return null;
 
             sqlRowToUpdate.setAttribute("id", id);
@@ -84,10 +84,10 @@ namespace ApiCells.Services
            /* Note cellToUpdate = convertSQLToCell(sqlRowToUpdate);
             SqlRow sqlRowToUpdate_2 = convertCellToSQL(sqlRowToUpdate, cellToUpdate);*/
 
-            bool checkUpdateCorrectly = bdd.update(bdd.sqlTableCells, sqlRowToUpdate, id);
+            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableCells, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
 
-            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.sqlTableCells, false, id);
+            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.db_config.sqlTableCells, false, id);
             Note cellUpdated = convertSQLToCell(sqlRowCheck);
 
             return cellUpdated;
@@ -96,11 +96,11 @@ namespace ApiCells.Services
         {
             //TODO //TODO //TODO
 
-            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.sqlTableCells, false, _id);
+            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.db_config.sqlTableCells, false, _id);
             Note cell = convertSQLToCell(rowToDelete);
             
             if (cell != null)   
-                bdd.delete(bdd.sqlTableCells, _id); 
+                bdd.delete(bdd.db_config.sqlTableCells, _id); 
             else
                 throw new ForbiddenException();
             return cell;

@@ -2,76 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiTrackers.BDD_Services;
 using ApiTrackers.Services;
 using MySql.Data.MySqlClient;
 
 namespace ApiTrackers
 {
-    public class BDD_MainService
+    public class DB_MainService
     {
         MainService mainService;
 
-        string connectionString = "server=localhost;database=trackers;uid=TRACKERS;pwd=TRACKERS;";
+        string connectionString;
 
         List<SqlTable> sqlTables = new List<SqlTable>();
 
-        public SqlTable sqlTableRightMusics;
-        public SqlTable sqlTableSamples;
-        public SqlTable sqlTableUsers;
-        public SqlTable sqlTableTrackers;
-        public SqlTable sqlTableCells;
+        public DB_Configuration db_config = new DB_Configuration();
 
-        public BDD_MainService(MainService _mainService)
+        string defaultIdNameTable;
+
+        public DB_MainService(MainService _mainService)
         {
             mainService = _mainService;
 
-            // data structure bdd
+            connectionString = 
+                "server="+ db_config.db_host + ";"               
+                + "database="+ db_config.db_database+";"                                      
+                + "uid="+ db_config.db_user + ";"
+                + "pwd="+ db_config.db_pass + ";";                       
 
-            sqlTables.Add(sqlTableUsers = new SqlTable("Users", new List<SqlAttribut> {
-                new SqlAttribut("id", "id", typeSql.tInt),
-                new SqlAttribut("pseudo", "pseudo", typeSql.tVarchar),
-                new SqlAttribut("mail", "mail", typeSql.tVarchar),
-                new SqlAttribut("passwordHash", "passwordHash", typeSql.tVarchar),
-                new SqlAttribut("recoverMails", "recoverMails", typeSql.tInt),
-                new SqlAttribut("isEnable", "isEnable", typeSql.tInt),
-            }));
+            defaultIdNameTable = db_config.defaultIdNameTable;
+            db_config.db_tablesDefinition(sqlTables);
 
-            sqlTables.Add(sqlTableTrackers=new SqlTable("Trackers", new List<SqlAttribut> {
-                new SqlAttribut("id", "id", typeSql.tInt),
-                new SqlAttribut("artist", "artist", typeSql.tVarchar),
-                new SqlAttribut("title", "title", typeSql.tVarchar),
-                new SqlAttribut("copyrightInformation", "copyrightInformation", typeSql.tVarchar),
-                new SqlAttribut("comments", "comments", typeSql.tVarchar),
-                new SqlAttribut("bpm", "bpm", typeSql.tDouble),
-                new SqlAttribut(sqlTableUsers, "idUser", "idUser", typeSql.tInt),
-            }));
-
-            sqlTables.Add(sqlTableSamples = new SqlTable("Samples", new List<SqlAttribut> {
-                new SqlAttribut("id","id", typeSql.tInt),
-                new SqlAttribut("name","name",typeSql.tVarchar),
-                new SqlAttribut("linkSample","linkSample",typeSql.tVarchar),
-                new SqlAttribut("idLogo","idLogo",typeSql.tInt),
-                new SqlAttribut("color","color",typeSql.tVarchar),
-            }));
-
-            sqlTables.Add(sqlTableCells=new SqlTable("Cells", new List<SqlAttribut> {
-                new SqlAttribut("id", "id", typeSql.tInt),
-                new SqlAttribut(sqlTableTrackers, "idTracker", "idTracker", typeSql.tInt),
-                new SqlAttribut(sqlTableSamples, "idSample", "idSample", typeSql.tInt),
-                new SqlAttribut("idPiste","idPiste", typeSql.tInt),
-                new SqlAttribut("frequence","frequence", typeSql.tDouble),
-                new SqlAttribut("effect","effect", typeSql.tInt),
-                new SqlAttribut("volume","volume", typeSql.tDouble),
-                new SqlAttribut("positionKey","positionKey", typeSql.tVarchar),
-                new SqlAttribut("position","position", typeSql.tDouble),
-            }));
-
-            sqlTables.Add(sqlTableRightMusics=new SqlTable("RightMusics", new List<SqlAttribut> {
-                new SqlAttribut("id","id", typeSql.tInt),
-                new SqlAttribut(sqlTableUsers, "idUser","idUser",typeSql.tInt),
-                new SqlAttribut(sqlTableTrackers, "idTracker","idTracker",typeSql.tInt),
-                new SqlAttribut("rightValue","rightValue",typeSql.tInt),
-            }));
         }
 
         public void executeNonQuery(string _sqlCommand)
@@ -182,7 +143,7 @@ namespace ApiTrackers
         }
         public SqlRow selectOnlyRow(SqlTable _sqlTable, bool _allColumns, int _id)
         {
-            return selectOnlyRow(_sqlTable, _allColumns, _id, "id");
+            return selectOnlyRow(_sqlTable, _allColumns, _id, defaultIdNameTable);
         }
         public SqlRow selectOnlyRow(SqlTable _sqlTable, bool _allColumns, int _filterAttr, string filterAttr_nametable)
         {
@@ -246,7 +207,7 @@ namespace ApiTrackers
 
         public bool delete(SqlTable _sqlTable, int _id)
         {
-            return delete(_sqlTable, _id, "id");
+            return delete(_sqlTable, _id, defaultIdNameTable);
         }
         public bool delete(SqlTable _sqlTable, int _whereValue1, string _whereTableName1)
         {
@@ -284,7 +245,7 @@ namespace ApiTrackers
         }
         public bool update(SqlTable _sqlTable, SqlRow _sqlRow, int _id)
         {
-            return update(_sqlTable, _sqlRow, _id, "id");
+            return update(_sqlTable, _sqlRow, _id, defaultIdNameTable);
         }
         public bool update(SqlTable _sqlTable, SqlRow _sqlRow, int _filterAttr1, string _filterAttr1_nametable)
         {
@@ -417,7 +378,7 @@ namespace ApiTrackers
                 if (sqlRows.Count > 0)
                     foreach (SqlRow sqlRow in sqlRows)
                     {
-                        SqlAttribut attrId = sqlRow.getAttribute("id");
+                        SqlAttribut attrId = sqlRow.getAttribute(_mainService.bdd.defaultIdNameTable);
                         if (attrId != null)
                             id = Math.Max(id, (int)attrId.value);
                     }

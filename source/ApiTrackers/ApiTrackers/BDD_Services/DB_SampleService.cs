@@ -6,22 +6,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static ApiTrackers.BDD_MainService;
+using static ApiTrackers.DB_MainService;
 
 namespace ApiSamples.Services
 {
-    public class BDD_SampleService
+    public class DB_SampleService
     {
-        BDD_MainService bdd;
+        DB_MainService bdd;
         MainService main;
         private int lastId = -1;
 
-        public BDD_SampleService(MainService _main)
+        public DB_SampleService(MainService _main)
         {
             main = _main;
             bdd = _main.bdd;
 
-            lastId = bdd.sqlTableSamples.selectLastID(_main);
+            lastId = bdd.db_config.sqlTableSamples.selectLastID(_main);
         }
 
         public int getLastId() { return lastId; }
@@ -31,7 +31,7 @@ namespace ApiSamples.Services
 
         public List<Sample> selectSamples()
         {
-            List<SqlRow> rows = bdd.select(bdd.sqlTableSamples, true);
+            List<SqlRow> rows = bdd.select(bdd.db_config.sqlTableSamples, true);
             List<Sample> samples = new List<Sample>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
@@ -40,7 +40,7 @@ namespace ApiSamples.Services
         }
         public Sample selectSample(int _id)
         {
-            SqlRow row = bdd.selectOnlyRow(bdd.sqlTableSamples, true, _id);
+            SqlRow row = bdd.selectOnlyRow(bdd.db_config.sqlTableSamples, true, _id);
             Sample sample = convertSQLToSample(row);
             return sample;
         }
@@ -51,13 +51,13 @@ namespace ApiSamples.Services
             int _canControlSamples = 1;
 
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableSamples);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableSamples);
 
             sqlRowToInsert = convertSampleToSQL(sqlRowToInsert, _sampleModel);
             sqlRowToInsert.setAttribute("id", id);
 
             if (_canControlSamples == 1)
-                if (bdd.insert(bdd.sqlTableSamples, sqlRowToInsert))
+                if (bdd.insert(bdd.db_config.sqlTableSamples, sqlRowToInsert))
                 {
                     int id2 = getLastId();
                     Sample checkSample = selectSample(id2);
@@ -72,7 +72,7 @@ namespace ApiSamples.Services
             //TODO //TODO //TODO
             int _canControlSamples = 1;
 
-            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.sqlTableSamples, true, id);
+            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableSamples, true, id);
             if (sqlRowToUpdate == null) return null;
 
             if (_canControlSamples != 1) return null;
@@ -80,10 +80,10 @@ namespace ApiSamples.Services
             sqlRowToUpdate = convertSampleToSQL(sqlRowToUpdate, _sampleModel);
             sqlRowToUpdate.setAttribute("id", id);
 
-            bool checkUpdateCorrectly = bdd.update(bdd.sqlTableSamples, sqlRowToUpdate, id);
+            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableSamples, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
 
-            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.sqlTableSamples, true, id);
+            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.db_config.sqlTableSamples, true, id);
             Sample sampleUpdated = convertSQLToSample(sqlRowCheck);
 
             return sampleUpdated;
@@ -93,12 +93,12 @@ namespace ApiSamples.Services
             //TODO //TODO //TODO
             int _canControlSamples = 1;
 
-            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.sqlTableSamples, true, _id);
+            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.db_config.sqlTableSamples, true, _id);
             Sample sample = convertSQLToSample(rowToDelete);
             
             if (_canControlSamples == 1)
                 if (sample != null)   
-                    bdd.delete(bdd.sqlTableSamples, _id); 
+                    bdd.delete(bdd.db_config.sqlTableSamples, _id); 
                 else
                     throw new ForbiddenException();
             else

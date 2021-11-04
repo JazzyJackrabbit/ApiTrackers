@@ -1,0 +1,163 @@
+﻿<Window x:Class="ClientTest_APITrackers.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientTest_APITrackers"
+        mc:Ignorable="d"
+        Title="Log" Height="900" Width="1480" Cursor="IBeam">
+    <Grid x:Name="grid" Background="#333" Margin="0,0,0,-6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50*"></ColumnDefinition>
+            <ColumnDefinition  Width="15"></ColumnDefinition>
+            <ColumnDefinition Width="30*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="grid_content"  Background="#bbb"   />
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.ColumnSpan="1" />
+        <Grid Background="#999"  Grid.Column="2" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="373*"/>
+
+                    <RowDefinition Height="518*"/>
+                </Grid.RowDefinitions>
+                <Rectangle HorizontalAlignment="Left" Height="54" Margin="198,17,0,0" Fill="Black" Stroke="Black" VerticalAlignment="Top" Width="8" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle HorizontalAlignment="Left" Height="54" Margin="334,16,0,0" Fill="Black" Stroke="Black" VerticalAlignment="Top" Width="8" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle HorizontalAlignment="Left" Height="45" Margin="197,95,0,0" Fill="Black" Stroke="Black" VerticalAlignment="Top" Width="8"/>
+                <Rectangle HorizontalAlignment="Left" Height="45" Margin="211,62,0,0" Fill="Black" Stroke="Black" VerticalAlignment="Top" Width="8" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="42.663"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle HorizontalAlignment="Left" Height="45" Margin="181,61,0,0" Fill="Black" Stroke="Black" VerticalAlignment="Top" Width="8" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-45"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle HorizontalAlignment="Left" Height="31" Margin="375,173,0,0" Fill="Black" Stroke="Black" VerticalAlignment="Top" Width="8"/>
+                <Rectangle HorizontalAlignment="Left" Height="133" Margin="113,83,0,0" Fill="Black" Stroke="Black" VerticalAlignment="Top" Width="8"/>
+                <Rectangle HorizontalAlignment="Left" Height="100" Margin="404,52,0,0" Fill="Black" Stroke="Black" VerticalAlignment="Top" Width="8"/>
+                <Rectangle HorizontalAlignment="Left" Height="204" Margin="212,113,0,0" Fill="Black" Stroke="Black" VerticalAlignment="Top" Width="8" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="tttt_Copy4" HorizontalAlignment="Left" Height="13" Margin="372,166,0,0" Fill="#D0F"  VerticalAlignment="Top" Width="13" RenderTransformOrigin="-0.151,0.077">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform X="13.962" Y="-2.964"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="tttt" HorizontalAlignment="Left" Height="13" Margin="180,38,0,0" Fill="#D0F"  VerticalAlignment="Top" Width="13" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="tttt_Copy1" HorizontalAlignment="Left" Height="13" Margin="170,73,0,0" Fill="#D0F"  VerticalAlignment="Top" Width="13" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="tttt_Copy2" HorizontalAlignment="Left" Height="13" Margin="218,73,0,0" Fill="#D0F"  VerticalAlignment="Top" Width="13" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="tttt_Copy5" HorizontalAlignment="Left" Height="13" Margin="111,73,0,0" Fill="#D0F"  VerticalAlignment="Top" Width="13" RenderTransformOrigin="-0.151,0.077">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform X="13.962" Y="-2.964"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="tttt_Copy3" HorizontalAlignment="Left" Height="13" Margin="402,94,0,0" Fill="#D0F"  VerticalAlignment="Top" Width="13" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="tttt_Copy" HorizontalAlignment="Left" Height="13" Margin="315,38,0,0" Fill="#D0F"  VerticalAlignment="Top" Width="13" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </Grid>
+            <Button x:Name="btn_users" Content="Users" Click="UsersClick" Background="#257" HorizontalAlignment="Left" Margin="81,8,0,0" VerticalAlignment="Top" Height="70" Width="104"/>
+            <Button x:Name="btn_samples" Content="Samples" Click="SamplesClick" Background="#257" HorizontalAlignment="Left" Margin="356,101,0,0" VerticalAlignment="Top" Height="70" Width="104"/>
+            <Button x:Name="btn_trackers" Content="Trackers" Click="TrackersClick" Background="#257" HorizontalAlignment="Left" Margin="216,8,0,0" VerticalAlignment="Top" Height="70" Width="104"/>
+            <Button x:Name="btn_rightMusics" Content="RightMusics" Click="RightMusicsClick" Background="#257" FontSize="12" HorizontalAlignment="Left" Margin="150,108,0,0" VerticalAlignment="Top" Height="70" Width="104"/>
+            <Button x:Name="btn_cells" Content="Cells" Click="CellsClick" Background="#257" HorizontalAlignment="Left" Margin="356,7,0,0" VerticalAlignment="Top" Height="70" Width="104"/>
+            <TextBox x:Name="tb_console" AcceptsReturn="True" Foreground="#fff" Background="#222"
+                FontSize="17"                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                Text="OK" TextWrapping="Wrap" Cursor="IBeam" Margin="0,274,0,0"/>
+            <Button x:Name="btn_samplesAlias" Content="Samples&#xA;Alias" Click="SamplesAliasClick" Background="#257" HorizontalAlignment="Left" Margin="304,193,0,0"  MinWidth="104" MinHeight="58" VerticalAlignment="Top" Cursor="Hand"/>
+        </Grid>
+        <Grid/>
+    </Grid>
+</Window>

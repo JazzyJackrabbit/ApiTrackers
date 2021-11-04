@@ -1,0 +1,86 @@
+﻿<Window x:Class="ClientTest_APITrackers.CellControlWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientTest_APITrackers"
+        mc:Ignorable="d"
+        Title="CellControlWindow" Height="379" Width="482" ResizeMode="NoResize">
+    <Grid x:Name="grid_content" Background="#ddd">
+        <Grid>
+            <Slider x:Name="sl_vol" ValueChanged="sl_vol_ValueChanged" Orientation="Vertical" Margin="88,17,0,0" Height="188" VerticalAlignment="Top" HorizontalAlignment="Left" Width="38"/>
+            <Slider x:Name="sl_freq" ValueChanged="sl_freq_ValueChanged"  Orientation="Vertical" Margin="21,17,0,0" Height="188" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40"/>
+            <Label Content="Vol&#xA;" Margin="84,210,0,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="42"/>
+            <Label Content="Freq&#xA;" Margin="18,210,0,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="66"/>
+            <TextBox Background="#ffb" x:Name="tb_id" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="292,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154" Height="29" Cursor="IBeam"/>
+            <Label Content="id&#xA;" Margin="209,67,0,0" HorizontalAlignment="Left" Width="46" Height="29" VerticalAlignment="Top"/>
+            <Label Content="idTracker" Margin="209,99,0,0" HorizontalAlignment="Left" Width="64" Height="27" VerticalAlignment="Top"/>
+            <TextBox Background="#ffb" x:Name="tb_idTracker" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="292,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="113" Height="29" Cursor="IBeam"/>
+            <Label Content="idSample" Margin="209,150,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="64"/>
+            <TextBox Background="#fff" x:Name="tb_idSample" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="292,150,0,0" Text="..." TextWrapping="Wrap" VerticalAlignment="Top" Width="154" Height="29" Cursor="IBeam"/>
+            <Label Content="idPiste" Margin="209,250,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="64"/>
+            <TextBox Background="#fff" x:Name="tb_idPiste" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="292,250,0,0" Text="..." TextWrapping="Wrap" VerticalAlignment="Top" Width="154" Height="29" Cursor="IBeam"/>
+            <Label Content="Key" Margin="232,307,0,0" RenderTransformOrigin="0.528,0.3" HorizontalAlignment="Left" Width="55" Height="29" VerticalAlignment="Top"/>
+            <TextBox Background="#fff" x:Name="tb_Key"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="292,307,0,0" Text="..." TextWrapping="Wrap" VerticalAlignment="Top" Width="154" Height="29" Cursor="IBeam"/>
+            <TextBox Background="#fff" x:Name="tb_freq" IsEnabled="False"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="14,243,0,0" Text="..." TextWrapping="Wrap" VerticalAlignment="Top" Width="55" Height="29" Cursor="IBeam"/>
+            <TextBox Background="#fff"  x:Name="tb_vol" IsEnabled="False"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="84,243,0,0" Text="..." TextWrapping="Wrap" VerticalAlignment="Top" Width="55" Height="29" Cursor="IBeam"/>
+            <Label Content="idEffect" Margin="209,203,0,0" RenderTransformOrigin="0.528,0.3" Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="78"/>
+            <TextBox Background="#fff" x:Name="tb_idEffect" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="292,202,0,0" Text="..." TextWrapping="Wrap" VerticalAlignment="Top" Width="154" Height="29" Cursor="IBeam"/>
+            <Label Content="position" Margin="18,307,0,0" RenderTransformOrigin="0.528,0.3" Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="78"/>
+            <TextBox Background="#fff" x:Name="tb_position" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="101,307,0,0" Text="..." TextWrapping="Wrap" VerticalAlignment="Top" Width="93" Height="29" Cursor="IBeam"/>
+
+            <Button x:Name="btn_UPDATE" Content="UPDATE" Margin="381,11,0,0" Click="btn_UPDATE_Click" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="88" Height="32" VerticalAlignment="Top">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleY="-0.466"/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="0.325"/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button x:Name="btn_INSERT" Background="ForestGreen" Click="btn_INSERT_Click" FontSize="11" Content="COPY&#xA;(INSERT)" Margin="294,12,0,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="78" Height="45" VerticalAlignment="Top" Cursor="Hand">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleY="-0.466"/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="0.325"/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button x:Name="btn_DELETE" Background="DarkRed" FontSize="11" Click="btn_DELETE_Click"  Content="DELETE" Margin="218,13,0,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="70" Height="32" VerticalAlignment="Top">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleY="-0.466"/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="0.325"/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button x:Name="btn_SELECT" FontSize="13" Click="btn_SELECT_Click" Content="SELECT" Margin="124,14,0,0" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="86">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleY="-0.466"/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="0.325"/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button x:Name="btn_SELECT_Copy" Background="#668" FontSize="13" Click="btn_SELECT_ALL_Click" Content="ALL" Margin="415,105,0,0" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Height="31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleY="-0.466"/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="0.325"/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

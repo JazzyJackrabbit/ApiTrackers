@@ -1,0 +1,133 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj": {}
+  },
+  "projects": {
+    "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj",
+        "projectName": "ClientTest_APITrackers",
+        "projectPath": "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj",
+        "packagesPath": "C:\\Users\\Alexandre\\.nuget\\packages\\",
+        "outputPath": "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Alexandre\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0-windows7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0-windows7.0": {
+            "targetAlias": "net5.0-windows",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0-windows7.0": {
+          "targetAlias": "net5.0-windows",
+          "dependencies": {
+            "Extended.Wpf.Toolkit": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
+            "Gu.Wpf.DataGrid2D": {
+              "target": "Package",
+              "version": "[0.2.4, )"
+            },
+            "LibVLCSharp": {
+              "target": "Package",
+              "version": "[3.6.1, )"
+            },
+            "MaterialDesignColors": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
+            "MaterialDesignExtensions": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
+            "MaterialDesignThemes": {
+              "target": "Package",
+              "version": "[4.2.1, )"
+            },
+            "Microsoft.AspNet.WebApi.Client": {
+              "target": "Package",
+              "version": "[5.2.7, )"
+            },
+            "NAudio": {
+              "target": "Package",
+              "version": "[2.0.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "ServiceStack": {
+              "target": "Package",
+              "version": "[5.12.0, )"
+            },
+            "System.Net.Http.Json": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "System.Runtime.WindowsRuntime.UI.Xaml": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "VideoLAN.LibVLC.Windows": {
+              "target": "Package",
+              "version": "[3.0.16, )"
+            },
+            "WMPLib": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Xam.Plugin.SimpleAudioPlayer": {
+              "target": "Package",
+              "version": "[1.5.0, )"
+            },
+            "Xceed.Wpf.DataGrid.ThemePack.5": {
+              "target": "Package",
+              "version": "[7.0.21101.19010, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WPF": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

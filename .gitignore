@@ -2,3 +2,5 @@ libSharpMod
 /source/ApiTrackers/ApiTrackers/bin
 /source/ApiTrackers/ApiTrackers/obj
 /source/ApiTrackers/.vs
+
+/source/TestClientTrackers/ClientTest_APITrackers/bin

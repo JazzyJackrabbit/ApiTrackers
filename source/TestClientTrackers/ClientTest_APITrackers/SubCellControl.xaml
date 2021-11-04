@@ -1,0 +1,22 @@
+﻿<UserControl x:Name="grid_content" x:Class="ClientTest_APITrackers.SubCellControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClientTest_APITrackers"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" Width="46">
+    <Grid x:Name="grid_background" Background="#500">
+        <Border CornerRadius="10" BorderBrush="#9d9" BorderThickness="6" HorizontalAlignment="Center" Margin="0,191,0,26" Width="30"  >
+            <Button x:Name="btn_edit" Content="Button" Cursor="Hand" Click="btn_edit_Click" HorizontalAlignment="Center" Margin="0,0,0,-5" Width="18" />
+        </Border>
+        <Grid x:Name="grid_visible">
+            <Slider x:Name="slider_key" Maximum="2" PreviewMouseUp="slider_PreviewMouseUp"  HorizontalAlignment="Left" Background="#89f" Orientation="Vertical" VerticalAlignment="Top" Width="23" Height="158" Margin="0,28,0,0"/>
+            <Slider x:Name="slider_vol"  Maximum="1"  PreviewMouseUp="slider_PreviewMouseUp"   Background="#eee" HorizontalAlignment="Left" Orientation="Vertical" VerticalAlignment="Top" Width="23" Height="158" Margin="23,28,0,0"/>
+            <Border CornerRadius="10" BorderBrush="#d99" BorderThickness="6" HorizontalAlignment="Center" Margin="0,224,0,-5" Width="30"  >
+                <Button x:Name="btn_delete" Content="Button" Background="#d00" Click="btn_delete_Click" Margin="0,0,0,-5"/>
+            </Border>
+            <Label x:Name="lbl_idCell" Content="Label" Foreground="#aff" Margin="0,0,0,227"/>
+        </Grid>
+    </Grid>
+</UserControl>

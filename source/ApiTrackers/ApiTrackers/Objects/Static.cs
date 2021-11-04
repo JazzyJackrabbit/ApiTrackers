@@ -49,6 +49,7 @@ namespace ApiTrackers
             json.Replace("  ", " ");
             return Static.jsonResp(_status, json);
         }
+
         internal static string jsonResponseArray(int _status, Type _type, object _obj)
         {
             IContractResolver resolver = new DefaultContractResolver();

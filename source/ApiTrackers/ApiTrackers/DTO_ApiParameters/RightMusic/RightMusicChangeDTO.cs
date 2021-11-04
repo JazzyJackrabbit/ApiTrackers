@@ -11,7 +11,7 @@ namespace ApiTrackers.DTO_ApiParameters
         public int id { get; set; }
         public int idUser { get; set; }
         public int idTracker { get; set; }
-        public int right { get; set; }
+        public string right { get; set; }
 
         public RightMusic toRightMusic()
         {

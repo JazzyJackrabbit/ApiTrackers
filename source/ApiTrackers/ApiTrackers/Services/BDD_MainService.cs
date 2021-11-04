@@ -70,7 +70,7 @@ namespace ApiTrackers
                 new SqlAttribut("id","id", typeSql.tInt),
                 new SqlAttribut(sqlTableUsers, "idUser","idUser",typeSql.tInt),
                 new SqlAttribut(sqlTableTrackers, "idTracker","idTracker",typeSql.tInt),
-                new SqlAttribut("canEdit","canEdit",typeSql.tInt),
+                new SqlAttribut("rightValue","rightValue",typeSql.tInt),
             }));
         }
 
@@ -307,14 +307,14 @@ namespace ApiTrackers
 
                 foreach (SqlAttribut sqlAttr in _sqlRow.attributs)
                 {
-                    
-                    string value = "" + sqlAttr.value;
-                    if (double.TryParse(value, out var parsedNumber))
-                    {
-                        value = value.Replace(',', '.');
-                    }
-                    commandString += ""+sqlAttr.name + " = '" + value + "',";
-                    
+
+                        string value = "" + sqlAttr.value;
+                        if (double.TryParse(value, out var parsedNumber))
+                        {
+                            value = value.Replace(',', '.');
+                        }
+                        commandString += ""+sqlAttr.name + " = '" + value + "',";
+              
                 }
                 commandString = Static.removeLastCharacter(commandString);
 
@@ -339,6 +339,12 @@ namespace ApiTrackers
         #region ******** classes *********
         public class SqlAttribut
         {
+            public string name;
+            public object value = null;
+            public typeSql typ;
+            public string jsonName = null;
+            public SqlTable foreignKeyReference = null;
+
             public SqlAttribut(string _name, object _value)
             { name = _name; value = _value; }
             public SqlAttribut(string _name, typeSql _typ)
@@ -353,11 +359,6 @@ namespace ApiTrackers
             { jsonName = _jsonName; name = _name; typ = _typ; value = _defaultValue; foreignKeyReference = _foreignKeyReference; }
 
 
-            public string name;
-            public object value = null;
-            public typeSql typ;
-            public string jsonName = null;
-            public SqlTable foreignKeyReference = null;
 
         }
 

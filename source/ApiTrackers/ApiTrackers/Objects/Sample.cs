@@ -22,7 +22,7 @@ namespace ApiTrackers.Objects
 
         public Sample()
         {
-            id = 0;
+            id = 1;
             name = "none";
             linkSample = null;
             color = null;

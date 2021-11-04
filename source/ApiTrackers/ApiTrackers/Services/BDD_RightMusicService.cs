@@ -16,18 +16,18 @@ namespace ApiRightMusics.Services
     {
         BDD_MainService bdd;
         MainService main;
-        private int lastId = -1;
+        //private int lastId = -1;
 
         public BDD_RightMusicService(MainService _main)
         {
             main = _main;
             bdd = _main.bdd;
 
-            lastId = bdd.sqlTableRightMusics.selectLastID(_main);
+            //lastId = bdd.sqlTableRightMusics.selectLastID(_main);
         }
 
-        public int getLastId() { return lastId; }
-        public int getNextId() { lastId++; return lastId; }
+        //public int getLastId() { return lastId; }
+        //public int getNextId() { lastId++; return lastId; }
 
         #region ******** public methods ********
 
@@ -56,12 +56,12 @@ namespace ApiRightMusics.Services
             return rightMusic;
         }
         
-        public RightMusic createRightMusic(RightMusic _right, int _idTracker, int _idUser)
+        public RightMusic createRightMusic(RightForMusic _rightForMusic, int _idTracker, int _idUser)
         {
             RightMusic right = selectRightMusic(_idTracker, _idUser);
             if (right == null)
             { // insert
-                insertRightMusic(_right, _idUser, _idTracker);
+                insertRightMusic(_rightForMusic, _idUser, _idTracker);
                 RightMusic rightInsered = selectRightMusic(_idTracker, _idUser);
 
                 if (rightInsered == null)
@@ -72,7 +72,7 @@ namespace ApiRightMusics.Services
                 else throw new AlreadyExistException(right.GetType());
 
         }
-        public RightMusic changeRightMusic(RightMusic _right, int _idTracker, int _idUser)
+        public RightMusic changeRightMusic(RightForMusic _right, int _idTracker, int _idUser)
         {
             RightMusic right = selectRightMusic(_idTracker, _idUser);
             if (right != null)
@@ -94,14 +94,14 @@ namespace ApiRightMusics.Services
                  throw new ForbiddenException();
         }
 
-        private RightMusic insertRightMusic(RightMusic _rightMusicModel, int idUser, int idTracker)
+        private RightMusic insertRightMusic(RightForMusic _rightMusicModel, int idUser, int idTracker)
         {
             int _canControlRightMusics = 1;
 
-            int id = getNextId();
+            //int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.sqlTableRightMusics);
 
-            sqlRowToInsert = convertRightMusicToSQL(sqlRowToInsert, _rightMusicModel);
+            sqlRowToInsert = convertRightMusicToSQL(sqlRowToInsert, _rightMusicModel, idTracker, idUser);
             sqlRowToInsert.setAttribute("idTracker", idTracker);
             sqlRowToInsert.setAttribute("idUser", idUser);
 
@@ -115,7 +115,7 @@ namespace ApiRightMusics.Services
             return null;
         }
 
-        private RightMusic updateRightMusic(RightMusic _rightMusicModel, int idTracker, int idUser)
+        private RightMusic updateRightMusic(RightForMusic _rightforMusic, int idTracker, int idUser)
         {
             int _canControlRightMusics = 1;
 
@@ -124,9 +124,10 @@ namespace ApiRightMusics.Services
 
             if (_canControlRightMusics != 1) return null;
 
-            sqlRowToUpdate = convertRightMusicToSQL(sqlRowToUpdate, _rightMusicModel);
+            sqlRowToUpdate = convertRightMusicToSQL(sqlRowToUpdate, _rightforMusic, idTracker, idUser);
             sqlRowToUpdate.setAttribute("idTracker", idTracker);
             sqlRowToUpdate.setAttribute("idUser", idUser);
+            sqlRowToUpdate.setAttribute("rightValue", convertRightFM_toInt(_rightforMusic));
 
             bool checkUpdateCorrectly = bdd.update(bdd.sqlTableRightMusics, sqlRowToUpdate, idTracker, "idTracker", idUser, "idUser");
             if (!checkUpdateCorrectly) return null;
@@ -135,10 +136,16 @@ namespace ApiRightMusics.Services
 
             return rightMusicUpdated;
         }
-       
+
         #endregion
 
         #region ******** convertions ******** 
+
+        private int convertRightFM_toInt(RightForMusic _rfm)
+        {
+            int i = (int)_rfm;
+            return i;
+        }
 
         private RightMusic convertSQLToRightMusic(SqlRow _sqlrow)
         {
@@ -155,7 +162,8 @@ namespace ApiRightMusics.Services
                 rightMusic.id = Static.convertToInteger(_sqlrow.getAttribute("id").value);       
                 rightMusic.idUser = Static.convertToInteger(_sqlrow.getAttribute("idUser").value);
                 rightMusic.idTracker = Static.convertToInteger(_sqlrow.getAttribute("idTracker").value);
-                rightMusic.setRight(_sqlrow.getAttribute("canEdit").value);
+                int i = Convert.ToInt32(_sqlrow.getAttribute("rightValue").value);
+                rightMusic.setRight(i);
 
                 return rightMusic;
             }
@@ -166,18 +174,35 @@ namespace ApiRightMusics.Services
             }
         }
 
-        private SqlRow convertRightMusicToSQL(SqlRow _sqlDest, RightMusic _rightMusic)
+        private SqlRow convertRightMusicToSQL(SqlRow _sqlDest, RightForMusic _rightforMusic, int _idTracker, int _idUser, int _id)
         {
             if (_sqlDest == null) return null;
             try
             {
                 if (_sqlDest == null) return null;
-                if (_rightMusic == null) return null;
 
-                _sqlDest.setAttribute( "idUser", _rightMusic.id);
-                _sqlDest.setAttribute( "idUser", _rightMusic.idUser);
-                _sqlDest.setAttribute( "idTracker", _rightMusic.idTracker);
-                _sqlDest.setAttribute( "canEdit", _rightMusic.right);
+                _sqlDest.setAttribute("id", _id);
+                _sqlDest.setAttribute("idUser", _idUser);
+                _sqlDest.setAttribute("idTracker", _idTracker);
+                _sqlDest.setAttribute("rightValue", convertRightFM_toInt(_rightforMusic));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("convert<<Object>>ToSQL - err: " + ex);
+                throw new OwnException();
+            }
+            return _sqlDest;
+        }
+        private SqlRow convertRightMusicToSQL(SqlRow _sqlDest, RightForMusic _rightforMusic, int _idTracker, int _idUser)
+        {
+            if (_sqlDest == null) return null;
+            try
+            {
+                if (_sqlDest == null) return null;
+
+                _sqlDest.setAttribute("idUser", _idUser);
+                _sqlDest.setAttribute("idTracker", _idTracker);
+                _sqlDest.setAttribute("rightValue", convertRightFM_toInt(_rightforMusic));
             }
             catch (Exception ex)
             {

@@ -96,7 +96,7 @@ namespace ApiRightMusics.Controllers
             try
             {
                 RightMusic right = dto.toRightMusic();
-                RightMusic rightCheck = mainService.bddRightMusics.createRightMusic(right, right.idTracker, right.idUser);
+                RightMusic rightCheck = mainService.bddRightMusics.createRightMusic(right.right, right.idTracker, right.idUser);
 
                 if (rightCheck != null)
                     return new ContentResult()
@@ -126,7 +126,7 @@ namespace ApiRightMusics.Controllers
             try
             {
                 RightMusic right = dto.toRightMusic();
-                RightMusic rightCheck = mainService.bddRightMusics.changeRightMusic(right, right.idTracker, right.idUser);
+                RightMusic rightCheck = mainService.bddRightMusics.changeRightMusic(right.right, right.idTracker, right.idUser);
 
                 if (rightCheck != null)
                     return new ContentResult()

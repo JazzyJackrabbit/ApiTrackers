@@ -47,8 +47,8 @@ namespace ClientTest_APITrackers
             int _idCell = main.trackerCtrlWindow.insertCell(getIDTrackerInterface());
 
 
-            int idSample = Convert.ToInt32(((JObject)API.SELECT_Cell(getIDTrackerInterface(), _idCell)).GetValue("idSample"));
-            string url = ((JObject)API.SELECT_Sample(idSample)).GetValue("linkSample").ToString();
+            int idSample = Convert.ToInt32(((JObject)main.api().SELECT_Cell(getIDTrackerInterface(), _idCell)).GetValue("idSample"));
+            string url = ((JObject)main.api().SELECT_Sample(idSample)).GetValue("linkSample").ToString();
 
 
             SubCellControl tcUC = new SubCellControl(main, _idCell, 0, url);

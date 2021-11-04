@@ -153,9 +153,9 @@
             <Button x:Name="btn_rightMusics" Content="RightMusics" Click="RightMusicsClick" Background="#257" FontSize="12" HorizontalAlignment="Left" Margin="150,108,0,0" VerticalAlignment="Top" Height="70" Width="104"/>
             <Button x:Name="btn_cells" Content="Cells" Click="CellsClick" Background="#257" HorizontalAlignment="Left" Margin="356,7,0,0" VerticalAlignment="Top" Height="70" Width="104"/>
             <TextBox x:Name="tb_console" AcceptsReturn="True" Foreground="#fff" Background="#222"
-                FontSize="17"                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                FontSize="14"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                Text="OK" TextWrapping="Wrap" Cursor="IBeam" Margin="0,274,0,0"/>
+                Text="" TextWrapping="Wrap" Cursor="IBeam" Margin="0,274,0,0"/>
             <Button x:Name="btn_samplesAlias" Content="Samples&#xA;Alias" Click="SamplesAliasClick" Background="#257" HorizontalAlignment="Left" Margin="304,193,0,0"  MinWidth="104" MinHeight="58" VerticalAlignment="Top" Cursor="Hand"/>
         </Grid>
         <Grid/>

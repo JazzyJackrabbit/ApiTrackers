@@ -160,17 +160,36 @@ namespace ClientTest_APITrackers
             return listWindow;
         }
 
-        public string log(string _text)
+        public string logErr(string _text)
         {
-            tb_console.Text = "[["+ DateTime.Now.ToString() + "]]  "+ _text + "\n\n" + tb_console.Text;
+            tb_console.Text = "XX " + DateTime.Now.ToString() + " XX  ERR/WAR : " + _text + "\n\n" + tb_console.Text;
             return _text;
         }
-        public object log(object _obj)
+        public string logErr(object _text)
         {
-            tb_console.Text = "[[" + DateTime.Now.ToString() + "]]  " + _obj.ToString() + "\n\n" + tb_console.Text;
+            tb_console.Text = "XX " + DateTime.Now.ToString() + " XX  ERR/WAR : " + _text.ToString() + "\n\n" + tb_console.Text;
+            return _text.ToString();
+        }
+        public string logSuite(string _text)
+        {
+            tb_console.Text = "[[ " + DateTime.Now.ToString() + " ]]  " + _text + "\n\n" + tb_console.Text;
+            return _text;
+        }
+        public object logSuite(object _obj)
+        {
+            tb_console.Text = "[[ " + DateTime.Now.ToString() + " ]]  " + _obj.ToString() + "\n\n" + tb_console.Text;
             return _obj;
         }
-        
+        public string logLine(string _text)
+        {
+            tb_console.Text = _text + "\n" + tb_console.Text;
+            return _text;
+        }
+        public string logLine(object _text)
+        {
+            tb_console.Text = _text.ToString() + "\n" + tb_console.Text;
+            return _text.ToString();
+        }
         internal void editCell(int _idTracker, int idCell)
         {
             trackerCtrlWindow.editCell(_idTracker, idCell);
@@ -259,7 +278,10 @@ namespace ClientTest_APITrackers
             base.OnClosing(e);
         }
 
-
+        public API api()
+        {
+            return new API(this);
+        }
 
     }
 }

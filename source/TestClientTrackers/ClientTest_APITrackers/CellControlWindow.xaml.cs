@@ -74,7 +74,7 @@ namespace ClientTest_APITrackers
                         if (p.Name == "idEffect") tb_idEffect.Text = p.Value.ToString();
                         if (p.Name == "idPiste") tb_idPiste.Text = p.Value.ToString();
                     }
-                    catch (Exception ex){ main.log(ex); }
+                    catch (Exception ex){ main.logErr(ex.ToString()); }
                 }
            
         }
@@ -101,7 +101,7 @@ namespace ClientTest_APITrackers
             {
                 int idCell = _idCell;
 
-                JContainer json = API.SELECT_Cell(main.getTrackerId_TRACKER_INTERFACE(), idCell);
+                JContainer json = main.api().SELECT_Cell(main.getTrackerId_TRACKER_INTERFACE(), idCell);
                 try
                 {
                     setOnInterface((JObject)json);
@@ -123,7 +123,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 // MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -137,7 +137,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 // MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
            
         }
@@ -149,14 +149,13 @@ namespace ClientTest_APITrackers
                 int idCell = Convert.ToInt32(tb_id.Text);
 
                 JObject json = getFromInterface();
-                JObject json_2 = API.INSERT_Cell(main.getTrackerId_TRACKER_INTERFACE(), json);
+                JObject json_2 = main.api().INSERT_Cell(main.getTrackerId_TRACKER_INTERFACE(), json);
                 setOnInterface(json_2);
-                main.log("INSERED: " + json);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -166,13 +165,12 @@ namespace ClientTest_APITrackers
             {
                 int idCell = Convert.ToInt32(tb_id.Text);
 
-                JObject json = API.DELETE_Cell(main.getTrackerId_TRACKER_INTERFACE(), idCell);
-                main.log("DELETED: " + json);
+                JObject json = main.api().DELETE_Cell(main.getTrackerId_TRACKER_INTERFACE(), idCell);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -183,14 +181,13 @@ namespace ClientTest_APITrackers
                 int idCell = Convert.ToInt32(tb_id.Text);
 
                 JObject json = getFromInterface();
-                JObject json_2 = API.UPDATE_Cell(main.getTrackerId_TRACKER_INTERFACE(), json);
+                JObject json_2 = main.api().UPDATE_Cell(main.getTrackerId_TRACKER_INTERFACE(), json);
                 setOnInterface(json_2);
-                main.log("UPDATED: " + json);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -216,7 +213,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JArray json = (JArray)API.SELECT_Cells(main.getTrackerId_CELL_INTERFACE());
+                JArray json = (JArray)main.api().SELECT_Cells(main.getTrackerId_CELL_INTERFACE());
 
                 ListWindow luw = main.getListWindow();
                 luw.lv.Items.Clear();

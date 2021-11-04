@@ -75,7 +75,7 @@ namespace ClientTest_APITrackers
             try
             {
                 setInterface(
-                   (JObject)API.SELECT_Sample(Convert.ToInt32(tb_id.Text))
+                   (JObject)main.api().SELECT_Sample(Convert.ToInt32(tb_id.Text))
                 );
             }
             catch
@@ -89,7 +89,7 @@ namespace ClientTest_APITrackers
             try
             {
                 setInterface(
-                   API.INSERT_Sample(getFromInterface())
+                   main.api().INSERT_Sample(getFromInterface())
                    );
             }
             catch
@@ -103,7 +103,7 @@ namespace ClientTest_APITrackers
             try
             {
                 setInterface(
-                    API.DELETE_Sample(Convert.ToInt32(tb_id.Text))
+                    main.api().DELETE_Sample(Convert.ToInt32(tb_id.Text))
                 );
             }
             catch
@@ -117,7 +117,7 @@ namespace ClientTest_APITrackers
             try
             {
                 setInterface(
-                    API.UPDATE_Sample(getFromInterface())
+                    main.api().UPDATE_Sample(getFromInterface())
                 );
 
             }
@@ -131,7 +131,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JArray json = (JArray)API.SELECT_Samples();
+                JArray json = (JArray)main.api().SELECT_Samples();
 
                 ListWindow luw = main.getListWindow();
                 luw.lv.Items.Clear();
@@ -229,7 +229,7 @@ namespace ClientTest_APITrackers
             }
             catch(Exception ex)
             {
-                main.log(ex);
+                main.logErr(ex);
                 tb_testt.Text = "KO";
             }
         }
@@ -244,7 +244,7 @@ namespace ClientTest_APITrackers
             }
             catch (Exception ex)
             {
-                main.log(ex);
+                main.logErr(ex);
             }
         }
         private void btn_playPitch_click(object sender, RoutedEventArgs e)
@@ -257,7 +257,7 @@ namespace ClientTest_APITrackers
             }
             catch (Exception ex)
             {
-                main.log(ex);
+                main.logErr(ex.ToString());
             }
         }
 
@@ -269,7 +269,7 @@ namespace ClientTest_APITrackers
             }
             catch (Exception ex)
             {
-                main.log(ex);
+                main.logErr(ex);
             }
         }
     }

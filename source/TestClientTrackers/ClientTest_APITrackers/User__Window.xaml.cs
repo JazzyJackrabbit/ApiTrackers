@@ -78,13 +78,13 @@ namespace ClientTest_APITrackers
         private void btn_SELECT_Click(object sender, RoutedEventArgs e)
         {
             try {
-                JObject json = (JObject)API.SELECT_User(getUserID());
+                JObject json = (JObject)main.api().SELECT_User(getUserID());
                 setOnInterface(json);
             }
             catch {
                 try
                 {
-                    JArray json = (JArray)API.SELECT_User(getUserID());
+                    JArray json = (JArray)main.api().SELECT_User(getUserID());
                     JToken jo = json[0];
                     setOnInterface(
                          (JObject)jo.ToObject((new JObject()).GetType())
@@ -100,7 +100,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JObject json = API.UPDATE_User(getFromInterface());
+                JObject json = main.api().UPDATE_User(getFromInterface());
                 setOnInterface(json);
             }
             catch { clearInterface(); }
@@ -110,7 +110,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JObject json = API.DELETE_User(getUserID());
+                JObject json = main.api().DELETE_User(getUserID());
                 setOnInterface(json);
             }
             catch { clearInterface(); }
@@ -120,7 +120,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JObject json = API.INSERT_User(getFromInterface());
+                JObject json = main.api().INSERT_User(getFromInterface());
                 setOnInterface(json);
             }
             catch { clearInterface(); }
@@ -130,7 +130,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JArray json = (JArray)API.SELECT_Users();
+                JArray json = (JArray)main.api().SELECT_Users();
 
                 ListWindow luw = main.getListWindow();
                 luw.lv.Items.Clear();

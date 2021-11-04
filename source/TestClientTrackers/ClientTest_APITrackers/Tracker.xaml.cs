@@ -186,7 +186,7 @@ namespace ClientTest_APITrackers
                                         try
                                         {
                                             // test
-                                            urlSample = ((JObject)API.SELECT_Sample(idSample)).GetValue("linkSample").ToString();
+                                            urlSample = ((JObject)main.api().SELECT_Sample(idSample)).GetValue("linkSample").ToString();
                                         }
                                         catch { }
 
@@ -217,7 +217,7 @@ namespace ClientTest_APITrackers
                     if (p.Name == "idUser")
                         lbl_infos.Content = "idUser: " + p.Value;
                 }
-                catch (Exception ex) { main.log(ex); }
+                catch (Exception ex) { main.logErr(ex); }
             }
 
         }
@@ -249,8 +249,7 @@ namespace ClientTest_APITrackers
             json.Add(new JProperty("id", idCell));
             json.Add(new JProperty("idTracker", _idTracker));
 
-            JContainer json2 = API.SELECT_Tracker(_idTracker, main.getTrackerId_TRACKER_INTERFACE());
-            main.log("SELECT: " + json2);
+            JContainer json2 = main.api().SELECT_Tracker(_idTracker, main.getTrackerId_TRACKER_INTERFACE());
 
             openInterface();
            // InvalidateVisual();
@@ -278,15 +277,14 @@ namespace ClientTest_APITrackers
                 //json.Add(new JProperty("id", idCell));
                 json.Add(new JProperty("idTracker", _idTracker));
                 json.Add(new JProperty("idUser", main.getUserId()));
-                JObject json_2 = API.INSERT_Cell(main.getTrackerId_TRACKER_INTERFACE(), json);
-                main.log("INSERED: " + json);
+                JObject json_2 = main.api().INSERT_Cell(main.getTrackerId_TRACKER_INTERFACE(), json);
                 foreach (JProperty j in json_2.Properties())
                     if (j.Name == "id") return Convert.ToInt32(j.Value);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
             return -1;
         }
@@ -307,7 +305,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -321,13 +319,12 @@ namespace ClientTest_APITrackers
             {
                 JObject json = new JObject();
                 json.Add(new JProperty("id", idCell));
-                json = API.DELETE_Cell(main.getTrackerId_TRACKER_INTERFACE(), _idtracker);
-                main.log("DELETED: " + json);
+                json = main.api().DELETE_Cell(main.getTrackerId_TRACKER_INTERFACE(), _idtracker);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -356,7 +353,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 // MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -367,7 +364,7 @@ namespace ClientTest_APITrackers
             {
                 int idTracker = Convert.ToInt32(tb_idTracker.Text);
 
-                JContainer json = API.SELECT_Tracker(idTracker, main.getTrackerId_TRACKER_INTERFACE());
+                JContainer json = main.api().SELECT_Tracker(idTracker, main.getTrackerId_TRACKER_INTERFACE());
                 try
                 { // object
 
@@ -394,7 +391,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 // MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -405,14 +402,13 @@ namespace ClientTest_APITrackers
                 int idTr = Convert.ToInt32(tb_idTracker.Text);
 
                 JObject json = getFromInterface();
-                JObject json_2 = API.INSERT_Tracker(main.getTrackerId_TRACKER_INTERFACE(), json);
+                JObject json_2 = (JObject)main.api().INSERT_Tracker(main.getTrackerId_TRACKER_INTERFACE(), json);
                 setOnInterface(json_2);
-                main.log("INSERED: " + json);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -422,13 +418,12 @@ namespace ClientTest_APITrackers
             {
                 int idTr = Convert.ToInt32(tb_idTracker.Text);
 
-                JObject json = API.DELETE_Tracker(main.getTrackerId_TRACKER_INTERFACE(), idTr);
-                main.log("DELETED: " + json);
+                JObject json = main.api().DELETE_Tracker(main.getTrackerId_TRACKER_INTERFACE(), idTr);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
 
@@ -441,16 +436,15 @@ namespace ClientTest_APITrackers
                 JObject json = getFromInterface();
                 
                 //main.trackerCtrlWindow.lv.Items.Clear();
-                JObject json_2 = API.UPDATE_Tracker(main.getTrackerId_TRACKER_INTERFACE(), json);
+                JObject json_2 = main.api().UPDATE_Tracker(main.getTrackerId_TRACKER_INTERFACE(), json);
 
 
                 setOnInterface(json_2);
-                main.log("UPDATED: " + json_2);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
         }
         public class DataGridRowElement
@@ -552,7 +546,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JArray json = (JArray)API.SELECT_Trackers(main.getUserId());
+                JArray json = (JArray)main.api().SELECT_Trackers(main.getUserId());
 
                 ListWindow luw = main.getListWindow();
                 luw.lv.Items.Clear();
@@ -572,7 +566,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JArray json = (JArray)API.SELECT_Cells(main.getTrackerId_TRACKER_INTERFACE());
+                JArray json = (JArray)main.api(). SELECT_Cells(main.getTrackerId_TRACKER_INTERFACE());
 
                 ListWindow luw = main.getListWindow();
                 luw.lv.Items.Clear();

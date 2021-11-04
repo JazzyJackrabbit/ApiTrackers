@@ -15,8 +15,8 @@ namespace ApiTrackers.BDD_Services
 
         internal string defaultIdNameTable = "id";
 
-        public SqlTable sqlTableRightMusics;
-        public SqlTable sqlTableSamples;
+            public SqlTable sqlTableRightMusics;
+            public SqlTable sqlTableSamples;
         public SqlTable sqlTableUsers;
         public SqlTable sqlTableTrackers;
         public SqlTable sqlTableCells;

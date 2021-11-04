@@ -224,14 +224,13 @@ namespace ClientTest_APITrackers
                 json.Add(new JProperty("id", _idCell));
                 json.Add(new JProperty("idUser", main.getUserId()));
 
-                JObject json_2 = API.UPDATE_Cell(_idTracker, json);
-                main.log("UPDATED: " + json_2);
+                JObject json_2 = main.api().UPDATE_Cell(_idTracker, json);
                 foreach (JProperty j in json_2.Properties())
                     if (j.Name == "id") return Convert.ToInt32(j.Value);
 
 
-                int idSample = Convert.ToInt32(((JObject)API.SELECT_Cell(main.getTrackerId_TRACKER_INTERFACE(), _idCell)).GetValue("idSample"));
-                string url = ((JObject)API.SELECT_Sample(idSample)).GetValue("linkSample").ToString();
+                int idSample = Convert.ToInt32(((JObject)main.api().SELECT_Cell(main.getTrackerId_TRACKER_INTERFACE(), _idCell)).GetValue("idSample"));
+                string url = ((JObject)main.api().SELECT_Sample(idSample)).GetValue("linkSample").ToString();
 
 
                 loadAudio(url, _vol, _key);
@@ -239,7 +238,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.log(ex.ToString());
+                main.logErr(ex.ToString());
             }
             return -1;
         }

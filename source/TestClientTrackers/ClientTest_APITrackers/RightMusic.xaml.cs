@@ -80,7 +80,7 @@ namespace ClientTest_APITrackers
             try
             {
                 setInterface((JObject)
-                    API.SELECT_RightMusic(
+                    main.api().SELECT_RightMusic(
                         Convert.ToInt32(tb_idUser.Text), 
                         Convert.ToInt32(tb_idTracker.Text) ));
             }
@@ -92,7 +92,7 @@ namespace ClientTest_APITrackers
             try
             {
                 setInterface(
-                API.INSERT_RightMusic(getFromInterface()));
+                main.api().INSERT_RightMusic(getFromInterface()));
             }
             catch { clearInterface(); }
         }
@@ -102,7 +102,7 @@ namespace ClientTest_APITrackers
             try
             {
                 setInterface(
-                API.UPDATE_RightMusic(getFromInterface())
+                main.api().UPDATE_RightMusic(getFromInterface())
             );
             }
             catch {
@@ -114,7 +114,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JArray json = (JArray)API.SELECT_RightMusics_byTracker(Convert.ToInt32(tb_idTracker.Text));
+                JArray json = (JArray)main.api().SELECT_RightMusics_byTracker(Convert.ToInt32(tb_idTracker.Text));
 
                 ListWindow luw = main.getListWindow();
                 luw.lv.Items.Clear();
@@ -132,7 +132,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                JArray json = (JArray)API.SELECT_RightMusics_byUser(Convert.ToInt32(tb_idUser.Text));
+                JArray json = (JArray)main.api().SELECT_RightMusics_byUser(Convert.ToInt32(tb_idUser.Text));
 
                 ListWindow luw = main.getListWindow();
                 luw.lv.Items.Clear();

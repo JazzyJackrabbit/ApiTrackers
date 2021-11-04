@@ -75,6 +75,16 @@ namespace ApiTrackers
 
         private static string StringifyJsonArrayProperties(this IContractResolver resolver, Type typeChild, object list_objs)
         {
+            // JObject 
+            // JArray
+
+            // TODO !!! 
+
+            /*JObject test =
+            {
+                test = new JObject()
+            }*/
+
             List<object> listObjsConvrt = castListObject(list_objs);
             string arrayJson = "[ ";
             foreach(object obj in listObjsConvrt)

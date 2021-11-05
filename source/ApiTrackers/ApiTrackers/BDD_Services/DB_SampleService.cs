@@ -13,15 +13,15 @@ namespace ApiSamples.Services
     public class DB_SampleService
     {
         DB_MainService bdd;
-        MainService main;
+        Main main;
         private int lastId = -1;
 
-        public DB_SampleService(MainService _main)
+        public DB_SampleService(Main _main)
         {
             main = _main;
             bdd = _main.bdd;
 
-            lastId = bdd.db_config.sqlTableSamples.selectLastID(_main);
+            lastId = bdd.db_config.sqlTableSamples.selectLastID(_main, true);
         }
 
         public int getLastId() { return lastId; }
@@ -59,15 +59,15 @@ namespace ApiSamples.Services
             if (_canControlSamples == 1)
                 if (bdd.insert(bdd.db_config.sqlTableSamples, sqlRowToInsert))
                 {
-                    int id2 = getLastId();
-                    Sample checkSample = selectSample(id2);
+                    //int id2 = getLastId();      << check for remove this line
+                    Sample checkSample = selectSample(id);
                     if (checkSample != null)
                         return checkSample;
                 }
             return null;
         }
 
-        public Sample updateSample(Sample _sampleModel, int id)
+        public Sample updateSample(Sample _sampleModel, int id /*<<< TODO remove this parameter, is accessible by sampleModel*/ )
         {
             //TODO //TODO //TODO
             int _canControlSamples = 1;
@@ -97,7 +97,7 @@ namespace ApiSamples.Services
             Sample sample = convertSQLToSample(rowToDelete);
             
             if (_canControlSamples == 1)
-                if (sample != null)   
+                if (sample != null)   // todo delete
                     bdd.delete(bdd.db_config.sqlTableSamples, _id); 
                 else
                     throw new ForbiddenException();

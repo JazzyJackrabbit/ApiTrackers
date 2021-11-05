@@ -19,6 +19,9 @@
     <Page Update="RightMusic.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="SampleAlias.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Sample.xaml">
       <SubType>Designer</SubType>
     </Page>

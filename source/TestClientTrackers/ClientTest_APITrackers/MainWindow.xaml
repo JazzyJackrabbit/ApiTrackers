@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientTest_APITrackers"
         mc:Ignorable="d"
-        Title="Log" Height="900" Width="1480" Cursor="IBeam">
+        Title="Log" Height="950" Width="1900" Cursor="IBeam">
     <Grid x:Name="grid" Background="#333" Margin="0,0,0,-6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50*"></ColumnDefinition>
             <ColumnDefinition  Width="15"></ColumnDefinition>
-            <ColumnDefinition Width="30*"></ColumnDefinition>
+            <ColumnDefinition Width="50*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <Grid x:Name="grid_content"  Background="#bbb"   />

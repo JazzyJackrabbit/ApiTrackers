@@ -12,9 +12,9 @@ namespace ApiCells.Controllers
     [Route("Cells")]
     public class CellController : ControllerBase
     {
-        public MainService mainService; //
+        public Main mainService; //
 
-        public CellController(MainService _mainService)
+        public CellController(Main _mainService)
         {
             mainService = _mainService;
         }

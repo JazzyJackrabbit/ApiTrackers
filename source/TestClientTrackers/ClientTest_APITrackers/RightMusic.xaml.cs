@@ -39,8 +39,8 @@ namespace ClientTest_APITrackers
 
         public void clearInterface()
         {
-            tb_idTracker.Text = "";
-            tb_idUser.Text = "";
+            //tb_idTracker.Text = "";
+            //tb_idUser.Text = "";
             tb_right.Text = "";
         }
         public void setInterface(JObject json)
@@ -94,7 +94,7 @@ namespace ClientTest_APITrackers
                 setInterface(
                 main.api().INSERT_RightMusic(getFromInterface()));
             }
-            catch { clearInterface(); }
+            catch (Exception xe) { main.logErr(xe.ToString()); clearInterface(); }
         }
 
         private void UpdateClick(object sender, RoutedEventArgs e)
@@ -105,7 +105,9 @@ namespace ClientTest_APITrackers
                 main.api().UPDATE_RightMusic(getFromInterface())
             );
             }
-            catch {
+            catch (Exception x)
+            {
+                main.logErr(x.ToString());
                 clearInterface();
             }
         }
@@ -144,6 +146,46 @@ namespace ClientTest_APITrackers
                  main.showListWindow();
             }
             catch { clearInterface(); }
+        }
+
+        private void btn_idLeftUser_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idUser.Text = "" + (Convert.ToInt32(tb_idUser.Text) - 1);
+                SelectClick(sender, e);
+            }
+            catch { }
+        }
+
+        private void btn_idLeftTracker_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idTracker.Text = "" + (Convert.ToInt32(tb_idTracker.Text) - 1);
+                SelectClick(sender, e);
+            }
+            catch { }
+        }
+
+        private void btn_idRightUser_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idUser.Text = "" + (Convert.ToInt32(tb_idUser.Text) + 1);
+                SelectClick(sender, e);
+            }
+            catch { }
+        }
+
+        private void btn_idRightTracker_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idTracker.Text = "" + (Convert.ToInt32(tb_idTracker.Text) + 1);
+                SelectClick(sender, e);
+            }
+            catch {  }
         }
     }
 }

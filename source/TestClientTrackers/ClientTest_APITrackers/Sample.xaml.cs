@@ -30,7 +30,7 @@ namespace ClientTest_APITrackers
 
         public void clearInterface()
         {
-            tb_id.Text = "";
+            //tb_id.Text = "";
             tb_idLogo.Text = "";
             tb_name.Text = "";
             tb_color.Text = "";
@@ -271,6 +271,25 @@ namespace ClientTest_APITrackers
             {
                 main.logErr(ex);
             }
+        }
+
+        private void btn_idLeft_click(object sender, RoutedEventArgs e)
+        {
+            try { 
+                tb_id.Text = "" + (Convert.ToInt32(tb_id.Text) - 1);
+                btn_select_click(sender, e);
+            }
+            catch { }
+        }
+
+        private void btn_ifRight_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_id.Text = "" + (Convert.ToInt32(tb_id.Text) + 1);
+                btn_select_click(sender, e);
+            }
+            catch { }
         }
     }
 }

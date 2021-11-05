@@ -12,9 +12,9 @@ namespace ApiSamples.Controllers
     [Route("Samples")]
     public class SampleController : ControllerBase
     {
-        public MainService mainService; //
+        public Main mainService; //
 
-        public SampleController(MainService _mainService)
+        public SampleController(Main _mainService)
         {
             mainService = _mainService;
         }

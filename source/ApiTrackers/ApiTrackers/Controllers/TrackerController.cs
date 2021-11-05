@@ -19,9 +19,9 @@ namespace ApiTrackers.Controllers
     [Route("Trackers")]
     public class TrackerController : ControllerBase
     {
-        public MainService mainService; //
+        public Main mainService; //
 
-        public TrackerController(MainService _mainService)
+        public TrackerController(Main _mainService)
         {
             mainService = _mainService;
         }

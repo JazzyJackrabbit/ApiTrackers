@@ -221,7 +221,7 @@ namespace ClientTest_APITrackers
             }
 
         }
-   
+
         private JObject getFromInterface()
         {
             var json = new JObject{
@@ -231,10 +231,21 @@ namespace ClientTest_APITrackers
                 new JProperty("title", tb_title.Text),
                 new JProperty("bpm", tb_bpm.Text),
                 new JProperty("comments", tb_comments.Text),
-                new JProperty("coprightInformations", "") 
+                new JProperty("coprightInformations", "")
             };
-     
+
             return json;
+        }
+        private void clearInterface()
+        {
+
+            //tb_idTracker.Text
+            tb_artist.Text = "";
+            tb_title.Text = "";
+            tb_bpm.Text = "";
+            tb_comments.Text = "";
+
+
         }
 
         public void openInterface()
@@ -268,6 +279,9 @@ namespace ClientTest_APITrackers
         {
             try
             {
+
+                int idSampleDefault = 1;
+
                 JObject json = new JObject();
 
                 json.Add(new JProperty("volume", 1));
@@ -276,6 +290,7 @@ namespace ClientTest_APITrackers
 
                 //json.Add(new JProperty("id", idCell));
                 json.Add(new JProperty("idTracker", _idTracker));
+                json.Add(new JProperty("idSample", idSampleDefault));
                 json.Add(new JProperty("idUser", main.getUserId()));
                 JObject json_2 = main.api().INSERT_Cell(main.getTrackerId_TRACKER_INTERFACE(), json);
                 foreach (JProperty j in json_2.Properties())
@@ -353,7 +368,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 // MessageBox.Show(ex.Message);
-                main.logErr(ex.ToString());
+                main.logErr(ex.ToString()); clearInterface();
             }
         }
 
@@ -391,7 +406,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 // MessageBox.Show(ex.Message);
-                main.logErr(ex.ToString());
+                main.logErr(ex.ToString()); clearInterface();
             }
         }
 
@@ -408,7 +423,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.logErr(ex.ToString());
+                main.logErr(ex.ToString()); clearInterface();
             }
         }
 
@@ -423,7 +438,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.logErr(ex.ToString());
+                main.logErr(ex.ToString()); clearInterface();
             }
         }
 
@@ -444,7 +459,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
-                main.logErr(ex.ToString());
+                main.logErr(ex.ToString()); clearInterface();
             }
         }
         public class DataGridRowElement
@@ -591,6 +606,29 @@ namespace ClientTest_APITrackers
             catch
             {
                 (new RightMusic(main)).Show();
+            }
+        }
+
+        private void btn_SELECT_LEFT_ID_Click(object sender, RoutedEventArgs e)
+        {
+            try { 
+                tb_idTracker.Text = "" + (Convert.ToInt32(tb_idTracker.Text) - 1);
+                btn_SELECT_Click(sender, e);
+            }
+            catch { 
+                clearInterface(); 
+            }
+        }
+
+        private void btn_SELECT_RIGHT_ID_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idTracker.Text = "" + (Convert.ToInt32(tb_idTracker.Text) + 1);
+                btn_SELECT_Click(sender, e);
+            }
+            catch {            
+                clearInterface();
             }
         }
     }

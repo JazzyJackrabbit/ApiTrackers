@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiTrackers.BDD_Services;
+using ApiTrackers.Exceptions;
 using ApiTrackers.Services;
 using MySql.Data.MySqlClient;
 
@@ -10,7 +11,7 @@ namespace ApiTrackers
 {
     public class DB_MainService
     {
-        MainService mainService;
+        Main mainService;
 
         string connectionString;
 
@@ -20,7 +21,9 @@ namespace ApiTrackers
 
         string defaultIdNameTable;
 
-        public DB_MainService(MainService _mainService)
+        MySqlConnection sqlConnection;
+
+        public DB_MainService(Main _mainService)
         {
             mainService = _mainService;
 
@@ -28,39 +31,43 @@ namespace ApiTrackers
                 "server="+ db_config.db_host + ";"               
                 + "database="+ db_config.db_database+";"                                      
                 + "uid="+ db_config.db_user + ";"
-                + "pwd="+ db_config.db_pass + ";";                       
+                + "pwd="+ db_config.db_pass + ";";
+
+            sqlConnection = new MySqlConnection(connectionString);
 
             defaultIdNameTable = db_config.defaultIdNameTable;
             db_config.db_tablesDefinition(sqlTables);
 
         }
+        public MySqlConnection getSqlConnection()
+        {
+            return sqlConnection;
+        }
 
-        public void executeNonQuery(string _sqlCommand)
+        public void executeNonQuery(string _sqlCommand, bool _selfOpenClose = false)
         {
             try
             {
-                MySqlConnection sqlConnection = new MySqlConnection(connectionString);
                 MySqlCommand command = new MySqlCommand(_sqlCommand, sqlConnection);
                 command.Connection = sqlConnection;
-                sqlConnection.Open();
+                if(_selfOpenClose) sqlConnection.Open();
                 command.ExecuteNonQuery();
-                sqlConnection.Close();
+                if(_selfOpenClose) sqlConnection.Close();
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySqlException ex)
             {
                 Console.WriteLine("BDDService - connection - err: " + ex);
                 return;
             }
          
         }
-        public List<SqlRow> executeReader(string _sqlCommand, SqlTable _sqlTable)
+        public List<SqlRow> executeReader(string _sqlCommand, SqlTable _sqlTable, bool _selfOpenClose = false)
         {
             try
             {
-                MySqlConnection sqlConnection = new MySqlConnection(connectionString);
                 MySqlCommand command = new MySqlCommand(_sqlCommand, sqlConnection);
                 command.Connection = sqlConnection;
-                sqlConnection.Open();
+                if (_selfOpenClose) sqlConnection.Open();
                 MySqlDataReader reader = command.ExecuteReader();
 
                 // traitment data rows
@@ -85,21 +92,20 @@ namespace ApiTrackers
                                     );
                                 }
                             }
-                        
+
                         sqlRowsResp.Add(row);
                         ++posI;
                     }
 
-                sqlConnection.Close();
+                if (_selfOpenClose) sqlConnection.Close();
                 return sqlRowsResp;
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySqlException ex)
             {
                 Console.WriteLine("BDDService - connection - err: " + ex);
                 return null;
             }
         }
-
         public bool insert(SqlTable _sqlTable, SqlRow _sqlRow)
         {
             try { 
@@ -199,12 +205,13 @@ namespace ApiTrackers
 
                 return rows;
             }
-            catch
+            catch (Exception ex)
             {
                 return null;
             }
         }
 
+  
         public bool delete(SqlTable _sqlTable, int _id)
         {
             return delete(_sqlTable, _id, defaultIdNameTable);
@@ -304,7 +311,6 @@ namespace ApiTrackers
             public object value = null;
             public typeSql typ;
             public string jsonName = null;
-            public SqlTable foreignKeyReference = null;
 
             public SqlAttribut(string _name, object _value)
             { name = _name; value = _value; }
@@ -314,13 +320,6 @@ namespace ApiTrackers
             { jsonName = _jsonName; name = _name; typ = _typ; }
             public SqlAttribut(string _jsonName, string _name, typeSql _typ, object _defaultValue)
             { jsonName = _jsonName; name = _name; typ = _typ; value = _defaultValue; }
-            public SqlAttribut(SqlTable _foreignKeyReference, string _jsonName, string _name, typeSql _typ)
-            { jsonName = _jsonName; name = _name; typ = _typ; foreignKeyReference = _foreignKeyReference; }
-            public SqlAttribut(SqlTable _foreignKeyReference, string _jsonName, string _name, typeSql _typ, object _defaultValue)
-            { jsonName = _jsonName; name = _name; typ = _typ; value = _defaultValue; foreignKeyReference = _foreignKeyReference; }
-
-
-
         }
 
         public class SqlRow
@@ -369,27 +368,30 @@ namespace ApiTrackers
             public List<SqlRow> rows = new List<SqlRow>();
             public List<SqlAttribut> attributesModels = new List<SqlAttribut>();
 
-
-            public int selectLastID(MainService _mainService)
+            public int selectLastID(Main _main, bool _selfOpenClose = false)
             {
-                List<SqlRow> sqlRows = _mainService.bdd.select(this, false);
-                int id = -1;
-                if (sqlRows == null) return id;
-                if (sqlRows.Count > 0)
-                    foreach (SqlRow sqlRow in sqlRows)
+                try
+                {
+                    MySqlCommand command = new MySqlCommand("SELECT MAX(id) FROM " + this.tableName + ";", _main.bdd.sqlConnection);
+                    command.Connection = _main.bdd.sqlConnection;
+                    if (_selfOpenClose) _main.bdd.sqlConnection.Open();
+                    MySqlDataReader reader = command.ExecuteReader();
+                    if (_selfOpenClose) _main.bdd.sqlConnection.Close();
+
+                    List<SqlRow> sqlRowsResp = new List<SqlRow>();
+                    int posI = 0;
+                    if (reader.HasRows)
                     {
-                        SqlAttribut attrId = sqlRow.getAttribute(_mainService.bdd.defaultIdNameTable);
-                        if (attrId != null)
-                            id = Math.Max(id, (int)attrId.value);
+                        reader.Read();
+                        posI = Convert.ToInt32(reader[0].ToString());
                     }
-                else
-                    return 0;
-                return id;
-            }
-
-            public int selectLastIDPlusOne(MainService _mainService)
-            {
-                return this.selectLastID(_mainService) + 1;
+                    return posI;
+                }
+                catch (MySqlException ex)
+                {
+                    Console.WriteLine("BDDService - connection - err: " + ex);
+                    throw new DatabaseRequestException();
+                }
             }
 
         }

@@ -27,6 +27,7 @@ namespace ClientTest_APITrackers
         public Sample sampleWindow; // sample
         public RightMusic rightMusicWindow; // sample
         public ListWindow listWindow;
+        public SampleAlias sampleAliasWindow;
 
         public Grid Grid_trackerCtrlWindow; // tracker
         public Grid Grid_cellControlWindow; // cell
@@ -34,6 +35,7 @@ namespace ClientTest_APITrackers
         public Grid Grid_sampleWindow; // sample
         public Grid Grid_rightMusicWindow; // sample
         public Grid Grid_listWindow; // sample
+        public Grid Grid_sampleAliasWindow; // sample
 
         public MainWindow()
         {
@@ -46,6 +48,7 @@ namespace ClientTest_APITrackers
             sampleWindow = new Sample(this);
             rightMusicWindow = new RightMusic(this);
             listWindow = new ListWindow();
+            sampleAliasWindow = new SampleAlias(this);
 
             Grid child = Grid_userWindow = (Grid)userWindow.grid_content.Children[0];
             userWindow.grid_content.Children.Clear();
@@ -71,16 +74,15 @@ namespace ClientTest_APITrackers
             listWindow.grid_content_Parent.Children.Clear();
             grid_content.Children.Add(child);
 
+            child = Grid_sampleAliasWindow = (Grid)sampleAliasWindow.grid_content.Children[0];
+            sampleAliasWindow.grid_content.Children.Clear();
+            grid_content.Children.Add(child);
 
-            Grid_trackerCtrlWindow.Visibility = Visibility.Hidden;
-            Grid_cellControlWindow.Visibility = Visibility.Hidden;
-            Grid_userWindow.Visibility = Visibility.Hidden;
-            Grid_sampleWindow.Visibility = Visibility.Hidden;
-            Grid_rightMusicWindow.Visibility = Visibility.Hidden;
-            Grid_listWindow.Visibility = Visibility.Hidden;
+
+            invisibilityGridsAndButtons();
         }
 
-        private void invisibilityGridsAndButtons()
+        public void invisibilityGridsAndButtons()
         {
             Grid_trackerCtrlWindow.Visibility = Visibility.Hidden;
             Grid_cellControlWindow.Visibility = Visibility.Hidden;
@@ -88,6 +90,7 @@ namespace ClientTest_APITrackers
             Grid_sampleWindow.Visibility = Visibility.Hidden;
             Grid_rightMusicWindow.Visibility = Visibility.Hidden;
             Grid_listWindow.Visibility = Visibility.Hidden;
+            Grid_sampleAliasWindow.Visibility = Visibility.Hidden;
 
             Brush b1 = new SolidColorBrush(Color.FromRgb((byte)(48), (byte)(60), (byte)(150)));
             btn_cells.Background = b1;
@@ -101,6 +104,11 @@ namespace ClientTest_APITrackers
         Brush b2 = new SolidColorBrush(Color.FromRgb((byte)(140), (byte)(50), (byte)(50)));
 
         private void UsersClick(object sender, RoutedEventArgs e)
+        {
+            goUserView();
+        }
+
+        public void goUserView()
         {
             invisibilityGridsAndButtons();
             Grid_userWindow.Visibility = Visibility.Visible; //
@@ -139,6 +147,11 @@ namespace ClientTest_APITrackers
 
         private void SamplesClick(object sender, RoutedEventArgs e)
         {
+            goSampleView();
+        }
+
+        public void goSampleView()
+        {
             invisibilityGridsAndButtons();
             Grid_sampleWindow.Visibility = Visibility.Visible; //
             btn_samples.Background = b2;
@@ -147,6 +160,8 @@ namespace ClientTest_APITrackers
         private void SamplesAliasClick(object sender, RoutedEventArgs e)
         {
             invisibilityGridsAndButtons();
+            Grid_sampleAliasWindow.Visibility = Visibility.Visible; //
+            btn_samplesAlias.Background = b2;
         }
 
         public void showListWindow()
@@ -162,32 +177,32 @@ namespace ClientTest_APITrackers
 
         public string logErr(string _text)
         {
-            tb_console.Text = "XX " + DateTime.Now.ToString() + " XX  ERR/WAR : " + _text + "\n\n" + tb_console.Text;
+            tb_console.Text = "XX " + DateTime.Now.ToString() + " XX  ERR/WAR : " + _text + "\n\n\n" + tb_console.Text;
             return _text;
         }
         public string logErr(object _text)
         {
-            tb_console.Text = "XX " + DateTime.Now.ToString() + " XX  ERR/WAR : " + _text.ToString() + "\n\n" + tb_console.Text;
+            tb_console.Text = "XX " + DateTime.Now.ToString() + " XX  ERR/WAR : " + _text.ToString() + "\n\n\n" + tb_console.Text;
             return _text.ToString();
         }
         public string logSuite(string _text)
         {
-            tb_console.Text = "[[ " + DateTime.Now.ToString() + " ]]  " + _text + "\n\n" + tb_console.Text;
+            tb_console.Text = "[[ " + DateTime.Now.ToString() + " ]]  " + _text + "\n\n\n" + tb_console.Text;
             return _text;
         }
         public object logSuite(object _obj)
         {
-            tb_console.Text = "[[ " + DateTime.Now.ToString() + " ]]  " + _obj.ToString() + "\n\n" + tb_console.Text;
+            tb_console.Text = "[[ " + DateTime.Now.ToString() + " ]]  " + _obj.ToString() + "\n\n\n" + tb_console.Text;
             return _obj;
         }
         public string logLine(string _text)
         {
-            tb_console.Text = _text + "\n" + tb_console.Text;
+            tb_console.Text = _text + "\n\n\n" + tb_console.Text;
             return _text;
         }
         public string logLine(object _text)
         {
-            tb_console.Text = _text.ToString() + "\n" + tb_console.Text;
+            tb_console.Text = _text.ToString() + "\n\n\n" + tb_console.Text;
             return _text.ToString();
         }
         internal void editCell(int _idTracker, int idCell)

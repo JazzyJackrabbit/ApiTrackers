@@ -19,9 +19,9 @@ namespace ApiTrackers.Controllers
     [Route("Users")]
     public class UserController : ControllerBase
     {
-        public MainService mainService; //
+        public Main mainService; //
 
-        public UserController(MainService _mainService)
+        public UserController(Main _mainService)
         {
             mainService = _mainService;
         }

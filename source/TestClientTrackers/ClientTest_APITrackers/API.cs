@@ -61,6 +61,8 @@ namespace ClientTest_APITrackers
             if (v.GetType() == typeof(JArray)) return (JArray)v;
             return (JObject)v;
         }
+
+
         public JObject INSERT_Cell(int _idTracker, JObject json)
         {
             string url = ServerUrl + "Cells", resp = "";
@@ -87,6 +89,7 @@ namespace ClientTest_APITrackers
             return (JObject)JsonConvert.DeserializeObject(
                 ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
         }
+
 
         internal JObject UPDATE_Cell(int idTracker, JObject json)
         {
@@ -431,6 +434,91 @@ namespace ClientTest_APITrackers
                 ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
         }
 
+
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+        // SAMPLE ALIAS
+
+        internal JContainer SELECT_SamplesAlias(int idUser)
+        {
+            string url = ServerUrl + "SamplesAlias?idUser=" + idUser, resp = "";
+            main.logLine(">>> URL : " + url);
+            var response = new HttpClient().GetAsync(url).Result;
+            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            resp = response.Content.ReadAsStringAsync().Result;
+            main.logSuite(">>> RESP : " + resp);
+            object v = JsonConvert.DeserializeObject(
+               ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
+            if (v.GetType() == typeof(JArray)) return (JArray)v;
+            return (JObject)v;
+        }
+        internal JObject INSERT_SampleAlias(JObject json)
+        {
+            string url = ServerUrl + "SamplesAlias", resp = "";
+            main.logLine(">>> URL : " + url);
+            main.logSuite(">>> JObject : " + json.ToString());
+            var response = new HttpClient().PostAsJsonAsync(url, json).Result;
+            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            resp = response.Content.ReadAsStringAsync().Result;
+            main.logSuite(">>> RESP : " + resp);
+            return (JObject)JsonConvert.DeserializeObject(
+              ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
+        }
+
+        internal JObject DELETE_SampleAlias(int idUser, int idSample)
+        {
+            string url = ServerUrl + "SamplesAlias?idUser=" + idUser + "&idSample=" + idSample, resp = "";
+            main.logLine(">>> URL : " + url);
+            var response = new HttpClient().DeleteAsync(url).Result;
+            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            resp = response.Content.ReadAsStringAsync().Result;
+            main.logSuite(">>> RESP : " + resp);
+            return (JObject)JsonConvert.DeserializeObject(
+              ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
+        }
+
+        internal JObject UPDATE_SampleAlias(JObject json)
+        {
+            string url = ServerUrl + "RightMusics", resp = "";
+            main.logLine(">>> URL : " + url);
+            main.logSuite(">>> JObject : " + json.ToString());
+            HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
+            var response = client.PutAsJsonAsync(url, json).Result;
+            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            resp = response.Content.ReadAsStringAsync().Result;
+            main.logSuite(">>> RESP : " + resp);
+            return (JObject)JsonConvert.DeserializeObject(
+                ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
+        }
+
+        internal JContainer SELECT_SampleAlias(int idUser, int idSample)
+        {
+            string url = ServerUrl + "SamplesAlias?idUser=" + idUser + "&idSample=" + idSample, resp = "";
+            main.logLine(">>> URL : " + url);
+            var response = new HttpClient().GetAsync(url).Result;
+            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            resp = response.Content.ReadAsStringAsync().Result;
+            main.logSuite(">>> RESP : " + resp);
+            object v = JsonConvert.DeserializeObject(
+               ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
+            if (v.GetType() == typeof(JArray)) return (JArray)v;
+            return (JObject)v;
+        }
 
     }
 }

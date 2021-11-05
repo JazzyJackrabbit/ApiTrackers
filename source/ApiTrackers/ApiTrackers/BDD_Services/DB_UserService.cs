@@ -11,15 +11,15 @@ namespace ApiTrackers.Services
     public class DB_UserService
     {
         DB_MainService bdd;
-        MainService main;
+        Main main;
         private int lastId = -1;
 
-        public DB_UserService(MainService _main)
+        public DB_UserService(Main _main)
         {
             main = _main;
             bdd = _main.bdd;
 
-            lastId = bdd.db_config.sqlTableUsers.selectLastID(_main);
+            lastId = bdd.db_config.sqlTableUsers.selectLastID(_main, true);
         }
 
         public int getLastId(){return lastId;}

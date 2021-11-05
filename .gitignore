@@ -4,3 +4,5 @@ libSharpMod
 /source/ApiTrackers/.vs
 
 /source/TestClientTrackers/ClientTest_APITrackers/bin
+
+/source/ApiTrackers/ApiTrackers/SMTPClient/MailConfig.json

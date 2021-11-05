@@ -13,17 +13,19 @@
             <Button Content="DELETE" HorizontalAlignment="Left"  Click="btn_delete_click" Margin="27,120,0,0" VerticalAlignment="Top" Width="103"/>
             <Button x:Name="btn_update" Content="UPDATE"  Click="btn_update_click" HorizontalAlignment="Left" Margin="27,171,0,0" VerticalAlignment="Top" Width="103"/>
             <Label Content="id&#xA;&#xA;name&#xA;&#xA;linkSample&#xA;&#xA;color&#xA;&#xA;idLogo" Margin="159,20,0,0" HorizontalAlignment="Left" Width="80" Height="167" VerticalAlignment="Top"/>
-            <TextBox x:Name="tb_id" HorizontalAlignment="Left" Margin="244,20,0,0" Background="#fff" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="tb_id" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="244,20,0,0" Background="#ffb" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Cursor="IBeam" Text="1"/>
             <TextBox x:Name="tb_name" HorizontalAlignment="Left" Margin="244,50,0,0" Background="#fff" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <TextBox x:Name="tb_linksample" HorizontalAlignment="Left" Margin="244,85,0,0" Background="#fff" TextWrapping="Wrap" VerticalAlignment="Top" Width="240" Height="25"/>
             <TextBox x:Name="tb_color" HorizontalAlignment="Left" Margin="244,115,0,0" Background="#fff" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <TextBox x:Name="tb_idLogo" HorizontalAlignment="Left" Margin="244,152,0,0" Background="#fff" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Cursor="IBeam"/>
-            <Button x:Name="eyeytreyttytyety" Content="SELECT ALL" Click="btn_selectall_click" HorizontalAlignment="Left" Background="#777" Margin="400,23,0,0" VerticalAlignment="Top" Width="116"/>
+            <Button x:Name="eyeytreyttytyety" Content="SELECT ALL" Click="btn_selectall_click" HorizontalAlignment="Left" Background="#777" Margin="445,23,0,0" VerticalAlignment="Top" Width="116"/>
             <Button x:Name="tezetrtezzteztezet" Content="test sample" Click="btn_test_click" HorizontalAlignment="Left" Background="#777" Margin="394,152,0,0" VerticalAlignment="Top" Width="128" Height="35" Cursor="Hand"/>
-            <TextBox x:Name="tb_testt" HorizontalAlignment="Left" Margin="394,192,0,0" Background="#fff" TextWrapping="Wrap" VerticalAlignment="Top" Width="128" Height="25" RenderTransformOrigin="0.058,0.76"/>
+            <TextBox x:Name="tb_testt" HorizontalAlignment="Left" Margin="394,192,0,0" Background="#aaa" TextWrapping="Wrap" VerticalAlignment="Top" Width="128" Height="25" RenderTransformOrigin="0.058,0.76"/>
             <Button x:Name="btnytiuityuityu" Content="PLAY"  Click="btn_play_click" Background="#752"  HorizontalAlignment="Left" Margin="159,187,0,0" VerticalAlignment="Top" Width="74" Height="35"/>
             <Button x:Name="doututodutou" Content="STOP"  Click="btn_stop_click" Background="#752"  HorizontalAlignment="Left" Margin="244,187,0,0" VerticalAlignment="Top" Width="74" Height="35"/>
             <Button x:Name="btnytiuityuityu_Copy" Content="play+"  Click="btn_playPitch_click" Background="#752"  HorizontalAlignment="Left" Margin="162,222,0,0" VerticalAlignment="Top" Width="68" Height="27" Cursor="Hand"/>
+            <Button Content="&lt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_idLeft_click" Margin="204,20,0,0" VerticalAlignment="Top" Width="35" Height="25" Cursor="Hand"/>
+            <Button Content="&gt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_ifRight_click" Margin="369,20,0,0" VerticalAlignment="Top" Width="34" Height="25"/>
         </Grid>
 
     </Grid>

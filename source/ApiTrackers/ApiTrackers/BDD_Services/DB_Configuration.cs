@@ -15,8 +15,9 @@ namespace ApiTrackers.BDD_Services
 
         internal string defaultIdNameTable = "id";
 
-            public SqlTable sqlTableRightMusics;
-            public SqlTable sqlTableSamples;
+        public SqlTable sqlTableRightMusics;
+        public SqlTable sqlTableSamples;
+        public SqlTable sqlTableSamplesAlias;
         public SqlTable sqlTableUsers;
         public SqlTable sqlTableTrackers;
         public SqlTable sqlTableCells;
@@ -42,7 +43,7 @@ namespace ApiTrackers.BDD_Services
                 new SqlAttribut("copyrightInformation", "copyrightInformation", typeSql.tVarchar),
                 new SqlAttribut("comments", "comments", typeSql.tVarchar),
                 new SqlAttribut("bpm", "bpm", typeSql.tDouble),
-                new SqlAttribut(sqlTableUsers, "idUser", "idUser", typeSql.tInt),
+                new SqlAttribut("idUser", "idUser", typeSql.tInt),
             }));
 
             _sqlTables.Add(sqlTableSamples = new SqlTable("Samples", new List<SqlAttribut> {
@@ -53,10 +54,19 @@ namespace ApiTrackers.BDD_Services
                 new SqlAttribut("color","color",typeSql.tVarchar),
             }));
 
+            _sqlTables.Add(sqlTableSamplesAlias = new SqlTable("SamplesAlias", new List<SqlAttribut> {
+                new SqlAttribut("id","id", typeSql.tInt),
+                new SqlAttribut("name","name",typeSql.tVarchar),
+                new SqlAttribut("idUser","idUser",typeSql.tInt),
+                new SqlAttribut("idSample","idSample",typeSql.tInt),
+                new SqlAttribut("idLogo","idLogo",typeSql.tInt),
+                new SqlAttribut("color","color",typeSql.tVarchar),
+            }));
+
             _sqlTables.Add(sqlTableCells = new SqlTable("Cells", new List<SqlAttribut> {
                 new SqlAttribut("id", "id", typeSql.tInt),
-                new SqlAttribut(sqlTableTrackers, "idTracker", "idTracker", typeSql.tInt),
-                new SqlAttribut(sqlTableSamples, "idSample", "idSample", typeSql.tInt),
+                new SqlAttribut("idTracker", "idTracker", typeSql.tInt),
+                new SqlAttribut("idSample", "idSample", typeSql.tInt),
                 new SqlAttribut("idPiste","idPiste", typeSql.tInt),
                 new SqlAttribut("frequence","frequence", typeSql.tDouble),
                 new SqlAttribut("effect","effect", typeSql.tInt),
@@ -67,8 +77,8 @@ namespace ApiTrackers.BDD_Services
 
             _sqlTables.Add(sqlTableRightMusics = new SqlTable("RightMusics", new List<SqlAttribut> {
                 new SqlAttribut("id","id", typeSql.tInt),
-                new SqlAttribut(sqlTableUsers, "idUser","idUser",typeSql.tInt),
-                new SqlAttribut(sqlTableTrackers, "idTracker","idTracker",typeSql.tInt),
+                new SqlAttribut("idUser","idUser",typeSql.tInt),
+                new SqlAttribut("idTracker","idTracker",typeSql.tInt),
                 new SqlAttribut("rightValue","rightValue",typeSql.tInt),
             }));
         }

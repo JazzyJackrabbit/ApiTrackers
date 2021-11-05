@@ -94,6 +94,19 @@ namespace ClientTest_APITrackers
             };
             return json;
         }
+        private void clearInterface()
+        {
+            //tb_id.Text = "";
+            tb_freq.Text = "";
+            tb_position.Text = "";
+            tb_vol.Text = "";
+            tb_Key.Text = "";
+            //tb_idTracker.Text = "";
+            tb_idSample.Text = "";
+            tb_idEffect.Text = "";
+            tb_idPiste.Text = "";
+  
+        }
 
         public void selectAndDisplay(int _idCell)
         {
@@ -228,5 +241,57 @@ namespace ClientTest_APITrackers
             {
             }
         }
+
+        private void btn_idTRACKERRIGHT_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                tb_idTracker.Text = "" + (Convert.ToInt32(tb_idTracker.Text) + 1);
+                btn_SELECT_Click(sender, e);
+            }
+            catch
+            {
+                clearInterface();
+            }
+        }
+        private void btn_idTRACKERLEFT_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idTracker.Text = "" + (Convert.ToInt32(tb_idTracker.Text) - 1);
+                btn_SELECT_Click(sender, e);
+            }
+            catch
+            {
+                clearInterface();
+            }
+        }
+        private void btn_idRIGHT_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_id.Text = "" + (Convert.ToInt32(tb_id.Text) + 1);
+                btn_SELECT_Click(sender, e);
+            }
+            catch
+            {
+                clearInterface();
+            }
+        }
+        private void btn_idLEFT_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                tb_id.Text = "" + (Convert.ToInt32(tb_id.Text) - 1);
+                btn_SELECT_Click(sender, e);
+            }
+            catch
+            {
+                clearInterface();
+            }
+        }
+
     }
 }

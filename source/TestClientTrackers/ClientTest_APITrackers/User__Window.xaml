@@ -6,26 +6,28 @@
         xmlns:local="clr-namespace:ClientTest_APITrackers"
         x:Class="ClientTest_APITrackers.User__Window"
         mc:Ignorable="d"
-        Title="User__Window" Height="252" Width="541" Background="#bbb">
-    <Grid x:Name="grid_content" Margin="0,0,-8,-16">
+        Title="User__Window" Height="304" Width="548" Background="#bbb">
+    <Grid x:Name="grid_content" Margin="0,0,0,-6">
         <Grid>
-            <TextBox x:Name="tb_id"  HorizontalAlignment="Left" Background="#ffffaa" Margin="96,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="1" Cursor="IBeam"/>
-            <Label Content="idUser :" HorizontalAlignment="Left" Margin="19,11,0,0" VerticalAlignment="Top"/>
-            <Button x:Name="btn_SELECT" Content="SELECT" Click="btn_SELECT_Click" HorizontalAlignment="Left" Margin="364,10,0,0" VerticalAlignment="Top" Width="150" Height="34"/>
-            <TextBox x:Name="tb_permissions" HorizontalAlignment="Left" Background="#fff" Margin="112,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" Cursor="IBeam"/>
-            <Label Content="permissions:" HorizontalAlignment="Left" Margin="19,41,0,0" VerticalAlignment="Top" Width="88"/>
-            <Label Content="mail:" HorizontalAlignment="Left" Margin="19,71,0,0" VerticalAlignment="Top" Width="72"/>
-            <TextBox x:Name="tb_mail" HorizontalAlignment="Left" Background="#fff" Margin="96,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243" Cursor="IBeam" RenderTransformOrigin="0.428,3.367"/>
-            <Label Content="pseudo:" HorizontalAlignment="Left" Margin="19,101,0,0" VerticalAlignment="Top" Width="72"/>
-            <TextBox x:Name="tb_pseudo" HorizontalAlignment="Left" Background="#fff" Margin="96,101,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243" Cursor="IBeam" RenderTransformOrigin="0.428,3.367"/>
-            <Label Content="(HASHPW)" HorizontalAlignment="Left" Margin="19,131,0,0" VerticalAlignment="Top" Width="72"/>
-            <TextBox x:Name="tb_passwordHash" HorizontalAlignment="Left" Background="#fff" Margin="96,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243" Cursor="IBeam" RenderTransformOrigin="0.428,3.367"/>
-            <Label Content="recoverMails:" HorizontalAlignment="Left" Margin="19,160,0,0" VerticalAlignment="Top" Width="88"/>
-            <TextBox x:Name="tb_recoverMails" HorizontalAlignment="Left" Background="#fff" Margin="112,161,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" Cursor="IBeam"/>
-            <Button x:Name="btn_UPDATE" Content="UPDATE" Click="btn_UPDATE_Click" HorizontalAlignment="Left" Margin="364,53,0,0" VerticalAlignment="Top" Width="150" Height="42"/>
-            <Button x:Name="btn_DELETE" Content="DELETE !!!!" Click="btn_DELETE_Click" Background="#a44"  HorizontalAlignment="Left" Margin="364,104,0,0" VerticalAlignment="Top" Width="150" Height="42"/>
-            <Button x:Name="btn_INSERT" Content="INSERT" Click="btn_INSERT_Click" Background="#494" HorizontalAlignment="Left" Margin="364,163,0,0" VerticalAlignment="Top" Width="150" Height="34" Cursor="Hand"/>
-            <Button x:Name="btn_SELECT_ALL" Content="ALL" Click="btn_SELECT_ALL_Click" Background="#669" HorizontalAlignment="Left" Margin="243,21,0,0" VerticalAlignment="Top" Width="105" Height="34"/>
+            <TextBox x:Name="tb_id" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Background="#ffffaa" Margin="101,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="1" Cursor="IBeam"/>
+            <Label Content="idUser :" HorizontalAlignment="Left" Margin="24,48,0,0" VerticalAlignment="Top"/>
+            <Button x:Name="btn_SELECT" Content="SELECT" Click="btn_SELECT_Click" HorizontalAlignment="Left" Margin="369,47,0,0" VerticalAlignment="Top" Width="150" Height="34"/>
+            <TextBox x:Name="tb_permissions" HorizontalAlignment="Left" Background="#fff" Margin="117,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" Cursor="IBeam"/>
+            <Label Content="permissions:" HorizontalAlignment="Left" Margin="24,78,0,0" VerticalAlignment="Top" Width="88"/>
+            <Label Content="mail:" HorizontalAlignment="Left" Margin="24,108,0,0" VerticalAlignment="Top" Width="72"/>
+            <TextBox x:Name="tb_mail" HorizontalAlignment="Left" Background="#fff" Margin="101,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243" Cursor="IBeam" RenderTransformOrigin="0.428,3.367"/>
+            <Label Content="pseudo:" HorizontalAlignment="Left" Margin="24,138,0,0" VerticalAlignment="Top" Width="72"/>
+            <TextBox x:Name="tb_pseudo" HorizontalAlignment="Left" Background="#fff" Margin="101,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243" Cursor="IBeam" RenderTransformOrigin="0.428,3.367"/>
+            <Label Content="(HASHPW)" HorizontalAlignment="Left" Margin="24,168,0,0" VerticalAlignment="Top" Width="72"/>
+            <TextBox x:Name="tb_passwordHash" HorizontalAlignment="Left" Background="#fff" Margin="101,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243" Cursor="IBeam" RenderTransformOrigin="0.428,3.367"/>
+            <Label Content="recoverMails:" HorizontalAlignment="Left" Margin="24,197,0,0" VerticalAlignment="Top" Width="88"/>
+            <TextBox x:Name="tb_recoverMails" HorizontalAlignment="Left" Background="#fff" Margin="117,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" Cursor="IBeam"/>
+            <Button x:Name="btn_UPDATE" Content="UPDATE" Click="btn_UPDATE_Click" HorizontalAlignment="Left" Margin="369,90,0,0" VerticalAlignment="Top" Width="150" Height="42"/>
+            <Button x:Name="btn_DELETE" Content="DELETE !!!!" Click="btn_DELETE_Click" Background="#a44"  HorizontalAlignment="Left" Margin="369,137,0,0" VerticalAlignment="Top" Width="150" Height="42"/>
+            <Button x:Name="btn_INSERT" Content="INSERT" Click="btn_INSERT_Click" Background="#494" HorizontalAlignment="Left" Margin="369,200,0,0" VerticalAlignment="Top" Width="150" Height="34" Cursor="Hand"/>
+            <Button x:Name="btn_SELECT_ALL" Content="ALL" Click="btn_SELECT_ALL_Click" Background="#669" HorizontalAlignment="Left" Margin="248,58,0,0" VerticalAlignment="Top" Width="105" Height="34"/>
+            <Button x:Name="btn_SELECT_Copy" Content="&lt;" Click="btn_SELECT_LEFT_ID_Click" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Width="58" Height="32"/>
+            <Button x:Name="btn_SELECT_Copy1" Content="&gt;" Click="btn_SELECT_RIGHT_ID_Click" HorizontalAlignment="Left" Margin="163,10,0,0" VerticalAlignment="Top" Width="58" Height="32"/>
         </Grid>
 
     </Grid>

@@ -38,7 +38,13 @@ namespace ApiTrackers.Objects
             right = rfm;
             return rfm;
         }
-      
+
+        public bool isEqual(RightForMusic _right)
+        {
+            if (_right == right) return true;
+            return false;
+        }
+
 
     }
 

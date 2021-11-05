@@ -31,7 +31,7 @@ namespace ClientTest_APITrackers
         }
         private void clearInterface()
         {
-            tb_id.Text = "";
+            //tb_id.Text = "";
             tb_mail.Text = "";
             tb_permissions.Text = "";
             tb_passwordHash.Text = "";
@@ -79,7 +79,11 @@ namespace ClientTest_APITrackers
         {
             try {
                 JObject json = (JObject)main.api().SELECT_User(getUserID());
-                setOnInterface(json);
+                try
+                {
+                    setOnInterface(json);
+                }
+                catch { }
             }
             catch {
                 try
@@ -144,6 +148,18 @@ namespace ClientTest_APITrackers
             catch
             {
             }
+        }
+
+        private void btn_SELECT_RIGHT_ID_Click(object sender, RoutedEventArgs e)
+        {
+            tb_id.Text = "" + (Convert.ToInt32(tb_id.Text) + 1);
+            btn_SELECT_Click(sender, e);
+        }
+
+        private void btn_SELECT_LEFT_ID_Click(object sender, RoutedEventArgs e)
+        {
+            tb_id.Text = "" + (Convert.ToInt32(tb_id.Text) - 1);
+            btn_SELECT_Click(sender, e);
         }
     }
 }

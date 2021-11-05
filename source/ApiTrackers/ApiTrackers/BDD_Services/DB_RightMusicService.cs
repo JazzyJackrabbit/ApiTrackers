@@ -15,19 +15,19 @@ namespace ApiRightMusics.Services
     public class DB_RightMusicService
     {
         DB_MainService bdd;
-        MainService main;
-        //private int lastId = -1;
+        Main main;
+        private int lastId = -1;
 
-        public DB_RightMusicService(MainService _main)
+        public DB_RightMusicService(Main _main)
         {
             main = _main;
             bdd = _main.bdd;
 
-            //lastId = bdd.db_config.sqlTableRightMusics.selectLastID(_main);
+            lastId = bdd.db_config.sqlTableRightMusics.selectLastID(main, true);
+     
         }
-
-        //public int getLastId() { return lastId; }
-        //public int getNextId() { lastId++; return lastId; }
+        public int getLastId() { return lastId; }
+        public int getNextId() { lastId++; return lastId; }
 
         #region ******** public methods ********
 
@@ -56,34 +56,29 @@ namespace ApiRightMusics.Services
             return rightMusic;
         }
         
-        public RightMusic createRightMusic(RightForMusic _rightForMusic, int _idTracker, int _idUser)
+        public RightMusic createRightMusic(RightMusic _right)
         {
-            RightMusic right = selectRightMusic(_idTracker, _idUser);
+            RightMusic right = selectRightMusic(_right.idTracker, _right.idUser);
             if (right == null)
-            { // insert
-                insertRightMusic(_rightForMusic, _idUser, _idTracker);
-                RightMusic rightInsered = selectRightMusic(_idTracker, _idUser);
+            { 
+                insertRightMusic(_right.right, _right.idUser, _right.idTracker);
+                RightMusic rightInsered = selectRightMusic(_right.idTracker, _right.idUser);
 
                 if (rightInsered == null)
-                    return null;
+                    throw new DatabaseRequestException("Not found after expected RightMusic.");
                 else
                     return rightInsered;
             }
-                else throw new AlreadyExistException(right.GetType());
+            else throw new AlreadyExistException(right.GetType());
 
         }
-        public RightMusic changeRightMusic(RightForMusic _right, int _idTracker, int _idUser)
+        public RightMusic changeRightMusic(RightMusic _right)
         {
-            RightMusic right = selectRightMusic(_idTracker, _idUser);
+            RightMusic right = selectRightMusic(_right.idTracker, _right.idUser);
             if (right != null)
             {
-
-                //TODO Right users
-                //if()
-
-                // update
-                updateRightMusic(_right, _idTracker, _idUser);
-                RightMusic rightUpdated = selectRightMusic(_idTracker, _idUser);
+                updateRightMusic(_right.right, _right.idTracker, _right.idUser);
+                RightMusic rightUpdated = selectRightMusic(_right.idTracker, _right.idUser);
 
                 if (rightUpdated == null)
                     return null;
@@ -104,6 +99,7 @@ namespace ApiRightMusics.Services
             sqlRowToInsert = convertRightMusicToSQL(sqlRowToInsert, _rightMusicModel, idTracker, idUser);
             sqlRowToInsert.setAttribute("idTracker", idTracker);
             sqlRowToInsert.setAttribute("idUser", idUser);
+            sqlRowToInsert.setAttribute("id", getNextId());
 
             if (_canControlRightMusics == 1)
                 if (bdd.insert(bdd.db_config.sqlTableRightMusics, sqlRowToInsert))
@@ -170,7 +166,7 @@ namespace ApiRightMusics.Services
             catch (Exception ex)
             {
                 Console.WriteLine("convertSQLTo<<Object>> - err: " + ex);
-                return null;
+                throw new OwnException();
             }
         }
 

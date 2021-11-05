@@ -13,15 +13,15 @@ namespace ApiCells.Services
     public class DB_CellService
     {
         DB_MainService bdd;
-        MainService main;
+        Main main;
         private int lastId = -1;
 
-        public DB_CellService(MainService _main)
+        public DB_CellService(Main _main)
         {
             main = _main;
             bdd = _main.bdd;
 
-            lastId = bdd.db_config.sqlTableCells.selectLastID(_main);
+            lastId = bdd.db_config.sqlTableCells.selectLastID(_main, true);
         }
 
         public int getLastId() { return lastId; }

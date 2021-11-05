@@ -2558,3 +2558,5 @@ D:\Dev\GITHUB\ApiTrackers\ApiTrackers\source\TestClientTrackers\ClientTest_APITr
 D:\Dev\GITHUB\ApiTrackers\ApiTrackers\source\TestClientTrackers\ClientTest_APITrackers\obj\Debug\net5.0-windows\ClientTest_APITrackers.AssemblyInfo.cs
 D:\Dev\GITHUB\ApiTrackers\ApiTrackers\source\TestClientTrackers\ClientTest_APITrackers\obj\Debug\net5.0-windows\ClientTest_APITrackers.csproj.CoreCompileInputs.cache
 D:\Dev\GITHUB\ApiTrackers\ApiTrackers\source\TestClientTrackers\ClientTest_APITrackers\obj\Debug\net5.0-windows\ClientTest_APITrackers.genruntimeconfig.cache
+D:\Dev\GITHUB\ApiTrackers\ApiTrackers\source\TestClientTrackers\ClientTest_APITrackers\obj\Debug\net5.0-windows\SampleAlias.g.cs
+D:\Dev\GITHUB\ApiTrackers\ApiTrackers\source\TestClientTrackers\ClientTest_APITrackers\obj\Debug\net5.0-windows\SampleAlias.baml

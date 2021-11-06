@@ -23,6 +23,7 @@ namespace ApiTrackers.Objects
             Read,
             Edit,
         }
+
         public int setRight(RightForMusic _rightEnum)
         {
             return (int)(right = _rightEnum);

@@ -1,27 +1,33 @@
 ﻿
 using ApiTrackers;
+using ApiTrackers.DB_ORM;
+using ApiTrackers.DB_Services.ORM;
 using ApiTrackers.Exceptions;
 using ApiTrackers.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static ApiTrackers.DB_MainService;
+using static ApiTrackers.SqlDatabase;
 
 namespace ApiCells.Services
 {
     public class DB_CellService
     {
-        DB_MainService bdd;
+        SqlDatabase bdd;
         Main main;
         private int lastId = -1;
+
+        SqlTable table;
+        SqlCommand command;
 
         public DB_CellService(Main _main)
         {
             main = _main;
             bdd = _main.bdd;
-
-            lastId = bdd.db_config.sqlTableCells.selectLastID(_main, true);
+            table = bdd.tableCells;
+            command = table.command;
+            lastId = command.select().lastId(true);
         }
 
         public int getLastId() { return lastId; }
@@ -29,26 +35,28 @@ namespace ApiCells.Services
 
         #region ******** public methods ********
 
-        public List<Note> selectCells(int _idTracker)
+        public List<Note> selectCells(int _idTracker, bool _selfOpenClose)
         {
-            List<SqlRow> rows = bdd.select(bdd.db_config.sqlTableCells, false, _idTracker, "idTracker");
+            List<SqlRow> rows = command.select().all(false, _idTracker, "idTracker", _selfOpenClose);
             List<Note> cells = new List<Note>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
                 cells.Add(convertSQLToCell(row));
             return cells;
         }
-        public Note selectCell(int _id, int _idTracker)
+        public Note selectCell(int _id, int _idTracker, bool _selfOpenClose)
         {
-            SqlRow row = bdd.selectOnlyRow(bdd.db_config.sqlTableCells, false, _id, "id", _idTracker, "idTracker");
+            SqlRow row = command.select().row(false, _id, "id", _idTracker, "idTracker", _selfOpenClose);
             Note cell = convertSQLToCell(row);
             return cell;
         }
 
-        public Note insertCell(Note _cellModel)
-        { 
+        public Note insertCell(Note _cellModel, bool _selfOpenClose)
+        {
+            command.connectOpen(_selfOpenClose);
+
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableCells);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableCells);
 
             sqlRowToInsert = convertCellToSQL(sqlRowToInsert, _cellModel);
 
@@ -58,51 +66,69 @@ namespace ApiCells.Services
                 sqlRowToInsert.getAttribute("idTracker").value
                 );
 
-            if (bdd.insert(bdd.db_config.sqlTableCells, sqlRowToInsert))
+            if (command.insert().insert(sqlRowToInsert, false))
             {
                 int id2 = getLastId();
-                Note checkCell = selectCell(id2, idTracker);
+                Note checkCell = selectCell(id2, idTracker, false);
                 if (checkCell != null)
+                {
+                    command.connectClose(_selfOpenClose);
                     return checkCell;
+                }
             }
+
+            command.connectClose(_selfOpenClose);
             return null;
         }
 
-        public Note updateCell(Note _cellModel, int id)
+        public Note updateCell(Note _cellModel, int id, bool _selfOpenClose)
         {
             //TODO
 
-            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableCells, false, id);
-            if (sqlRowToUpdate == null) return null;
+            command.connectOpen(_selfOpenClose);
 
+            SqlRow sqlRowToUpdate = command.select().row(false, id, false);
+            if (sqlRowToUpdate == null)
+            {
+                command.connectClose(_selfOpenClose);
+                return null;
+            }
             sqlRowToUpdate.setAttribute("id", id);
             
             sqlRowToUpdate = convertCellToSQL(sqlRowToUpdate, _cellModel);
 
             // TODO REWORK 
 
-           /* Note cellToUpdate = convertSQLToCell(sqlRowToUpdate);
-            SqlRow sqlRowToUpdate_2 = convertCellToSQL(sqlRowToUpdate, cellToUpdate);*/
-
-            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableCells, sqlRowToUpdate, id);
-            if (!checkUpdateCorrectly) return null;
-
-            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.db_config.sqlTableCells, false, id);
+            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id, false);
+            if (!checkUpdateCorrectly)
+            {
+                command.connectClose(_selfOpenClose); 
+                return null;
+            }
+            SqlRow sqlRowCheck = command.select().row(false, id, false);
             Note cellUpdated = convertSQLToCell(sqlRowCheck);
 
+            command.connectClose(_selfOpenClose);
             return cellUpdated;
         }
-        public Note deleteCell(int _id, int _idUser)
+        public Note deleteCell(int _id, int _idUser, bool _selfOpenClose)
         {
-            //TODO //TODO //TODO
+            //TODO idUser
+            command.connectOpen(_selfOpenClose);
 
-            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.db_config.sqlTableCells, false, _id);
+            SqlRow rowToDelete = command.select().row(false, _id, false);
             Note cell = convertSQLToCell(rowToDelete);
             
-            if (cell != null)   
-                bdd.delete(bdd.db_config.sqlTableCells, _id); 
+            if (cell != null)
+                command.delete().delete(_id, false);
             else
+            {
+                command.connectClose(_selfOpenClose);
                 throw new ForbiddenException();
+            }
+
+            command.connectClose(_selfOpenClose);
+
             return cell;
         }
 

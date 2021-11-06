@@ -23,8 +23,9 @@ namespace ApiSamples.Controllers
         [Route("")]
         public ContentResult GetSamples()
         {
-            try { 
-                List<Sample> samples = mainService.bddSamples.selectSamples();
+            try {
+
+                List<Sample> samples = mainService.bddSamples.selectSamples(true);
 
                 if (samples != null)
                 {
@@ -58,7 +59,7 @@ namespace ApiSamples.Controllers
         public ContentResult GetSample(int id)
         {
             try { 
-                Sample sample = mainService.bddSamples.selectSample(id);
+                Sample sample = mainService.bddSamples.selectSample(id, true);
 
                 if (sample != null)
                     return new ContentResult()
@@ -90,7 +91,7 @@ namespace ApiSamples.Controllers
             try { 
                 Sample sampleToInsert = dto.toSample();
 
-                Sample sampleResp = mainService.bddSamples.insertSample(sampleToInsert);
+                Sample sampleResp = mainService.bddSamples.insertSample(sampleToInsert, true);
 
                 if (sampleResp != null)
                     return new ContentResult()
@@ -130,7 +131,7 @@ namespace ApiSamples.Controllers
                     Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
 
-                Sample sample = mainService.bddSamples.deleteSample(id, idUser);
+                Sample sample = mainService.bddSamples.deleteSample(id, idUser, true);
 
                 if (sample != null)
                     return new ContentResult()
@@ -168,7 +169,7 @@ namespace ApiSamples.Controllers
         {
             try { 
                 Sample sampleToInsert = dto.toSample();
-                 Sample sampleResp = mainService.bddSamples.updateSample(sampleToInsert, dto.id);
+                 Sample sampleResp = mainService.bddSamples.updateSample(sampleToInsert, dto.id, true);
 
                 if (sampleResp != null)
                     return new ContentResult()

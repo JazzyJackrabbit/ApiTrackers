@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
-using static ApiTrackers.DB_MainService;
+using static ApiTrackers.SqlDatabase;
 using ApiTrackers.Objects;
 using System.IO;
 using System.Text;
@@ -31,7 +31,7 @@ namespace ApiTrackers.Controllers
         public ContentResult GetTrackers()
         {
             try { 
-                List<Tracker> trackers = mainService.bddTracker.selectTrackers();
+                List<Tracker> trackers = mainService.bddTracker.selectTrackers(true);
 
                 if (trackers != null)
                 {
@@ -65,7 +65,7 @@ namespace ApiTrackers.Controllers
         public ContentResult GetTracker(int id)
         {
             try { 
-                Tracker tracker = mainService.bddTracker.selectTracker(id);
+                Tracker tracker = mainService.bddTracker.selectTracker(id, true);
 
                 if (tracker != null)
                     return new ContentResult()
@@ -100,7 +100,7 @@ namespace ApiTrackers.Controllers
 
                 Tracker trackerToInsert = dto.toTracker();
 
-                Tracker trackerResp = mainService.bddTracker.insertTracker(trackerToInsert);
+                Tracker trackerResp = mainService.bddTracker.insertTracker(trackerToInsert, true);
 
                 if (trackerResp != null)
                     return new ContentResult()
@@ -152,7 +152,7 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
 
-                Tracker tracker = mainService.bddTracker.deleteTracker(id, idUser);
+                Tracker tracker = mainService.bddTracker.deleteTracker(id, idUser, true);
 
                 if (tracker != null)
                     return new ContentResult()
@@ -187,7 +187,7 @@ namespace ApiTrackers.Controllers
                 int idUser = dto.idUser;
 
                 Tracker trackerToInsert = dto.toTracker();
-                Tracker trackerResp = mainService.bddTracker.updateTracker(trackerToInsert, dto.id, idUser);
+                Tracker trackerResp = mainService.bddTracker.updateTracker(trackerToInsert, dto.id, idUser, true);
 
                 if (trackerResp != null)
                     return new ContentResult()

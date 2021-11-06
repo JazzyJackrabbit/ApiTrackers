@@ -46,23 +46,28 @@ namespace MailingTest
 
         }
 
-        public void sendMail_GivenWriteAccess(Main _main, RightMusic _rightMusic)
+        public void sendMail_GivenWriteAccess(Main _main, RightMusic _rightMusic, bool _selfOpenClose)
         {
+            _main.bdd.connectOpen(_selfOpenClose);
+
             int idTracker = _rightMusic.idTracker;
-            Tracker tracker = _main.bddTracker.selectTracker(idTracker);
+            Tracker tracker = _main.bddTracker.selectTracker(idTracker, false);
             ; string titleTracker = tracker.trackerMetadata.title;
 
             int idUserOwner = tracker.idUser;
-            User userowner = _main.bddUser.selectUser(idUserOwner);
+            User userowner = _main.bddUser.selectUser(idUserOwner, false);
             ; string pseudoOwner = userowner.pseudo;
 
             int idUserGiven = _rightMusic.idUser;
-            User usergiven = _main.bddUser.selectUser(idUserGiven);
+            User usergiven = _main.bddUser.selectUser(idUserGiven, false);
             ; string userGivenMail = usergiven.mail;
 
 
             MailService mailService = new MailService();
             mailService.sendMail_RightMusic_GivenWriteAccess(pseudoOwner, titleTracker, userGivenMail);
+
+            _main.bdd.connectClose(_selfOpenClose);
+
         }
         public void sendMail_GivenWriteAccess(Tracker _tracker, User _userowner, User _usergiven)
         {

@@ -1,27 +1,32 @@
 ﻿
 using ApiTrackers;
+using ApiTrackers.DB_ORM;
+using ApiTrackers.DB_Services.ORM;
 using ApiTrackers.Exceptions;
 using ApiTrackers.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static ApiTrackers.DB_MainService;
+using static ApiTrackers.SqlDatabase;
 
 namespace ApiSamples.Services
 {
     public class DB_SampleService
     {
-        DB_MainService bdd;
+        SqlDatabase bdd;
         Main main;
         private int lastId = -1;
+        SqlTable table;
+        SqlCommand command;
 
         public DB_SampleService(Main _main)
         {
             main = _main;
             bdd = _main.bdd;
-
-            lastId = bdd.db_config.sqlTableSamples.selectLastID(_main, true);
+            table = bdd.tableSamples;
+            command = table.command;
+            lastId = command.select().lastId(true);
         }
 
         public int getLastId() { return lastId; }
@@ -29,80 +34,105 @@ namespace ApiSamples.Services
 
         #region ******** public methods ********
 
-        public List<Sample> selectSamples()
+        public List<Sample> selectSamples(bool _selfOpenClose)
         {
-            List<SqlRow> rows = bdd.select(bdd.db_config.sqlTableSamples, true);
+            List<SqlRow> rows = command.select().all(_selfOpenClose);
             List<Sample> samples = new List<Sample>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
                 samples.Add(convertSQLToSample(row));
             return samples;
         }
-        public Sample selectSample(int _id)
+        public Sample selectSample(int _id, bool _selfOpenClose)
         {
-            SqlRow row = bdd.selectOnlyRow(bdd.db_config.sqlTableSamples, true, _id);
+            SqlRow row = command.select().row(true, _id, _selfOpenClose);
             Sample sample = convertSQLToSample(row);
             return sample;
         }
 
-        public Sample insertSample(Sample _sampleModel)
+        public Sample insertSample(Sample _sampleModel, bool _selfOpenClose)
         {
-            //TODO //TODO //TODO
+            //TODO if idUser => user => admin ?
             int _canControlSamples = 1;
 
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableSamples);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableSamples);
 
             sqlRowToInsert = convertSampleToSQL(sqlRowToInsert, _sampleModel);
             sqlRowToInsert.setAttribute("id", id);
 
             if (_canControlSamples == 1)
-                if (bdd.insert(bdd.db_config.sqlTableSamples, sqlRowToInsert))
+                if (command.insert().insert(sqlRowToInsert, false))
                 {
                     //int id2 = getLastId();      << check for remove this line
-                    Sample checkSample = selectSample(id);
+                    Sample checkSample = selectSample(id, false);
                     if (checkSample != null)
                         return checkSample;
                 }
             return null;
         }
 
-        public Sample updateSample(Sample _sampleModel, int id /*<<< TODO remove this parameter, is accessible by sampleModel*/ )
+        public Sample updateSample(Sample _sampleModel, int id, bool _selfOpenClose /*<<< TODO remove this parameter, is accessible by sampleModel*/ )
         {
-            //TODO //TODO //TODO
+            //TODO if idUser => user => admin ?
             int _canControlSamples = 1;
 
-            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableSamples, true, id);
-            if (sqlRowToUpdate == null) return null;
+            command.connectOpen(_selfOpenClose);
 
-            if (_canControlSamples != 1) return null;
+            SqlRow sqlRowToUpdate = command.select().row(true, id, false);
+            if (sqlRowToUpdate == null)
+            {
+                command.connectClose(_selfOpenClose);
+                return null;
+            }
+            if (_canControlSamples != 1)
+            {
+                command.connectClose(_selfOpenClose);
+                return null;
+            }
 
             sqlRowToUpdate = convertSampleToSQL(sqlRowToUpdate, _sampleModel);
             sqlRowToUpdate.setAttribute("id", id);
 
-            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableSamples, sqlRowToUpdate, id);
-            if (!checkUpdateCorrectly) return null;
+            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id, false);
+            if (!checkUpdateCorrectly)
+            {
+                command.connectClose(_selfOpenClose);
+                return null;
+            }
 
-            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.db_config.sqlTableSamples, true, id);
+            SqlRow sqlRowCheck = command.select().row(true, id, false);
             Sample sampleUpdated = convertSQLToSample(sqlRowCheck);
 
+            command.connectClose(_selfOpenClose);
             return sampleUpdated;
         }
-        public Sample deleteSample(int _id, int _idUser)
+        public Sample deleteSample(int _id, int _idUser, bool _selfOpenClose)
         {
-            //TODO //TODO //TODO
+            //TODO if idUser => user => admin ?
             int _canControlSamples = 1;
 
-            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.db_config.sqlTableSamples, true, _id);
+            command.connectOpen(_selfOpenClose);
+
+            SqlRow rowToDelete = command.select().row(true, _id, false);
             Sample sample = convertSQLToSample(rowToDelete);
-            
+
             if (_canControlSamples == 1)
-                if (sample != null)   // todo delete
-                    bdd.delete(bdd.db_config.sqlTableSamples, _id); 
+                if (sample != null)
+                {   // todo delete
+                    command.delete().delete(_id, false);
+                }
                 else
+                {
+                    command.connectClose(_selfOpenClose);
                     throw new ForbiddenException();
+                }
             else
+            {
+                command.connectClose(_selfOpenClose);
                 throw new UnauthorisedException();
+            }
+            command.connectClose(_selfOpenClose);
             return sample;
         }
 

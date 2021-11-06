@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
-using static ApiTrackers.DB_MainService;
+using static ApiTrackers.SqlDatabase;
 using ApiTrackers.Objects;
 using System.IO;
 using System.Text;
@@ -31,7 +31,7 @@ namespace ApiTrackers.Controllers
         public ContentResult GetUsers()
         {
             try { 
-                List<User> users = mainService.bddUser.selectUsers();
+                List<User> users = mainService.bddUser.selectUsers(true);
 
                 if (users != null)
                 {
@@ -65,7 +65,7 @@ namespace ApiTrackers.Controllers
         public ContentResult GetUser(int id)
         {
             try { 
-                User user = mainService.bddUser.selectUser(id);
+                User user = mainService.bddUser.selectUser(id, true);
 
                 if (user != null)
                     return new ContentResult()
@@ -97,7 +97,7 @@ namespace ApiTrackers.Controllers
             try { 
             User user = dto.toUser();
 
-            User userResp = mainService.bddUser.insertUser(user);
+            User userResp = mainService.bddUser.insertUser(user, true);
 
             if (userResp != null)
                 return new ContentResult()
@@ -132,7 +132,7 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
 
-                User user = mainService.bddUser.deleteUser(id);
+                User user = mainService.bddUser.deleteUser(id, true);
 
                 if (user != null)
                     return new ContentResult()
@@ -162,7 +162,7 @@ namespace ApiTrackers.Controllers
             try { 
                 User userToInsert = dto.toUser();
        
-                User userResp = mainService.bddUser.updateUser(userToInsert, dto.id);
+                User userResp = mainService.bddUser.updateUser(userToInsert, dto.id, true);
 
                 if (userResp != null)
                     return new ContentResult()

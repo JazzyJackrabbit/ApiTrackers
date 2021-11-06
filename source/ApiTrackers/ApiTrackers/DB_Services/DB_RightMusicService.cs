@@ -1,84 +1,98 @@
 ﻿
-using ApiSamples.Services;
 using ApiTrackers;
 using ApiTrackers.Exceptions;
 using ApiTrackers.Objects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using static ApiTrackers.DB_MainService;
+using ApiTrackers.DB_Services.ORM;
+using ApiTrackers.DB_ORM;
 using static ApiTrackers.Objects.RightMusic;
 
 namespace ApiRightMusics.Services
 {
     public class DB_RightMusicService
     {
-        DB_MainService bdd;
+        SqlDatabase bdd;
         Main main;
         private int lastId = -1;
+        SqlTable table;
+        SqlCommand command;
 
         public DB_RightMusicService(Main _main)
         {
             main = _main;
             bdd = _main.bdd;
-
-            lastId = bdd.db_config.sqlTableRightMusics.selectLastID(main, true);
-     
+            table = bdd.tableRightMusics;
+            command = table.command;
+            lastId = command.select().lastId(true);
         }
         public int getLastId() { return lastId; }
         public int getNextId() { lastId++; return lastId; }
 
         #region ******** public methods ********
 
-        public List<RightMusic> selectRightMusics_bytrackerid(int _idTracker)
+        public List<RightMusic> selectRightMusics_bytrackerid(int _idTracker, bool _selfOpenClose)
         {
-            List<SqlRow> rows = bdd.select(bdd.db_config.sqlTableRightMusics, false, _idTracker, "idTracker");
+            List<SqlRow> rows = command.select().all(false, _idTracker, "idTracker", _selfOpenClose);
             List<RightMusic> rightMusics = new List<RightMusic>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
                 rightMusics.Add(convertSQLToRightMusic(row));
             return rightMusics;
         }
-        public List<RightMusic> selectRightMusics_byuserid(int _idUser)
+        public List<RightMusic> selectRightMusics_byuserid(int _idUser, bool _selfOpenClose)
         {
-            List<SqlRow> rows = bdd.select(bdd.db_config.sqlTableRightMusics, false, _idUser, "idUser");
+            List<SqlRow> rows = command.select().all(false, _idUser, "idUser", _selfOpenClose);
             List<RightMusic> rightMusics = new List<RightMusic>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
                 rightMusics.Add(convertSQLToRightMusic(row));
             return rightMusics;
         }
-        public RightMusic selectRightMusic(int _idTracker, int _idUser)
+        public RightMusic selectRightMusic(int _idTracker, int _idUser, bool _selfOpenClose)
         {
-            SqlRow row = bdd.selectOnlyRow(bdd.db_config.sqlTableRightMusics, false, _idTracker, "idTracker", _idUser, "idUser");
+            SqlRow row = command.select().row(false, _idTracker, "idTracker", _idUser, "idUser", _selfOpenClose);
             RightMusic rightMusic = convertSQLToRightMusic(row);
             return rightMusic;
         }
         
-        public RightMusic createRightMusic(RightMusic _right)
+        public RightMusic createRightMusic(RightMusic _right, bool _selfOpenClose)
         {
-            RightMusic right = selectRightMusic(_right.idTracker, _right.idUser);
+
+            bdd.connectOpen(_selfOpenClose);
+
+             RightMusic right = selectRightMusic(_right.idTracker, _right.idUser, false);
             if (right == null)
-            { 
-                insertRightMusic(_right.right, _right.idUser, _right.idTracker);
-                RightMusic rightInsered = selectRightMusic(_right.idTracker, _right.idUser);
+            {
+                insertRightMusic(_right.right, _right.idUser, _right.idTracker, false);
+                RightMusic rightInsered = selectRightMusic(_right.idTracker, _right.idUser, false);
+
+                bdd.connectClose(_selfOpenClose);
 
                 if (rightInsered == null)
-                    throw new DatabaseRequestException("Not found after expected RightMusic.");
+                    throw new DatabaseRequestException("Expected RightMusic not found.");
                 else
                     return rightInsered;
             }
-            else throw new AlreadyExistException(right.GetType());
+            else
+            {
+                bdd.connectClose(_selfOpenClose);
+
+                throw new AlreadyExistException(right.GetType());
+            }
 
         }
-        public RightMusic changeRightMusic(RightMusic _right)
+        public RightMusic changeRightMusic(RightMusic _right, bool _selfOpenClose)
         {
-            RightMusic right = selectRightMusic(_right.idTracker, _right.idUser);
+            bdd.connectOpen(_selfOpenClose);
+
+            RightMusic right = selectRightMusic(_right.idTracker, _right.idUser, false);
             if (right != null)
             {
-                updateRightMusic(_right.right, _right.idTracker, _right.idUser);
-                RightMusic rightUpdated = selectRightMusic(_right.idTracker, _right.idUser);
+                updateRightMusic(_right.right, _right.idTracker, _right.idUser, false);
+                RightMusic rightUpdated = selectRightMusic(_right.idTracker, _right.idUser, false);
+
+                bdd.connectClose(_selfOpenClose);
 
                 if (rightUpdated == null)
                     return null;
@@ -86,15 +100,17 @@ namespace ApiRightMusics.Services
                     return rightUpdated;
             }
             else
-                 throw new ForbiddenException();
+            {
+                bdd.connectClose(_selfOpenClose);
+                throw new ForbiddenException();
+            }
         }
 
-        private RightMusic insertRightMusic(RightForMusic _rightMusicModel, int idUser, int idTracker)
+        private RightMusic insertRightMusic(RightForMusic _rightMusicModel, int idUser, int idTracker, bool _selfOpenClose)
         {
             int _canControlRightMusics = 1;
 
-            //int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableRightMusics);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableRightMusics);
 
             sqlRowToInsert = convertRightMusicToSQL(sqlRowToInsert, _rightMusicModel, idTracker, idUser);
             sqlRowToInsert.setAttribute("idTracker", idTracker);
@@ -102,20 +118,32 @@ namespace ApiRightMusics.Services
             sqlRowToInsert.setAttribute("id", getNextId());
 
             if (_canControlRightMusics == 1)
-                if (bdd.insert(bdd.db_config.sqlTableRightMusics, sqlRowToInsert))
+            {
+                bdd.connectOpen(_selfOpenClose);
+           
+                if (command.insert().insert(sqlRowToInsert, false))
                 {
-                    RightMusic checkRightMusic = selectRightMusic(idTracker, idUser);
+                    RightMusic checkRightMusic = selectRightMusic(idTracker, idUser, false);
                     if (checkRightMusic != null)
+                    {
+                        bdd.connectClose(_selfOpenClose);
                         return checkRightMusic;
+                    }
                 }
+
+                bdd.connectClose(_selfOpenClose);
+            }
             return null;
         }
 
-        private RightMusic updateRightMusic(RightForMusic _rightforMusic, int idTracker, int idUser)
+        private RightMusic updateRightMusic(RightForMusic _rightforMusic, int idTracker, int idUser, bool _selfOpenClose)
         {
+
             int _canControlRightMusics = 1;
 
-            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableRightMusics, true, idTracker, "idTracker", idUser, "idUser");
+            main.bdd.connectOpen(_selfOpenClose);
+
+            SqlRow sqlRowToUpdate = command.select().row(true, idTracker, "idTracker", idUser, "idUser", false);
             if (sqlRowToUpdate == null) return null;
 
             if (_canControlRightMusics != 1) return null;
@@ -125,10 +153,13 @@ namespace ApiRightMusics.Services
             sqlRowToUpdate.setAttribute("idUser", idUser);
             sqlRowToUpdate.setAttribute("rightValue", convertRightFM_toInt(_rightforMusic));
 
-            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableRightMusics, sqlRowToUpdate, idTracker, "idTracker", idUser, "idUser");
+            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, idTracker, "idTracker", idUser, "idUser", false);
+
+            main.bdd.connectClose(_selfOpenClose);
+
             if (!checkUpdateCorrectly) return null;
 
-            RightMusic rightMusicUpdated = selectRightMusic(idTracker, idUser);
+            RightMusic rightMusicUpdated = selectRightMusic(idTracker, idUser, false);
 
             return rightMusicUpdated;
         }

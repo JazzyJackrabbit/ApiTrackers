@@ -34,7 +34,7 @@ namespace ApiSampleAliass.Controllers
 
                 if (idSample < 0) // by User
                 {
-                    List<SampleAlias> samplesAlias = mainService.bddSamplesAlias.selectSamplesAliasByIdUser(idUser);
+                    List<SampleAlias> samplesAlias = mainService.bddSamplesAlias.selectSamplesAliasByIdUser(idUser, true);
 
                     if (samplesAlias != null)
                     {
@@ -55,7 +55,7 @@ namespace ApiSampleAliass.Controllers
                 }
                 else // by both
                 {
-                    SampleAlias sampleAlias = mainService.bddSamplesAlias.selectSampleAlias(idUser, idSample);
+                    SampleAlias sampleAlias = mainService.bddSamplesAlias.selectSampleAlias(idUser, idSample, true);
 
                     if (sampleAlias != null)
                     {
@@ -93,7 +93,7 @@ namespace ApiSampleAliass.Controllers
             try { 
                 SampleAlias sampleAliasToInsert = dto.toSampleAlias();
 
-                SampleAlias sampleAliasResp = mainService.bddSamplesAlias.insertSampleAlias(sampleAliasToInsert);
+                SampleAlias sampleAliasResp = mainService.bddSamplesAlias.insertSampleAlias(sampleAliasToInsert, true);
 
                 if (sampleAliasResp != null)
                     return new ContentResult()
@@ -133,7 +133,7 @@ namespace ApiSampleAliass.Controllers
                     Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
 
-                SampleAlias sampleAlias = mainService.bddSamplesAlias.deleteSampleAlias(id, idUser);
+                SampleAlias sampleAlias = mainService.bddSamplesAlias.deleteSampleAlias(id, idUser, true);
 
                 if (sampleAlias != null)
                     return new ContentResult()
@@ -172,7 +172,7 @@ namespace ApiSampleAliass.Controllers
             try { 
                 SampleAlias sampleAliasToInsert = dto.toSampleAlias();
                 sampleAliasToInsert.id = dto.id;
-                SampleAlias sampleAliasResp = mainService.bddSamplesAlias.updateSampleAlias(sampleAliasToInsert);
+                SampleAlias sampleAliasResp = mainService.bddSamplesAlias.updateSampleAlias(sampleAliasToInsert, true);
 
                 if (sampleAliasResp != null)
                     return new ContentResult()

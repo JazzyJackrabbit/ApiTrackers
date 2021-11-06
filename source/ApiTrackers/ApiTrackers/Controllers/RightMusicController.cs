@@ -25,7 +25,9 @@ namespace ApiRightMusics.Controllers
         [Route("")]
         public ContentResult GetRightMusic([FromQuery] int idUser = -1, [FromQuery] int idTracker = -1)
         {
-            try { 
+            try {
+
+
                 if (idUser < 0 && idTracker < 0) 
                     return new ContentResult()
                     {
@@ -34,7 +36,7 @@ namespace ApiRightMusics.Controllers
                     };
                 else if(idUser < 0)         // Will Return   all users by tracker id 
                 {
-                    List<RightMusic> rightMusics_resp = mainService.bddRightMusics.selectRightMusics_bytrackerid(idTracker);
+                    List<RightMusic> rightMusics_resp = mainService.bddRightMusics.selectRightMusics_bytrackerid(idTracker, true);
                     if (rightMusics_resp != null)
                         return new ContentResult()
                         {
@@ -50,7 +52,7 @@ namespace ApiRightMusics.Controllers
                 }
                 else if (idTracker < 0)     // Will Return   all trackers by user id 
                 {
-                    List<RightMusic> rightMusics_resp = mainService.bddRightMusics.selectRightMusics_byuserid(idUser);
+                    List<RightMusic> rightMusics_resp = mainService.bddRightMusics.selectRightMusics_byuserid(idUser, true);
                     if (rightMusics_resp != null)
                         return new ContentResult()
                         {
@@ -66,8 +68,8 @@ namespace ApiRightMusics.Controllers
                 }
                 else                            // Will Return   the specific rightMusic object
                 {
-                    RightMusic rightMusic_resp = mainService.bddRightMusics.selectRightMusic(idTracker, idUser);
-                    if(rightMusic_resp!=null)
+                    RightMusic rightMusic_resp = mainService.bddRightMusics.selectRightMusic(idTracker, idUser, true);
+                    if (rightMusic_resp!=null)
                         return new ContentResult()
                         {
                             StatusCode = 200,
@@ -97,20 +99,20 @@ namespace ApiRightMusics.Controllers
         {
             try
             {
-                mainService.bdd.getSqlConnection().Open(); //<<<< todo mettre ceci dans bdd 
+                mainService.bdd.connectOpen(false); //<<<< todo mettre ceci dans bdd 
                 MySqlTransaction mysqltransaction = mainService.bdd.getSqlConnection().BeginTransaction();
 
                 try
                 {
-                    RightMusic rightCheck = mainService.bddRightMusics.createRightMusic(dto.toRightMusic());
+                    RightMusic rightCheck = mainService.bddRightMusics.createRightMusic(dto.toRightMusic(), false);
 
                     mysqltransaction.Commit();
 
                     // Check 
-                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker);
-                    User userowner = mainService.bddUser.selectUser(tracker.idUser);
-                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser);
-
+                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker, false);
+                    User userowner = mainService.bddUser.selectUser(tracker.idUser, false);
+                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser, false);
+                    
                     // Sending Mail
                     MailService mailService = new MailService();
                     mailService.sendMail_GivenWriteAccess(tracker, userowner, usergiven);
@@ -150,7 +152,7 @@ namespace ApiRightMusics.Controllers
                 }
                 finally
                 {
-                    mainService.bdd.getSqlConnection().Close();
+                    mainService.bdd.connectClose(false);
                 }
             }
             catch {
@@ -166,65 +168,19 @@ namespace ApiRightMusics.Controllers
         [HttpPut]
         public ContentResult PutRightMusic([FromBody] RightMusicChangeDTO dto)
         {
-            /*
             try
             {
-                RightMusic right = dto.toRightMusic();
-
-                RightMusic rightSelect = mainService.bddRightMusics.selectRightMusic(right.idTracker, right.idUser);
-
-
-
-                //todo RightMusic rightCheck = mainService.bddRightMusics.changeRightMusic(right.right, right.idTracker, right.idUser);
-
-                if (rightCheck != null)
-                {
-                    // Check 
-                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker);
-                    User userowner = mainService.bddUser.selectUser(tracker.idUser);
-                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser);
-
-                    
-                        RightMusic.RightForMusic newRight = right.right;
-                        if ( ! rightSelect.isEqual(newRight)  &&  newRight == RightMusic.RightForMusic.Edit )
-                        {
-                            // Sending Mail
-                            MailService mailService = new MailService();
-                            mailService.sendMail_GivenWriteAccess(tracker, userowner, usergiven);
-                        }
-                        return new ContentResult()
-                        {
-                            StatusCode = 200,
-                            Content = Static.jsonResponseObject(200, typeof(RightMusic), rightCheck)
-                        };
-                    
-                }
-                else
-                    throw new Exception();
-
-            }
-            catch (Exception ex)
-            {
-                return new ContentResult()
-                {
-                    StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
-                };
-            }*/
-
-            try
-            {
-                mainService.bdd.getSqlConnection().Open();
+                mainService.bdd.connectOpen(false);
                 MySqlTransaction mysqltransaction = mainService.bdd.getSqlConnection().BeginTransaction();
 
                 try
                 {
-                    RightMusic rightCheck = mainService.bddRightMusics.changeRightMusic(dto.toRightMusic());
+                    RightMusic rightCheck = mainService.bddRightMusics.changeRightMusic(dto.toRightMusic(), false);
 
                     // Check 
-                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker);
-                    User userowner = mainService.bddUser.selectUser(tracker.idUser);
-                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser);
+                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker, false);
+                    User userowner = mainService.bddUser.selectUser(tracker.idUser, false);
+                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser, false);
 
                     // Sending Mail
                     MailService mailService = new MailService();
@@ -266,7 +222,7 @@ namespace ApiRightMusics.Controllers
                 }
                 finally
                 {
-                    mainService.bdd.getSqlConnection().Close();
+                    mainService.bdd.connectClose(false);
                 }
             }
             catch

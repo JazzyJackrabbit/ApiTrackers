@@ -57,14 +57,9 @@ namespace ApiTrackers
         [JsonProperty(PropertyName = "notes", NullValueHandling = NullValueHandling.Include)]
         public JArray noteArray { 
             get {
-                string json = Static.ArrayToJsonString_Converter((new Note()).GetType(), pistes[0].notes);
-                return (JArray)JsonConvert.DeserializeObject(json);
+                return Static.ConvertToJArray(pistes[0].notes);
             } set {
-                string json = Static.ArrayToJsonString_Converter((new Note()).GetType(), pistes[0].notes);
-                noteArray = (JArray)JsonConvert.DeserializeObject(json);
-                /*JArray ja = new JArray();
-                foreach (Piste p in pistes)
-                    ja.Add(p);*/
+                noteArray = Static.ConvertToJArray(pistes[0].notes);
             }
         }
     }

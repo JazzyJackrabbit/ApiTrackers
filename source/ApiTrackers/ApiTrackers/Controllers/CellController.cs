@@ -28,7 +28,7 @@ namespace ApiCells.Controllers
 
                 if (id < 0)
                 {
-                    List<Note> cells = mainService.bddCells.selectCells(idTracker);
+                    List<Note> cells = mainService.bddCells.selectCells(idTracker, true);
 
                     if (cells != null)
                     {
@@ -49,7 +49,7 @@ namespace ApiCells.Controllers
                 }
                 else
                 {
-                    Note cell = mainService.bddCells.selectCell(id, idTracker);
+                    Note cell = mainService.bddCells.selectCell(id, idTracker, true);
 
                     if (cell != null)
                         return new ContentResult()
@@ -85,7 +85,7 @@ namespace ApiCells.Controllers
 
                 int idTracker = cellToInsert.parentTracker.idTracker;
 
-                Note cellResp = mainService.bddCells.insertCell(cellToInsert);
+                Note cellResp = mainService.bddCells.insertCell(cellToInsert, true);
 
                 if (cellResp != null)
                     return new ContentResult()
@@ -103,12 +103,12 @@ namespace ApiCells.Controllers
             catch (Exception ex)
             {
                 return new ContentResult()
-        {
-            StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
-                };
-    }
-}
+                    {
+                        StatusCode = 500,
+                                Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                            };
+                }
+            }
 
         [HttpDelete]
         [Route("")]
@@ -127,7 +127,7 @@ namespace ApiCells.Controllers
                     Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
 
-                Note cell = mainService.bddCells.deleteCell(id, idUser);
+                Note cell = mainService.bddCells.deleteCell(id, idUser, true);
 
                 int idTracker = cell.parentTracker.idTracker;
 
@@ -168,7 +168,7 @@ namespace ApiCells.Controllers
             //TODO idTracker
             try { 
                 Note cellToInsert = dto.toCell();
-                Note cellResp = mainService.bddCells.updateCell(cellToInsert, dto.id);
+                Note cellResp = mainService.bddCells.updateCell(cellToInsert, dto.id, true);
 
                 int idTracker = cellToInsert.parentTracker.idTracker;
 

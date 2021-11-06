@@ -9,7 +9,7 @@ namespace ApiTrackers
     public class Main
     {
 
-        public DB_MainService bdd;
+        public SqlDatabase bdd;
         public DB_TrackerService bddTracker;
         public DB_UserService bddUser;
         public DB_SampleService bddSamples;
@@ -19,7 +19,7 @@ namespace ApiTrackers
 
         public Main()
         {
-            bdd = new DB_MainService(this);
+            bdd = new SqlDatabase(this);
             bddTracker = new DB_TrackerService(this);
             bddUser = new DB_UserService(this);
             bddSamples = new DB_SampleService(this);

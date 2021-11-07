@@ -86,7 +86,7 @@ namespace ApiSamples.Services
             bdd.connectOpen(_selfOpenClose);
             try { 
                 int id = getNextId();
-                SqlRow sqlRowToInsert = new SqlRow(bdd.tableSamplesAlias);
+                SqlRow sqlRowToInsert = new SqlRow(bdd.tableSamplesAlias, false);
 
 
                 sqlRowToInsert = convertSampleAliasToSQL(sqlRowToInsert, _sampleAlias);
@@ -218,7 +218,7 @@ namespace ApiSamples.Services
             if (_smpl == null) return null;
 
             _sqlDest.setAttribute("idLogo", _smpl.idLogo);
-            _sqlDest.setAttribute("idSample", _smpl.id);
+            _sqlDest.setAttribute("idSample", _smpl.idSample);
             _sqlDest.setAttribute("color", _smpl.color);
             _sqlDest.setAttribute("name", _smpl.name);
             _sqlDest.setAttribute("idUser", _smpl.idUser);

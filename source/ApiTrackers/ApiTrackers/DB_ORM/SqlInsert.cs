@@ -12,13 +12,11 @@ namespace ApiTrackers.DB_ORM
     {
         private SqlTable table;
         private SqlCommand command;
-        private bool selfOpenClose;
 
         public SqlInsert(SqlTable _table, SqlCommand _command, bool _selfOpenClose = false)
         {
             table = _table;
             command = _command;
-            selfOpenClose = _selfOpenClose;
         }
 
         public bool insert(SqlRow _row, bool _selfOpenClose)
@@ -54,7 +52,7 @@ namespace ApiTrackers.DB_ORM
                 command.connectClose(_selfOpenClose);
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 command.connectClose(_selfOpenClose);
                 throw new DatabaseRequestException();

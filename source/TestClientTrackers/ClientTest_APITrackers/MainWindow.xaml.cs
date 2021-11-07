@@ -37,6 +37,12 @@ namespace ClientTest_APITrackers
         public Grid Grid_listWindow; // sample
         public Grid Grid_sampleAliasWindow; // sample
 
+        public Label title1 = new Label();
+        public Label title2 = new Label();
+        public Label title3 = new Label();
+        public Label title4 = new Label();
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -52,31 +58,44 @@ namespace ClientTest_APITrackers
 
             Grid child = Grid_userWindow = (Grid)userWindow.grid_content.Children[0];
             userWindow.grid_content.Children.Clear();
-            grid_content.Children.Add(child);
+            //grid_content.Children.Add(child);
 
             child = Grid_trackerCtrlWindow = (Grid)trackerCtrlWindow.grid_content_Parent.Children[0];
             trackerCtrlWindow.grid_content_Parent.Children.Clear();
-            grid_content.Children.Add(child);
+            //grid_content.Children.Add(child);
 
             child = Grid_cellControlWindow = (Grid)cellControlWindow.grid_content.Children[0];
             cellControlWindow.grid_content.Children.Clear();
-            grid_content.Children.Add(child);
+            //grid_content.Children.Add(child);
 
             child = Grid_rightMusicWindow = (Grid)rightMusicWindow.grid_content.Children[0];
             rightMusicWindow.grid_content.Children.Clear();
-            grid_content.Children.Add(child);
+            //grid_content.Children.Add(child);
 
             child = Grid_sampleWindow = (Grid)sampleWindow.grid_content.Children[0];
             sampleWindow.grid_content.Children.Clear();
-            grid_content.Children.Add(child);
+            //grid_content.Children.Add(child);
 
             child = Grid_listWindow = (Grid)listWindow.grid_content_Parent.Children[0];
             listWindow.grid_content_Parent.Children.Clear();
-            grid_content.Children.Add(child);
+            //grid_content.Children.Add(child);
 
             child = Grid_sampleAliasWindow = (Grid)sampleAliasWindow.grid_content.Children[0];
             sampleAliasWindow.grid_content.Children.Clear();
-            grid_content.Children.Add(child);
+            //grid_content.Children.Add(child);
+
+            title1.Content = "--";
+            title2.Content = "--";
+            title3.Content = "--";
+            title4.Content = "--";
+
+            Grid_trackerCtrlWindow.Name = "Trackers";
+            Grid_cellControlWindow.Name = "Cells";
+            Grid_userWindow.Name = "Users";
+            Grid_sampleWindow.Name = "Samples";
+            Grid_rightMusicWindow.Name = "RightMusics";
+            Grid_listWindow.Name = "List";
+            Grid_sampleAliasWindow.Name = "SamplesAlias";
 
 
             invisibilityGridsAndButtons();
@@ -84,14 +103,6 @@ namespace ClientTest_APITrackers
 
         public void invisibilityGridsAndButtons()
         {
-            Grid_trackerCtrlWindow.Visibility = Visibility.Hidden;
-            Grid_cellControlWindow.Visibility = Visibility.Hidden;
-            Grid_userWindow.Visibility = Visibility.Hidden;
-            Grid_sampleWindow.Visibility = Visibility.Hidden;
-            Grid_rightMusicWindow.Visibility = Visibility.Hidden;
-            Grid_listWindow.Visibility = Visibility.Hidden;
-            Grid_sampleAliasWindow.Visibility = Visibility.Hidden;
-
             Brush b1 = new SolidColorBrush(Color.FromRgb((byte)(48), (byte)(60), (byte)(150)));
             btn_cells.Background = b1;
             btn_rightMusics.Background = b1;
@@ -99,9 +110,8 @@ namespace ClientTest_APITrackers
             btn_samplesAlias.Background = b1;
             btn_trackers.Background = b1;
             btn_users.Background = b1;
-
         }
-        Brush b2 = new SolidColorBrush(Color.FromRgb((byte)(140), (byte)(50), (byte)(50)));
+       Brush b2 = new SolidColorBrush(Color.FromRgb((byte)(140), (byte)(50), (byte)(50)));
 
         private void UsersClick(object sender, RoutedEventArgs e)
         {
@@ -111,27 +121,27 @@ namespace ClientTest_APITrackers
         public void goUserView()
         {
             invisibilityGridsAndButtons();
-            Grid_userWindow.Visibility = Visibility.Visible; //
+            display(Grid_userWindow); //.Visibility = Visibility.Visible; //
             btn_users.Background = b2;
         }
 
         private void TrackersClick(object sender, RoutedEventArgs e)
         {
             invisibilityGridsAndButtons();
-            Grid_trackerCtrlWindow.Visibility = Visibility.Visible; //
+            display(Grid_trackerCtrlWindow); //.Visibility = Visibility.Visible; //
             btn_trackers.Background = b2;
         }
 
         private void CellsClick(object sender, RoutedEventArgs e)
         {
             invisibilityGridsAndButtons();
-            Grid_cellControlWindow.Visibility = Visibility.Visible; //
+            display(Grid_cellControlWindow); //.Visibility = Visibility.Visible; //
             btn_cells.Background = b2;
         }
         public void openCellInterface()
         {
             invisibilityGridsAndButtons();
-            Grid_cellControlWindow.Visibility = Visibility.Visible; //
+            display(Grid_cellControlWindow); //.Visibility = Visibility.Visible; //
             btn_cells.Background = b2;
 
             //cellControlWindow.selectAndDisplay(Main
@@ -140,7 +150,7 @@ namespace ClientTest_APITrackers
         private void RightMusicsClick(object sender, RoutedEventArgs e)
         {
             invisibilityGridsAndButtons();
-            Grid_rightMusicWindow.Visibility = Visibility.Visible; //
+            display(Grid_rightMusicWindow); //.Visibility = Visibility.Visible; //
             btn_rightMusics.Background = b2;
 
         }
@@ -153,21 +163,21 @@ namespace ClientTest_APITrackers
         public void goSampleView()
         {
             invisibilityGridsAndButtons();
-            Grid_sampleWindow.Visibility = Visibility.Visible; //
+            display(Grid_sampleWindow); //.Visibility = Visibility.Visible; //
             btn_samples.Background = b2;
         }
 
         private void SamplesAliasClick(object sender, RoutedEventArgs e)
         {
             invisibilityGridsAndButtons();
-            Grid_sampleAliasWindow.Visibility = Visibility.Visible; //
+            display(Grid_sampleAliasWindow); //.Visibility = Visibility.Visible; //
             btn_samplesAlias.Background = b2;
         }
 
         public void showListWindow()
         {
             invisibilityGridsAndButtons();
-            Grid_listWindow.Visibility = Visibility.Visible; //
+            display(Grid_listWindow); //.Visibility = Visibility.Visible; //
 
         }
         internal ListWindow getListWindow()
@@ -298,5 +308,168 @@ namespace ClientTest_APITrackers
             return new API(this);
         }
 
+
+        public void display(Grid _gridChild)
+        {
+            displaySuite(_gridChild);
+
+            title1.HorizontalAlignment = HorizontalAlignment.Right;
+            title2.HorizontalAlignment = HorizontalAlignment.Right;
+            title3.HorizontalAlignment = HorizontalAlignment.Right;
+            title4.HorizontalAlignment = HorizontalAlignment.Right;
+            title1.Margin = new Thickness(0, 0, 0, 0);
+            title2.Margin = new Thickness(0, 0, 0, 0);
+            title3.Margin = new Thickness(0, 0, 0, 0);
+            title4.Margin = new Thickness(0, 0, 0, 0);
+            title1.FontSize = 32;
+            title2.FontSize = 32;
+            title3.FontSize = 32;
+            title4.FontSize = 32;
+
+            title1.FontWeight = FontWeights.Bold;
+            title2.FontWeight = FontWeights.Bold;
+            title3.FontWeight = FontWeights.Bold;
+            title4.FontWeight = FontWeights.Bold;
+
+            grid_content_1.Children.Remove(title1);
+            grid_content_2.Children.Remove(title2);
+            grid_content_3.Children.Remove(title3);
+            grid_content_4.Children.Remove(title4);
+
+            if (grid_content_1.Children.Count > 0)
+                grid_content_1.Children.Add(title1);
+            if (grid_content_2.Children.Count > 0)
+                grid_content_2.Children.Add(title2);
+            if (grid_content_3.Children.Count > 0)
+                grid_content_3.Children.Add(title3);
+            if (grid_content_4.Children.Count > 0)
+                grid_content_4.Children.Add(title4);
+
+            try { title1.Content = ((Grid)grid_content_1.Children[0]).Name + "  "; } catch { title1.Content = "...  "; }
+            try { title2.Content = ((Grid)grid_content_2.Children[0]).Name + "  "; } catch { title2.Content = "...  "; }
+            try { title3.Content = ((Grid)grid_content_3.Children[0]).Name + "  "; } catch { title3.Content = "...  "; }
+            try { title4.Content = ((Grid)grid_content_4.Children[0]).Name + "  "; } catch { title4.Content = "...  "; }
+
+        }
+
+        public void displaySuite(Grid _gridChild)
+        {
+            Grid gr1 = grid_content_1.Children.Count > 0 ? (Grid)grid_content_1.Children[0] : new Grid();
+            Grid gr2 = grid_content_1.Children.Count > 0 ? (Grid)grid_content_2.Children[0] : new Grid();
+            Grid gr3 = grid_content_1.Children.Count > 0 ? (Grid)grid_content_3.Children[0] : new Grid();
+            Grid gr4 = grid_content_1.Children.Count > 0 ? (Grid)grid_content_4.Children[0] : new Grid();
+
+            if (_gridChild == gr1) return;
+
+            if (grid_content_1.Children.Count > 0) grid_content_1.Children.RemoveAt(0);
+            if (grid_content_2.Children.Count > 0) grid_content_2.Children.RemoveAt(0);
+            if (grid_content_3.Children.Count > 0) grid_content_3.Children.RemoveAt(0);
+            if (grid_content_4.Children.Count > 0) grid_content_4.Children.RemoveAt(0);
+
+            if (_gridChild == gr2)
+            {
+                grid_content_1.Children.Add(gr2);
+                grid_content_2.Children.Add(gr1);
+                grid_content_3.Children.Add(gr3);
+                grid_content_4.Children.Add(gr4);
+                return;
+            }
+            if (_gridChild == gr3)
+            {
+                grid_content_1.Children.Add(gr3);
+                grid_content_2.Children.Add(gr1);
+                grid_content_3.Children.Add(gr2);
+                grid_content_4.Children.Add(gr4);
+                return;
+            }
+            if (_gridChild == gr4)
+            {
+                grid_content_1.Children.Add(gr4);
+                grid_content_2.Children.Add(gr1);
+                grid_content_3.Children.Add(gr2);
+                grid_content_4.Children.Add(gr3);
+                return;
+            }
+
+            grid_content_1.Children.Add(_gridChild);
+            grid_content_2.Children.Add(gr1);
+            grid_content_3.Children.Add(gr2);
+            grid_content_4.Children.Add(gr3);
+        }
+
+        int nGrids = 4;
+
+
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            sizeRows();
+        }
+
+        public void sizeRows()
+        {
+            double height = ActualHeight / nGrids;
+            double width = grid_contents.ActualWidth;
+
+            grid_content_1.Height = height;
+            grid_content_2.Height = height;
+            grid_content_3.Height = height;
+            grid_content_4.Height = height;
+
+            grid_content_1.Width = width;
+            grid_content_2.Width = width;
+            grid_content_3.Width = width;
+            grid_content_4.Width = width;
+
+
+        
+
+        }
+
+        private void set4Rows(object sender, RoutedEventArgs e)
+        {
+            nGrids = 4;
+
+            grid_content_2.Visibility = Visibility.Visible;
+            grid_content_3.Visibility = Visibility.Visible;
+            grid_content_4.Visibility = Visibility.Visible;
+            sizeRows();
+        }
+
+        private void set3Rows(object sender, RoutedEventArgs e)
+        {
+            nGrids = 3;
+
+            grid_content_2.Visibility = Visibility.Visible;
+            grid_content_3.Visibility = Visibility.Visible;
+            grid_content_4.Visibility = Visibility.Collapsed;
+            sizeRows();
+        }
+
+        private void set2Rows(object sender, RoutedEventArgs e)
+        {
+            nGrids = 2;
+
+            grid_content_2.Visibility = Visibility.Visible;
+            grid_content_3.Visibility = Visibility.Collapsed;
+            grid_content_4.Visibility = Visibility.Collapsed;
+            sizeRows();
+        }
+
+        private void set1Rows(object sender, RoutedEventArgs e)
+        {
+            nGrids = 1;
+
+            grid_content_2.Visibility = Visibility.Collapsed;
+            grid_content_3.Visibility = Visibility.Collapsed;
+            grid_content_4.Visibility = Visibility.Collapsed;
+            sizeRows();
+        }
+
+        private void grid_contents_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            sizeRows();
+
+        }
     }
 }

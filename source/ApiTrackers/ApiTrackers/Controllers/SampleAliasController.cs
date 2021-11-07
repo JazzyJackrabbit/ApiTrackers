@@ -41,7 +41,7 @@ namespace ApiSampleAliass.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseArray(200, typeof(SampleAlias), samplesAlias)
+                            Content = Static.jsonResponseArray<SampleAlias>(200, samplesAlias)
                         };
                     }
                     else
@@ -62,7 +62,7 @@ namespace ApiSampleAliass.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseArray(200, typeof(SampleAlias), sampleAlias)
+                            Content = Static.jsonResponseObject(200, sampleAlias)
                         };
                     }
                     else
@@ -99,7 +99,7 @@ namespace ApiSampleAliass.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(SampleAlias), sampleAliasResp)
+                        Content = Static.jsonResponseObject(200, sampleAliasResp)
                     };
                 else
                     return new ContentResult()
@@ -139,7 +139,7 @@ namespace ApiSampleAliass.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(SampleAlias), sampleAlias)
+                        Content = Static.jsonResponseObject(200, sampleAlias)
                     };
                 else
                     return new ContentResult()
@@ -178,7 +178,7 @@ namespace ApiSampleAliass.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(SampleAlias), sampleAliasResp)
+                        Content = Static.jsonResponseObject(200, sampleAliasResp)
                     };
                 else
                     return new ContentResult()

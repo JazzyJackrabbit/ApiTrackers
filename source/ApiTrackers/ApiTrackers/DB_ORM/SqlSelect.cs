@@ -103,19 +103,17 @@ namespace ApiTrackers.DB_ORM
             {
                 command.connectOpen(_selfOpenClose);
 
-                List<SqlRow> rows = command.executeReader(table, "SELECT MAX(id) FROM " + table.name, false);
-
-                if (rows.Count <= 0) return 1;
-
-                SqlRow row = rows[0];
-
-                int lastId = Convert.ToInt32(row.getAttribute("id").value);
+                int lastId = command.executeReaderMaxId(table.name, false);
 
                 command.connectClose(_selfOpenClose);
+
+                Console.WriteLine("Max Id = " + lastId + " .. " + table.name);
+
                 return lastId;
             }
             catch (MySqlException ex)
             {
+                command.connectClose(_selfOpenClose);
                 Console.WriteLine("BDDService - connection - err: " + ex);
                 throw new DatabaseRequestException();
             }

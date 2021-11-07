@@ -62,50 +62,87 @@ namespace ApiTrackers.DB_ORM
             }
         }
 
+        public int executeReaderMaxId(string _sqlTableName, bool _selfOpenClose)
+        {
+            try
+            {
+                string sqlIdColumnName = "maxId";
+                string commandStr = "SELECT MAX(id) as "+ sqlIdColumnName + " FROM " + _sqlTableName;
+                MySqlCommand mysqlcommand = new MySqlCommand(commandStr, connection);
+
+                connectOpen(_selfOpenClose);
+
+                int id = 0;
+
+                using (MySqlDataReader reader = mysqlcommand.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                        if (reader.Read())
+                            id = Convert.ToInt32( reader.GetValue(0) );
+
+                    reader.Close();
+
+                    connectClose(_selfOpenClose);
+                }
+
+                return id;
+            }
+            catch (MySqlException ex)
+            {
+                connectClose(_selfOpenClose);
+
+                Console.WriteLine("BDDService - connection - err: " + ex);
+                throw new DatabaseRequestException();
+            }
+        }
         public List<SqlRow> executeReader(SqlTable _table, string _sqlCommand, bool _selfOpenClose)
         {
             try
             {
-                MySqlCommand mysqlcommand = new MySqlCommand(_sqlCommand, connection);
-
-                if (_selfOpenClose) 
-                    connection.Open();
-
-                MySqlDataReader reader = mysqlcommand.ExecuteReader();
-
-                // traitment data rows
-                string sqlTableName = _table.name;
-                List<SqlAttribut> sqlAttributsModel = _table.attributesModels;
+                  MySqlCommand mysqlcommand = new MySqlCommand(_sqlCommand, connection);
 
                 List<SqlRow> sqlRowsResp = new List<SqlRow>();
-                int posI = 0;
-                if (reader.HasRows)
-                    while (reader.Read())
-                    {
-                        SqlRow row = new SqlRow(_table);
 
-                        for (int i = 0; i < reader.FieldCount; i++)
-                            for (int j = 0; j < sqlAttributsModel.Count; j++)
-                                if (sqlAttributsModel[j].name == reader.GetName(i))
-                                {
-                                    row.attributs.Add(new SqlAttribut(
-                                        sqlAttributsModel[j].name,
-                                        reader[i])
-                                    );
-                                }
+                connectOpen(_selfOpenClose);
+
+                using (MySqlDataReader reader = mysqlcommand.ExecuteReader()) {                
+                    // traitment data rows
+                    string sqlTableName = _table.name;
+                    List<SqlAttribut> sqlAttributsModel = _table.attributesModels;
+
+                    int posI = 0;
+                    if (reader.HasRows)
+                        while (reader.Read())
+                        {
+                            SqlRow row = new SqlRow(_table, true);
+
+                            for (int i = 0; i < reader.FieldCount; i++)
+                                for (int j = 0; j < sqlAttributsModel.Count; j++)
+                                    if (sqlAttributsModel[j].name == reader.GetName(i))
+                                    {
+                                        row.attributs.Add(new SqlAttribut(
+                                            sqlAttributsModel[j].name,
+                                            reader[i])
+                                        );
+                                    }
                             
 
-                        sqlRowsResp.Add(row);
-                        ++posI;
-                    }
+                            sqlRowsResp.Add(row);
+                            ++posI;
+                        }
 
-                if (_selfOpenClose) 
-                    connection.Close();
+                    reader.Close();
+   
+                    connectClose(_selfOpenClose);
+                }
 
                 return sqlRowsResp;
             }
             catch (MySqlException ex)
             {
+
+                connectClose(_selfOpenClose);
+
                 Console.WriteLine("BDDService - connection - err: " + ex);
                 throw new DatabaseRequestException();
             }
@@ -117,13 +154,10 @@ namespace ApiTrackers.DB_ORM
             {
                 MySqlCommand mysqlcommand = new MySqlCommand(_sqlCommand, connection);
 
-                if (_selfOpenClose) 
-                    connection.Open();
-
+                connectOpen(_selfOpenClose);
                 mysqlcommand.ExecuteNonQuery();
+                connectClose(_selfOpenClose);
 
-                if (_selfOpenClose) 
-                    connection.Close();
             }
             catch (MySqlException ex)
             {

@@ -32,7 +32,7 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseArray(200, typeof(Sample), samples)
+                        Content = Static.jsonResponseArray<Sample>(200, samples)
                     };
                 }
                 else
@@ -65,7 +65,7 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Sample), sample)
+                        Content = Static.jsonResponseObject(200, sample)
                     };
                 else
                     return new ContentResult()
@@ -97,7 +97,7 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Sample), sampleResp)
+                        Content = Static.jsonResponseObject(200, sampleResp)
                     };
                 else
                     return new ContentResult()
@@ -137,7 +137,7 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Sample), sample)
+                        Content = Static.jsonResponseObject(200, sample)
                     };
                 else
                     return new ContentResult()
@@ -175,7 +175,7 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Sample), sampleResp)
+                        Content = Static.jsonResponseObject(200, sampleResp)
                     };
                 else
                     return new ContentResult()

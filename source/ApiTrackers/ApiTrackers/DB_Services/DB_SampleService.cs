@@ -55,8 +55,10 @@ namespace ApiSamples.Services
             //TODO if idUser => user => admin ?
             int _canControlSamples = 1;
 
+            command.connectOpen(_selfOpenClose);
+
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.tableSamples);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableSamples, false);
 
             sqlRowToInsert = convertSampleToSQL(sqlRowToInsert, _sampleModel);
             sqlRowToInsert.setAttribute("id", id);
@@ -67,8 +69,12 @@ namespace ApiSamples.Services
                     //int id2 = getLastId();      << check for remove this line
                     Sample checkSample = selectSample(id, false);
                     if (checkSample != null)
+                    {
+                        command.connectClose(_selfOpenClose);
                         return checkSample;
+                    }
                 }
+            command.connectClose(_selfOpenClose);
             return null;
         }
 

@@ -67,7 +67,7 @@ namespace ApiTrackers.Services
             command.connectOpen(_autoOpenClose);
 
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.tableTrackers);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableTrackers, false);
 
             sqlRowToInsert = convertTrackerToSQL(sqlRowToInsert, _trackerModel);
             sqlRowToInsert.setAttribute("id", id);

@@ -135,11 +135,11 @@ namespace ClientTest_APITrackers
                 JArray json = (JArray)main.api().SELECT_SamplesAlias(Convert.ToInt32(tb_idUser.Text));
 
                 ListWindow luw = main.getListWindow();
-                luw.lv.Items.Clear();
+                luw.lv.Children.Clear();
                 foreach (JToken jo in json)
                 {
                     JObject jobj = (JObject)jo.ToObject((new JObject()).GetType());
-                    luw.lv.Items.Add(("" + jobj).Replace("\n", ""));
+                    luw.addOnList(jobj);
                 }
                 main.showListWindow();
             }

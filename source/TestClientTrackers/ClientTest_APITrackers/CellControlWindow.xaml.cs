@@ -61,7 +61,7 @@ namespace ClientTest_APITrackers
                             double d = Convert.ToDouble(p.Value.ToString()); 
                             sl_freq.Value = d;
                         }
-                         if (p.Name == "position") tb_position.Text = p.Value.ToString();
+                        if (p.Name == "position") tb_position.Text = p.Value.ToString();
                         if (p.Name == "volume")
                         {
                             tb_vol.Text = p.Value.ToString().Replace(",", ".");
@@ -105,7 +105,8 @@ namespace ClientTest_APITrackers
             tb_idSample.Text = "";
             tb_idEffect.Text = "";
             tb_idPiste.Text = "";
-  
+            sl_freq.Value = 0;
+            sl_vol.Value = 0;
         }
 
         public void selectAndDisplay(int _idCell)
@@ -114,7 +115,7 @@ namespace ClientTest_APITrackers
             {
                 int idCell = _idCell;
 
-                JContainer json = main.api().SELECT_Cell(main.getTrackerId_TRACKER_INTERFACE(), idCell);
+                JContainer json = main.api().SELECT_Cell(main.getTrackerId_CELL_INTERFACE(), idCell);
                 try
                 {
                     setOnInterface((JObject)json);
@@ -136,6 +137,7 @@ namespace ClientTest_APITrackers
             catch (Exception ex)
             {
                 // MessageBox.Show(ex.Message);
+                clearInterface();
                 main.logErr(ex.ToString());
             }
         }
@@ -162,12 +164,13 @@ namespace ClientTest_APITrackers
                 int idCell = Convert.ToInt32(tb_id.Text);
 
                 JObject json = getFromInterface();
-                JObject json_2 = main.api().INSERT_Cell(main.getTrackerId_TRACKER_INTERFACE(), json);
+                JObject json_2 = main.api().INSERT_Cell(main.getTrackerId_CELL_INTERFACE(), json);
                 setOnInterface(json_2);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
+                clearInterface();
                 main.logErr(ex.ToString());
             }
         }
@@ -178,11 +181,12 @@ namespace ClientTest_APITrackers
             {
                 int idCell = Convert.ToInt32(tb_id.Text);
 
-                JObject json = main.api().DELETE_Cell(main.getTrackerId_TRACKER_INTERFACE(), idCell);
+                JObject json = main.api().DELETE_Cell(main.getTrackerId_CELL_INTERFACE(), idCell);
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.Message);
+                //MessageBox.Show(ex.Message)
+                clearInterface(); ;
                 main.logErr(ex.ToString());
             }
         }
@@ -194,12 +198,13 @@ namespace ClientTest_APITrackers
                 int idCell = Convert.ToInt32(tb_id.Text);
 
                 JObject json = getFromInterface();
-                JObject json_2 = main.api().UPDATE_Cell(main.getTrackerId_TRACKER_INTERFACE(), json);
+                JObject json_2 = main.api().UPDATE_Cell(main.getTrackerId_CELL_INTERFACE(), json);
                 setOnInterface(json_2);
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
+                clearInterface();
                 main.logErr(ex.ToString());
             }
         }
@@ -216,10 +221,6 @@ namespace ClientTest_APITrackers
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
-            //e.Cancel = true;
-            //this.Visibility = Visibility.Collapsed;
-            //e.Cancel = true;
-            //this.Visibility = Visibility.Collapsed;
         }
 
          private void btn_SELECT_ALL_Click(object sender, RoutedEventArgs e)
@@ -229,11 +230,11 @@ namespace ClientTest_APITrackers
                 JArray json = (JArray)main.api().SELECT_Cells(main.getTrackerId_CELL_INTERFACE());
 
                 ListWindow luw = main.getListWindow();
-                luw.lv.Items.Clear();
+                luw.lv.Children.Clear();
                 foreach (JToken jo in json)
                 {
                     JObject jobj = (JObject)jo.ToObject((new JObject()).GetType());
-                    luw.lv.Items.Add(("" + jobj).Replace("\n", ""));
+                    luw.addOnList(jobj);
                 }
                  main.showListWindow();
             }
@@ -246,7 +247,6 @@ namespace ClientTest_APITrackers
         {
             try
             {
-
                 tb_idTracker.Text = "" + (Convert.ToInt32(tb_idTracker.Text) + 1);
                 btn_SELECT_Click(sender, e);
             }

@@ -246,6 +246,9 @@ namespace ClientTest_APITrackers
             tb_comments.Text = "";
 
 
+            ((TrackerRowUserControl)main.trackerCtrlWindow.lv.Items[0])
+                                         .listbox_notes.Items.Clear();
+
         }
 
         public void openInterface()
@@ -564,11 +567,11 @@ namespace ClientTest_APITrackers
                 JArray json = (JArray)main.api().SELECT_Trackers(main.getUserId());
 
                 ListWindow luw = main.getListWindow();
-                luw.lv.Items.Clear();
+                luw.lv.Children.Clear();
                 foreach (JToken jo in json)
                 {
-                    JObject jobj = (JObject)jo.ToObject((new JObject()).GetType());
-                    luw.lv.Items.Add(("" + jobj).Replace("\n", ""));
+                    JObject jobj = (JObject)jo.ToObject(new JObject().GetType());
+                    luw.addOnList(jobj);
                 }
                  main.showListWindow();
             }
@@ -584,11 +587,11 @@ namespace ClientTest_APITrackers
                 JArray json = (JArray)main.api(). SELECT_Cells(main.getTrackerId_TRACKER_INTERFACE());
 
                 ListWindow luw = main.getListWindow();
-                luw.lv.Items.Clear();
+                luw.lv.Children.Clear();
                 foreach (JToken jo in json)
                 {
                     JObject jobj = (JObject)jo.ToObject((new JObject()).GetType());
-                    luw.lv.Items.Add(("" + jobj).Replace("\n", ""));
+                    luw.addOnList(jobj);
                 }
                  main.showListWindow();
             }

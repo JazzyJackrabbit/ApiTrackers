@@ -14,8 +14,15 @@ namespace ApiTrackers.Objects
         public int idTracker;
         [JsonProperty(PropertyName = "idUser")]
         public int idUser;
-        [JsonProperty(PropertyName = "right")]
+        [JsonIgnore]
         public RightForMusic right = RightForMusic.Read;
+
+        [JsonProperty(PropertyName = "right")]
+        public string rightString {
+            get { return right.ToString(); }  
+            set { rightString = right.ToString(); }
+        }
+
 
         public enum RightForMusic
         {
@@ -24,10 +31,6 @@ namespace ApiTrackers.Objects
             Edit,
         }
 
-        public int setRight(RightForMusic _rightEnum)
-        {
-            return (int)(right = _rightEnum);
-        }
         public RightForMusic setRight(int _val)
         {
             right = (RightForMusic)Static.convertToInteger(_val);
@@ -39,13 +42,6 @@ namespace ApiTrackers.Objects
             right = rfm;
             return rfm;
         }
-
-        public bool isEqual(RightForMusic _right)
-        {
-            if (_right == right) return true;
-            return false;
-        }
-
 
     }
 

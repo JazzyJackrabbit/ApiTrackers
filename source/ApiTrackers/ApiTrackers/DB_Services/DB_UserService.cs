@@ -52,7 +52,7 @@ namespace ApiTrackers.Services
             command.connectOpen(_selfOpenClose);
 
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.tableUsers);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableUsers, false);
 
             sqlRowToInsert.setAttribute("id", id);
 
@@ -74,14 +74,14 @@ namespace ApiTrackers.Services
         public User insertUser(User _userModel, bool _selfOpenClose)
         {
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.tableUsers);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableUsers, false);
 
             sqlRowToInsert = convertUserToSQL(sqlRowToInsert, _userModel);
             sqlRowToInsert.setAttribute("id", id);
 
             command.connectOpen(_selfOpenClose);
 
-            if (command.insert().insert(sqlRowToInsert, false))
+            if (command.insert().insert(sqlRowToInsert, true))
             {
                 int id2 = getLastId();
                 User checkUser = selectUser(id2, false);
@@ -89,7 +89,8 @@ namespace ApiTrackers.Services
                 {
                     command.connectClose(_selfOpenClose);
                     return checkUser;
-                }
+                }   
+                throw new DatabaseRequestException();
             }
             command.connectClose(_selfOpenClose);
             return null;

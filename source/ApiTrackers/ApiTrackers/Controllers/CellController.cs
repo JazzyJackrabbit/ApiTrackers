@@ -35,7 +35,7 @@ namespace ApiCells.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseArray(200, typeof(Note), cells)
+                            Content = Static.jsonResponseArray<Note>(200, cells)
                         };
                     }
                     else
@@ -55,7 +55,7 @@ namespace ApiCells.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseObject(200, typeof(Note), cell)
+                            Content = Static.jsonResponseObject(200, cell)
                         };
                     else
                         return new ContentResult()
@@ -91,7 +91,7 @@ namespace ApiCells.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Note), cellResp)
+                        Content = Static.jsonResponseObject(200, cellResp)
                     };
                 else
                     return new ContentResult()
@@ -135,7 +135,7 @@ namespace ApiCells.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Note), cell)
+                        Content = Static.jsonResponseObject(200, cell)
                     };
                 else
                     return new ContentResult()
@@ -176,7 +176,7 @@ namespace ApiCells.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Note), cellResp)
+                        Content = Static.jsonResponseObject(200, cellResp)
                     };
                 else 
                     return new ContentResult()

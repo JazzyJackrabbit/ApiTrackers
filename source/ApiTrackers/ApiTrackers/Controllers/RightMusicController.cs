@@ -41,7 +41,7 @@ namespace ApiRightMusics.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseArray(200, typeof(RightMusic), rightMusics_resp)
+                            Content = Static.jsonResponseArray<RightMusic>(200, rightMusics_resp)
                         };
                     else
                         return new ContentResult()
@@ -57,7 +57,7 @@ namespace ApiRightMusics.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseArray(200, typeof(RightMusic), rightMusics_resp)
+                            Content = Static.jsonResponseArray<Tracker>(200, rightMusics_resp)
                         };
                     else
                         return new ContentResult()
@@ -73,7 +73,7 @@ namespace ApiRightMusics.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseObject(200, typeof(RightMusic), rightMusic_resp)
+                            Content = Static.jsonResponseObject(200, rightMusic_resp)
                         }; 
                     else 
                         return new ContentResult()
@@ -99,7 +99,7 @@ namespace ApiRightMusics.Controllers
         {
             try
             {
-                mainService.bdd.connectOpen(false); //<<<< todo mettre ceci dans bdd 
+                mainService.bdd.connectOpen(true); //<<<< todo mettre ceci dans bdd 
                 MySqlTransaction mysqltransaction = mainService.bdd.getSqlConnection().BeginTransaction();
 
                 try
@@ -117,11 +117,11 @@ namespace ApiRightMusics.Controllers
                     MailService mailService = new MailService();
                     mailService.sendMail_GivenWriteAccess(tracker, userowner, usergiven);
 
-
+                    mainService.bdd.connectClose(true);
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(RightMusic), rightCheck)
+                        Content = Static.jsonResponseObject(200, rightCheck)
                     };
 
                 }
@@ -144,18 +144,17 @@ namespace ApiRightMusics.Controllers
                     Console.WriteLine("An exception of type " + ex1.GetType() + " was encountered while inserting the data.");
                     Console.WriteLine("Neither record was written to database.");
 
+                    mainService.bdd.connectClose(true);
                     return new ContentResult()
                     {
                         StatusCode = 500,
                         Content = Static.jsonResponseError(500, "Internal Error: " + ex1.Message)
                     };
                 }
-                finally
-                {
-                    mainService.bdd.connectClose(false);
-                }
             }
-            catch {
+            catch
+            {
+                mainService.bdd.connectClose(true);
                 return new ContentResult()
                 {
                     StatusCode = 500,
@@ -170,7 +169,7 @@ namespace ApiRightMusics.Controllers
         {
             try
             {
-                mainService.bdd.connectOpen(false);
+                mainService.bdd.connectOpen(true);
                 MySqlTransaction mysqltransaction = mainService.bdd.getSqlConnection().BeginTransaction();
 
                 try
@@ -188,10 +187,11 @@ namespace ApiRightMusics.Controllers
 
                     mysqltransaction.Commit();
 
+                    mainService.bdd.connectClose(true);
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(RightMusic), rightCheck)
+                        Content = Static.jsonResponseObject(200, rightCheck)
                     };
 
                 }
@@ -214,19 +214,17 @@ namespace ApiRightMusics.Controllers
                     Console.WriteLine("An exception of type " + ex1.GetType() + " was encountered while inserting the data.");
                     Console.WriteLine("Neither record was written to database.");
 
+                    mainService.bdd.connectClose(true);
                     return new ContentResult()
                     {
                         StatusCode = 500,
                         Content = Static.jsonResponseError(500, "Internal Error: " + ex1.Message)
                     };
                 }
-                finally
-                {
-                    mainService.bdd.connectClose(false);
-                }
             }
             catch
             {
+                mainService.bdd.connectClose(true);
                 return new ContentResult()
                 {
                     StatusCode = 500,

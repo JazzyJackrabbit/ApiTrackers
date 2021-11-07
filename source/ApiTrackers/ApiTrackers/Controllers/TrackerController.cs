@@ -38,7 +38,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseArray(200, typeof(Tracker), trackers)
+                        Content = Static.jsonResponseArray<Tracker>(200, trackers)
                     };
                 }
                 else
@@ -71,7 +71,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Tracker), tracker)
+                        Content = Static.jsonResponseObject(200, tracker)
                     };
                 else
                     return new ContentResult()
@@ -106,7 +106,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Tracker), trackerResp)
+                        Content = Static.jsonResponseObject(200, trackerResp)
                     };
                 else
                     return new ContentResult()
@@ -158,7 +158,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Tracker), tracker)
+                        Content = Static.jsonResponseObject(200, tracker)
                     };
                 else
                     return new ContentResult()
@@ -193,7 +193,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Tracker), trackerResp)
+                        Content = Static.jsonResponseObject(200, trackerResp)
                     };
                 else
                     return new ContentResult()

@@ -26,9 +26,9 @@ namespace ApiTrackers
             trackerContent.pistes[0].notes = new List<Note>();
         }
 
-        [JsonProperty(PropertyName = Static.JsonClassIndicator + "metadata")]
+        [JsonProperty(PropertyName = "metadata")]
         public TrackerMetadata trackerMetadata;
-        [JsonProperty(PropertyName = Static.JsonClassIndicator + "content")]
+        [JsonProperty(PropertyName = "content")]
         public TrackerContent trackerContent;
         [JsonProperty(PropertyName = "id")]
         public int idTracker;
@@ -57,9 +57,9 @@ namespace ApiTrackers
         [JsonProperty(PropertyName = "notes", NullValueHandling = NullValueHandling.Include)]
         public JArray noteArray { 
             get {
-                return Static.ConvertToJArray(pistes[0].notes);
+                return Static.ConvertToJArray<Note>(pistes[0].notes);
             } set {
-                noteArray = Static.ConvertToJArray(pistes[0].notes);
+                noteArray = Static.ConvertToJArray<Note>(pistes[0].notes);
             }
         }
     }

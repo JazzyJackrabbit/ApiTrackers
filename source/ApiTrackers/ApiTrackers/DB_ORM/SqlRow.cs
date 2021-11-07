@@ -8,20 +8,14 @@ namespace ApiTrackers.DB_ORM
 {
     public class SqlRow
     {
-        bool selfOpenClose = false;
         SqlTable sqlparentTable;
-        public SqlRow(SqlTable _sqlTableParent, bool _selfOpenClose = false)
+        public SqlRow(SqlTable _sqlTableParent, bool _newEmptyRow = false)
         {
-            selfOpenClose = _selfOpenClose;
-            sqlparentTable = _sqlTableParent;
-        }
-        public SqlRow(SqlTable _sqlTableModelStructure, SqlTable _sqlTableParent, bool _selfOpenClose = false)
-        {
-            selfOpenClose = _selfOpenClose;
             sqlparentTable = _sqlTableParent;
 
-            foreach (SqlAttribut attrModel in _sqlTableModelStructure.attributesModels)
-                attributs.Add(new SqlAttribut(attrModel.name, null));
+            if(!_newEmptyRow)
+                foreach (SqlAttribut attrModel in _sqlTableParent.attributesModels)
+                    attributs.Add(new SqlAttribut(attrModel.name, null));
         }
 
         public List<SqlAttribut> attributs = new List<SqlAttribut>();

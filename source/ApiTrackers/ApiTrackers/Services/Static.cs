@@ -13,8 +13,7 @@ namespace ApiTrackers
 {
     public static class Static
     {
-        internal const string JsonClassIndicator = "*";
-        
+
         public static JArray ConvertToJArray<T>(List<T> _arr)
         {
             JArray arrJson = new JArray();
@@ -30,8 +29,59 @@ namespace ApiTrackers
         public static JObject ConvertToJObject(object _obj)
         {
             if (_obj == null) return null;
-            return (JObject)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(_obj));
+            try
+            {
+                if (_obj.GetType() == "".GetType())
+                    return (JObject)JsonConvert.DeserializeObject(_obj.ToString());
+            }
+            catch { }
+            try
+            {
+                return (JObject)JsonConvert.DeserializeObject(_obj.ToString());
+            }
+            catch { }
+            try
+            {
+                return (JObject)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(_obj));
+            }
+            catch { }
+            return new JObject();
         }
+        /*public static JContainer ConvertToJContainer<T>(T _obj)
+        {
+           
+            if (_obj.GetType() == new List<T>().GetType())
+            {
+                IList objList = (IList)_obj;
+                int count = objList.Count; // The LINQ conversions will lose this information  
+                IEnumerable<T> list = objList.Cast<T>();
+                List<T> lt = new List<T>();
+                foreach (T t in list) lt.Add(t);
+                return ConvertToJArray<T>(lt);
+            }
+            if (_obj.GetType() == typeof(T))
+            {
+                return ConvertToJObject(_obj);
+            }
+
+            try
+            {
+                if (_obj.GetType() == "".GetType())
+                    return (JObject)JsonConvert.DeserializeObject(_obj.ToString());
+            }
+            catch { }
+            try
+            {
+                return (JObject)JsonConvert.DeserializeObject(_obj.ToString());
+            }
+            catch { }
+            try
+            {
+                return (JObject)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(_obj));
+            }
+            catch { }
+            return new JObject();
+        }*/
 
         public static string removeLastCharacter(string text)
         {
@@ -40,7 +90,8 @@ namespace ApiTrackers
 
         public static string jsonResp(int _status, object _response)
         {
-            JObject jsonResp = ConvertToJObject(_response);
+            JContainer jsonResp = (JContainer)JsonConvert.DeserializeObject(_response.ToString());
+            //JContainer jsonResp = ConvertToJContainer(_response);
             JObject jsonBody = new JObject
             {
                 new JProperty("status", _status),
@@ -52,7 +103,7 @@ namespace ApiTrackers
 
         public static string jsonResp(int _status, string _message, object _response)
         {
-            JObject jsonResp = ConvertToJObject(_response);
+            JContainer jsonResp = (JContainer)JsonConvert.DeserializeObject(_response.ToString());
             JObject jsonBody = new JObject
             {
                 new JProperty("status", _status),
@@ -63,15 +114,15 @@ namespace ApiTrackers
             return jsonBody.ToString();
         }
 
-        internal static string jsonResponseObject(int _status, Type _unused, object _obj)
+        internal static string jsonResponseObject(int _status, object _obj)
         {
             string jsonString = JsonConvert.SerializeObject( ConvertToJObject(_obj) );
             return Static.jsonResp(_status, jsonString);
         }
 
-        internal static string jsonResponseArray(int _status, Type _unused, object _arr)
+        internal static string jsonResponseArray<T>(int _status, object _arr)
         {
-            string jsonString = ConvertToJArray((List<object>)_arr).ToString();
+            string jsonString = ConvertToJArray((List<T>)_arr).ToString();            
             return Static.jsonResp(_status, jsonString);
         }
 
@@ -84,7 +135,6 @@ namespace ApiTrackers
         {
             try { 
                 if (value == null) return "";
-                //if (value.GetType().Name == "String")
                 return value.ToString();
             }
             catch { }

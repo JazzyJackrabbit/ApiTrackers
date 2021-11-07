@@ -8,7 +8,7 @@ namespace ApiTrackers.Objects
 {
     public class SampleAlias
     {
-        [JsonProperty(PropertyName = "id")]
+        [JsonIgnore]
         public int id;
         [JsonProperty(PropertyName = "name")]
         public string name;
@@ -50,6 +50,11 @@ namespace ApiTrackers.Objects
             name = _nameSample;
             color = _color;
             idLogo = _idLogo;
+        }
+
+        public static Type get_type()
+        {
+            return new SampleAlias(0,0).GetType();
         }
     }
 }

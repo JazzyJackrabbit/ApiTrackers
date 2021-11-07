@@ -38,7 +38,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseArray(200, typeof(User), users)
+                        Content = Static.jsonResponseArray<User>(200, users)
                     };
                 }
                 else
@@ -71,7 +71,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(User), user)
+                        Content = Static.jsonResponseObject(200, user)
                     };
                 else
                     return new ContentResult()
@@ -103,7 +103,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 200,
-                    Content = Static.jsonResponseObject(200, typeof(User), userResp)
+                    Content = Static.jsonResponseObject(200, userResp)
                 };
             else
                 return new ContentResult()
@@ -138,7 +138,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(User), user)
+                        Content = Static.jsonResponseObject(200, user)
                     };
                 else
                     return new ContentResult()
@@ -168,7 +168,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(User), userResp)
+                        Content = Static.jsonResponseObject(200, userResp)
                     };
                 else
                     return new ContentResult()

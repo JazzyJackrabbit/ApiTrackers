@@ -56,7 +56,7 @@ namespace ApiCells.Services
             command.connectOpen(_selfOpenClose);
 
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.tableCells);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableCells, false);
 
             sqlRowToInsert = convertCellToSQL(sqlRowToInsert, _cellModel);
 

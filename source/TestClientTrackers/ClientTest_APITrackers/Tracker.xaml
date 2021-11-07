@@ -36,7 +36,6 @@
                 <Label x:Name="lbl_infos_Copy" Content="Infos: " HorizontalAlignment="Left" Margin="418,120,0,0" VerticalAlignment="Top" Width="43"/>
                 <Button x:Name="btn_STOP_Copy" Click="btn_SELECT_ALL_Click" Content="select all trackers" Background="DimGray" HorizontalAlignment="Left" Margin="643,95,0,0" VerticalAlignment="Top" Width="155" RenderTransformOrigin="0.691,-0.069" Height="27" Cursor="Hand"/>
                 <Button x:Name="btn_STOP_Copy1" Click="btn_SELECT_ALL_CELLS_Click" Content="select all cells" Background="#883" HorizontalAlignment="Left" Margin="644,125,0,0" VerticalAlignment="Top" Width="154" RenderTransformOrigin="0.691,-0.069" Height="27" Cursor="Hand"/>
-                <Button x:Name="btn_STOP_Copy2" Click="btn_RightMusics_Click" Content="RightMusics" Background="DimGray" HorizontalAlignment="Left" Margin="666,64,0,0" VerticalAlignment="Top" Width="122" Height="26" Cursor="Hand"/>
             </Grid>
         </Grid>
     </Grid>

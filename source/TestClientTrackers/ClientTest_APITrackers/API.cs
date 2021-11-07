@@ -38,9 +38,9 @@ namespace ClientTest_APITrackers
         public JContainer SELECT_Cells(int _idTracker)
         {
             string url = ServerUrl + "Cells?idTracker=" + _idTracker, resp = "";
-            main.logLine(">>> URL : " + url);
+            main.logLine(">>> URL : " + url); 
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -53,7 +53,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Cells?idTracker=" + _idTracker + "&id=" + _idCell, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -70,7 +70,7 @@ namespace ClientTest_APITrackers
             main.logLine(">>> JObject : " + json.ToString());
             HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
             var response = client.PostAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -83,7 +83,7 @@ namespace ClientTest_APITrackers
             main.logLine(">>> URL : " + url);
             HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
             var response = client.DeleteAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -98,7 +98,7 @@ namespace ClientTest_APITrackers
             main.logLine(">>> JObject : " + json.ToString());
             HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
             var response = client.PutAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -123,7 +123,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Trackers/" + idTracker; string resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -136,7 +136,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Trackers"; string resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -153,7 +153,7 @@ namespace ClientTest_APITrackers
             main.logLine(">>> URL : " + url);
             main.logSuite(">>> JObject : " + json.ToString());
             var response = new HttpClient().PostAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -165,7 +165,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Trackers?idUser="+idUser+"&id="+ idTracker; string resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().DeleteAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -178,7 +178,7 @@ namespace ClientTest_APITrackers
             main.logLine(">>> URL : " + url);
             main.logSuite(">>> JObject : " + json.ToString());
             var response = new HttpClient().PutAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -205,7 +205,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Users/" + _idUser, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -218,7 +218,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Users", resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -233,7 +233,7 @@ namespace ClientTest_APITrackers
             main.logLine(">>> URL : " + url);
             main.logSuite(">>> JObject : " + json.ToString());
             var response = new HttpClient().PostAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -247,7 +247,7 @@ namespace ClientTest_APITrackers
             main.logSuite(">>> JObject : " + json.ToString());
             HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
             var response = client.PutAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -258,7 +258,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Users?id=" + idUser; string resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().DeleteAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -289,7 +289,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Samples/" + _id, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -302,7 +302,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Samples", resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -317,7 +317,7 @@ namespace ClientTest_APITrackers
             main.logLine(">>> JObject : " + json.ToString());
             main.logSuite(">>> URL : " + url);
             var response = new HttpClient().PostAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -331,7 +331,7 @@ namespace ClientTest_APITrackers
             main.logSuite(">>> JObject : " + json.ToString());
             HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
             var response = client.PutAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -342,7 +342,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "Samples?id=" + _id; string resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().DeleteAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -372,7 +372,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "RightMusics?idUser=" + _idUser+ "&idTracker="+ _idTracker, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -385,7 +385,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "RightMusics?idTracker=" + _idTracker, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -398,7 +398,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "RightMusics?idUser=" + _idUser, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -413,7 +413,7 @@ namespace ClientTest_APITrackers
             main.logLine(">>> URL : " + url);
             main.logSuite(">>> JObject : " + json.ToString());
             var response = new HttpClient().PostAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -427,7 +427,7 @@ namespace ClientTest_APITrackers
             main.logSuite(">>> JObject : " + json.ToString());
             HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
             var response = client.PutAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -459,7 +459,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "SamplesAlias?idUser=" + idUser, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(
@@ -473,7 +473,7 @@ namespace ClientTest_APITrackers
             main.logLine(">>> URL : " + url);
             main.logSuite(">>> JObject : " + json.ToString());
             var response = new HttpClient().PostAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); };
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -485,7 +485,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "SamplesAlias?idUser=" + idUser + "&idSample=" + idSample, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().DeleteAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -499,7 +499,7 @@ namespace ClientTest_APITrackers
             main.logSuite(">>> JObject : " + json.ToString());
             HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
             var response = client.PutAsJsonAsync(url, json).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             return (JObject)JsonConvert.DeserializeObject(
@@ -511,7 +511,7 @@ namespace ClientTest_APITrackers
             string url = ServerUrl + "SamplesAlias?idUser=" + idUser + "&idSample=" + idSample, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().GetAsync(url).Result;
-            if (!response.IsSuccessStatusCode) throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);
+            if (!response.IsSuccessStatusCode){main.logErr(response.Content.ReadAsStream().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase);}
             resp = response.Content.ReadAsStringAsync().Result;
             main.logSuite(">>> RESP : " + resp);
             object v = JsonConvert.DeserializeObject(

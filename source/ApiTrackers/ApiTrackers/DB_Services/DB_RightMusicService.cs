@@ -110,7 +110,7 @@ namespace ApiRightMusics.Services
         {
             int _canControlRightMusics = 1;
 
-            SqlRow sqlRowToInsert = new SqlRow(bdd.tableRightMusics);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableRightMusics, false);
 
             sqlRowToInsert = convertRightMusicToSQL(sqlRowToInsert, _rightMusicModel, idTracker, idUser);
             sqlRowToInsert.setAttribute("idTracker", idTracker);

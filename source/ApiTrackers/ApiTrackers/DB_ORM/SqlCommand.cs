@@ -39,38 +39,30 @@ namespace ApiTrackers.DB_ORM
             return new SqlDelete(table, this);
         }
 
-        public void connectClose(bool _selfOpenClose)
+        public void connectClose()
         {
             if (!isConnectionOpen) 
                 return;
 
-            if (_selfOpenClose)
-            {
-                isConnectionOpen = false;
-                connection.Close();
-            }
+            isConnectionOpen = false;
+            connection.Close();
         }
-        public void connectOpen(bool _selfOpenClose)
+        public void connectOpen()
         {
             if (isConnectionOpen) 
                 return;
 
-            if (_selfOpenClose)
-            {
-                isConnectionOpen = true;
-                connection.Open();
-            }
+            isConnectionOpen = true;
+            connection.Open();
         }
 
-        public int executeReaderMaxId(string _sqlTableName, bool _selfOpenClose)
+        public int executeReaderMaxId(string _sqlTableName)
         {
             try
             {
                 string sqlIdColumnName = "maxId";
                 string commandStr = "SELECT MAX(id) as "+ sqlIdColumnName + " FROM " + _sqlTableName;
                 MySqlCommand mysqlcommand = new MySqlCommand(commandStr, connection);
-
-                connectOpen(_selfOpenClose);
 
                 int id = 0;
 
@@ -81,29 +73,24 @@ namespace ApiTrackers.DB_ORM
                             id = Convert.ToInt32( reader.GetValue(0) );
 
                     reader.Close();
-
-                    connectClose(_selfOpenClose);
                 }
 
                 return id;
             }
             catch (MySqlException ex)
             {
-                connectClose(_selfOpenClose);
 
                 Console.WriteLine("BDDService - connection - err: " + ex);
                 throw new DatabaseRequestException();
             }
         }
-        public List<SqlRow> executeReader(SqlTable _table, string _sqlCommand, bool _selfOpenClose)
+        public List<SqlRow> executeReader(SqlTable _table, string _sqlCommand)
         {
             try
             {
                   MySqlCommand mysqlcommand = new MySqlCommand(_sqlCommand, connection);
 
                 List<SqlRow> sqlRowsResp = new List<SqlRow>();
-
-                connectOpen(_selfOpenClose);
 
                 using (MySqlDataReader reader = mysqlcommand.ExecuteReader()) {                
                     // traitment data rows
@@ -133,30 +120,24 @@ namespace ApiTrackers.DB_ORM
 
                     reader.Close();
    
-                    connectClose(_selfOpenClose);
                 }
 
                 return sqlRowsResp;
             }
             catch (MySqlException ex)
             {
-
-                connectClose(_selfOpenClose);
-
                 Console.WriteLine("BDDService - connection - err: " + ex);
                 throw new DatabaseRequestException();
             }
         }
 
-        public void executeNonQuery(string _sqlCommand, bool _selfOpenClose)
+        public void executeNonQuery(string _sqlCommand)
         {
             try
             {
                 MySqlCommand mysqlcommand = new MySqlCommand(_sqlCommand, connection);
 
-                connectOpen(_selfOpenClose);
                 mysqlcommand.ExecuteNonQuery();
-                connectClose(_selfOpenClose);
 
             }
             catch (MySqlException ex)

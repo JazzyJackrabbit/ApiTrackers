@@ -11,33 +11,29 @@ namespace ApiTrackers.DB_ORM
     {
         private SqlTable table;
         private SqlCommand command;
-        private bool selfOpenClose;
-        public SqlUpdate(SqlTable _table, SqlCommand _command, bool _selfOpenClose = false)
+        public SqlUpdate(SqlTable _table, SqlCommand _command)
         {
             table = _table;
             command = _command;
-            selfOpenClose = _selfOpenClose;
         }
 
-        public bool update(SqlRow _sqlRow, int _id, bool _selfOpenClose)
+        public bool update(SqlRow _sqlRow, int _id )
         {
-            return update(_sqlRow, _id, command.config.defaultIdNameTable, _selfOpenClose);
+            return update(_sqlRow, _id, command.config.defaultIdNameTable);
         }
-        public bool update(SqlRow _sqlRow, int _filterAttr1, string _filterAttr1_nametable, bool _selfOpenClose)
+        public bool update(SqlRow _sqlRow, int _filterAttr1, string _filterAttr1_nametable )
         {
-            return update(_sqlRow, true, _filterAttr1, _filterAttr1_nametable, false, 0, "", _selfOpenClose);
+            return update(_sqlRow, true, _filterAttr1, _filterAttr1_nametable, false, 0, "");
         }
 
-        public bool update(SqlRow _sqlRow, int _filterAttr1, string _filterAttr1_nametable, int _filterAttr2, string _filterAttr2_nametable, bool _selfOpenClose)
+        public bool update(SqlRow _sqlRow, int _filterAttr1, string _filterAttr1_nametable, int _filterAttr2, string _filterAttr2_nametable )
         {
-            return update(_sqlRow, true, _filterAttr1, _filterAttr1_nametable, true, _filterAttr2, _filterAttr2_nametable, _selfOpenClose);
+            return update(_sqlRow, true, _filterAttr1, _filterAttr1_nametable, true, _filterAttr2, _filterAttr2_nametable);
         }
-        public bool update(SqlRow _sqlRow, bool _hasfilter1, int _filterAttr1, string _filterAttr1_nametable, bool _hasfilter2, int _filterAttr2, string _filterAttr2_nametable, bool _selfOpenClose)
+        public bool update(SqlRow _sqlRow, bool _hasfilter1, int _filterAttr1, string _filterAttr1_nametable, bool _hasfilter2, int _filterAttr2, string _filterAttr2_nametable )
         {
             try
             {
-                command.connectOpen(_selfOpenClose);
-
                 List<SqlAttribut> sqlAttributsModel = table.attributesModels;
 
                 string sqlTableName = table.name;
@@ -64,17 +60,14 @@ namespace ApiTrackers.DB_ORM
                         commandString += " AND " + _filterAttr2_nametable + " = '" + _filterAttr2 + "'";
                 }
 
-                command.executeNonQuery(commandString, false);
+                command.executeNonQuery(commandString);
 
-
-                command.connectClose(_selfOpenClose);
 
                 return true;
             }
             catch
             {
 
-                command.connectClose(_selfOpenClose);
                 return false;
             }
         }

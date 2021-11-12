@@ -23,17 +23,17 @@ namespace ApiTrackers.Controllers
         public ContentResult InsertModules(ModulesConvertDTO _dto)
         {
             try{
-                
+
+                mainService.bdd.connectOpen();
+
                 User currentUser = new User();
                 currentUser.id = 1;     // todo change < _dto.idUser ?
                 List<Module> modules = _dto.toModules(currentUser);
 
-                mainService.bdd.connectOpen(true);
-
                 foreach(Module module in modules) { 
 
                     // todor response faire la liste des fichier OK ou KO
-                    mainService.bddTracker.insertTracker(module.getTracker(), false);
+                    mainService.bddTracker.insertTracker(module.getTracker());
 
 
                     bool isConverted = false;
@@ -48,7 +48,6 @@ namespace ApiTrackers.Controllers
                         else
                         {
 
-                            mainService.bdd.connectClose(true);
                             return new ContentResult()
                             {
                                 StatusCode = 500,
@@ -57,7 +56,6 @@ namespace ApiTrackers.Controllers
                         }
                     }
                     else { 
-                        mainService.bdd.connectClose(true);
                         return new ContentResult()
                         {
                             StatusCode = 404,
@@ -66,7 +64,6 @@ namespace ApiTrackers.Controllers
                     }
                 }
 
-                mainService.bdd.connectClose(true);
                 return new ContentResult()
                 {
                     StatusCode = 200,
@@ -75,12 +72,15 @@ namespace ApiTrackers.Controllers
             }
             catch (Exception ex)
             {
-                mainService.bdd.connectClose(true);
                 return new ContentResult()
                 {
                     StatusCode = 500,
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 

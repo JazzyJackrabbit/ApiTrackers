@@ -44,15 +44,13 @@ namespace ApiTrackers
         {
             return sqlConnection;
         }
-        public void connectClose(bool _selfOpenClose)
+        public void connectClose()
         {
-            if (_selfOpenClose)
-                sqlConnection.Close();
+            sqlConnection.Close();
         }
-        public void connectOpen(bool _selfOpenClose)
+        public void connectOpen()
         {
-            if (_selfOpenClose)
-                sqlConnection.Open();
+            sqlConnection.Open();
         }
 
 

@@ -34,28 +34,27 @@ namespace ApiSamples.Services
 
         #region ******** public methods ********
 
-        public List<Sample> selectSamples(bool _selfOpenClose)
+        public List<Sample> selectSamples()
         {
-            List<SqlRow> rows = command.select().all(_selfOpenClose);
+            List<SqlRow> rows = command.select().all();
             List<Sample> samples = new List<Sample>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
                 samples.Add(convertSQLToSample(row));
             return samples;
         }
-        public Sample selectSample(int _id, bool _selfOpenClose)
+        public Sample selectSample(int _id)
         {
-            SqlRow row = command.select().row(true, _id, _selfOpenClose);
+            SqlRow row = command.select().row(true, _id);
             Sample sample = convertSQLToSample(row);
             return sample;
         }
 
-        public Sample insertSample(Sample _sampleModel, bool _selfOpenClose)
+        public Sample insertSample(Sample _sampleModel)
         {
             //TODO if idUser => user => admin ?
             int _canControlSamples = 1;
 
-            command.connectOpen(_selfOpenClose);
 
             int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.tableSamples, false);
@@ -64,81 +63,68 @@ namespace ApiSamples.Services
             sqlRowToInsert.setAttribute("id", id);
 
             if (_canControlSamples == 1)
-                if (command.insert().insert(sqlRowToInsert, false))
+                if (command.insert().insert(sqlRowToInsert))
                 {
                     //int id2 = getLastId();      << check for remove this line
-                    Sample checkSample = selectSample(id, false);
+                    Sample checkSample = selectSample(id);
                     if (checkSample != null)
                     {
-                        command.connectClose(_selfOpenClose);
                         return checkSample;
                     }
                 }
-            command.connectClose(_selfOpenClose);
             return null;
         }
 
-        public Sample updateSample(Sample _sampleModel, int id, bool _selfOpenClose /*<<< TODO remove this parameter, is accessible by sampleModel*/ )
+        public Sample updateSample(Sample _sampleModel, int id)
         {
             //TODO if idUser => user => admin ?
             int _canControlSamples = 1;
 
-            command.connectOpen(_selfOpenClose);
-
-            SqlRow sqlRowToUpdate = command.select().row(true, id, false);
+            SqlRow sqlRowToUpdate = command.select().row(true, id);
             if (sqlRowToUpdate == null)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
             if (_canControlSamples != 1)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
 
             sqlRowToUpdate = convertSampleToSQL(sqlRowToUpdate, _sampleModel);
             sqlRowToUpdate.setAttribute("id", id);
 
-            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id, false);
+            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id);
             if (!checkUpdateCorrectly)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
 
-            SqlRow sqlRowCheck = command.select().row(true, id, false);
+            SqlRow sqlRowCheck = command.select().row(true, id);
             Sample sampleUpdated = convertSQLToSample(sqlRowCheck);
 
-            command.connectClose(_selfOpenClose);
             return sampleUpdated;
         }
-        public Sample deleteSample(int _id, int _idUser, bool _selfOpenClose)
+        public Sample deleteSample(int _id, int _idUser)
         {
             //TODO if idUser => user => admin ?
             int _canControlSamples = 1;
-
-            command.connectOpen(_selfOpenClose);
-
-            SqlRow rowToDelete = command.select().row(true, _id, false);
+            
+            SqlRow rowToDelete = command.select().row(true, _id);
             Sample sample = convertSQLToSample(rowToDelete);
 
             if (_canControlSamples == 1)
                 if (sample != null)
                 {   // todo delete
-                    command.delete().delete(_id, false);
+                    command.delete().delete(_id);
                 }
                 else
                 {
-                    command.connectClose(_selfOpenClose);
                     throw new ForbiddenException();
                 }
             else
             {
-                command.connectClose(_selfOpenClose);
                 throw new UnauthorisedException();
             }
-            command.connectClose(_selfOpenClose);
             return sample;
         }
 

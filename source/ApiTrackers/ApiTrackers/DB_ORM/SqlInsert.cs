@@ -13,17 +13,16 @@ namespace ApiTrackers.DB_ORM
         private SqlTable table;
         private SqlCommand command;
 
-        public SqlInsert(SqlTable _table, SqlCommand _command, bool _selfOpenClose = false)
+        public SqlInsert(SqlTable _table, SqlCommand _command)
         {
             table = _table;
             command = _command;
         }
 
-        public bool insert(SqlRow _row, bool _selfOpenClose)
+        public bool insert(SqlRow _row)
         {
             try
             {
-                command.connectOpen(_selfOpenClose);
 
                 List<SqlAttribut> sqlAttributsModel = table.attributesModels;
 
@@ -47,14 +46,12 @@ namespace ApiTrackers.DB_ORM
                 values += ") ";
 
                 commandString = commandString + columns + values;
-                command.executeNonQuery(commandString, false);
+                command.executeNonQuery(commandString);
 
-                command.connectClose(_selfOpenClose);
                 return true;
             }
             catch (Exception ex)
             {
-                command.connectClose(_selfOpenClose);
                 throw new DatabaseRequestException();
             }
         }

@@ -23,7 +23,8 @@ namespace ApiSampleAliass.Controllers
         [Route("")]
         public ContentResult GetSamplesAlias([FromQuery] int idUser = -1, [FromQuery] int idSample = -1)
         {
-            try { 
+            try {
+                mainService.bdd.connectOpen();
 
                 if(idUser < 0)
                     return new ContentResult()
@@ -34,7 +35,7 @@ namespace ApiSampleAliass.Controllers
 
                 if (idSample < 0) // by User
                 {
-                    List<SampleAlias> samplesAlias = mainService.bddSamplesAlias.selectSamplesAliasByIdUser(idUser, true);
+                    List<SampleAlias> samplesAlias = mainService.bddSamplesAlias.selectSamplesAliasByIdUser(idUser);
 
                     if (samplesAlias != null)
                     {
@@ -55,7 +56,7 @@ namespace ApiSampleAliass.Controllers
                 }
                 else // by both
                 {
-                    SampleAlias sampleAlias = mainService.bddSamplesAlias.selectSampleAlias(idUser, idSample, true);
+                    SampleAlias sampleAlias = mainService.bddSamplesAlias.selectSampleAlias(idUser, idSample);
 
                     if (sampleAlias != null)
                     {
@@ -74,7 +75,6 @@ namespace ApiSampleAliass.Controllers
                         };
                     }
                 }
-               
             }
             catch (Exception ex)
             {
@@ -84,16 +84,23 @@ namespace ApiSampleAliass.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [Route("")]
         [HttpPost]
         public ContentResult CreateSampleAlias([FromBody] SampleAliasCreateDTO dto)
         {
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
+
                 SampleAlias sampleAliasToInsert = dto.toSampleAlias();
 
-                SampleAlias sampleAliasResp = mainService.bddSamplesAlias.insertSampleAlias(sampleAliasToInsert, true);
+                SampleAlias sampleAliasResp = mainService.bddSamplesAlias.insertSampleAlias(sampleAliasToInsert);
 
                 if (sampleAliasResp != null)
                     return new ContentResult()
@@ -116,6 +123,10 @@ namespace ApiSampleAliass.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpDelete]
@@ -124,6 +135,8 @@ namespace ApiSampleAliass.Controllers
         {
             try
             {
+                mainService.bdd.connectOpen();
+
                 int idUser = 1;
                 //TODO AUTHENT TOKEN
 
@@ -133,7 +146,7 @@ namespace ApiSampleAliass.Controllers
                     Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
 
-                SampleAlias sampleAlias = mainService.bddSamplesAlias.deleteSampleAlias(id, idUser, true);
+                SampleAlias sampleAlias = mainService.bddSamplesAlias.deleteSampleAlias(id, idUser);
 
                 if (sampleAlias != null)
                     return new ContentResult()
@@ -164,15 +177,22 @@ namespace ApiSampleAliass.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpPut]
         [Route("")]
         public ContentResult UpdateSampleAlias([FromBody] SampleAliasUpdateDTO dto)
         {
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
+
                 SampleAlias sampleAliasToInsert = dto.toSampleAlias();
                 sampleAliasToInsert.id = dto.id;
-                SampleAlias sampleAliasResp = mainService.bddSamplesAlias.updateSampleAlias(sampleAliasToInsert, true);
+                SampleAlias sampleAliasResp = mainService.bddSamplesAlias.updateSampleAlias(sampleAliasToInsert);
 
                 if (sampleAliasResp != null)
                     return new ContentResult()
@@ -194,6 +214,10 @@ namespace ApiSampleAliass.Controllers
                     StatusCode = 500,
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 

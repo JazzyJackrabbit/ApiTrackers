@@ -19,28 +19,26 @@ namespace ApiTrackers.DB_ORM
             command = _command;
         }
 
-        public List<SqlRow> all(bool _allColumns, int _filterAttr, string filterAttr_nametable, bool _selfOpenClose)
+        public List<SqlRow> all(bool _allColumns, int _filterAttr, string filterAttr_nametable)
         {
-            return all(_allColumns, true, _filterAttr, filterAttr_nametable, false, 0, "", _selfOpenClose);
+            return all(_allColumns, true, _filterAttr, filterAttr_nametable, false, 0, "");
         }
-        public List<SqlRow> all(bool _allColumns, bool _selfOpenClose)
+        public List<SqlRow> all(bool _allColumns)
         {
-            return all(_allColumns, false, 0, "", false, 0, "", _selfOpenClose);
+            return all(_allColumns, false, 0, "", false, 0, "");
         }
-        public List<SqlRow> all(bool _selfOpenClose)
+        public List<SqlRow> all()
         {
-            return all(false, false, 0, "", false, 0, "", _selfOpenClose);
+            return all(false, false, 0, "", false, 0, "");
         }
-        public List<SqlRow> all(bool _allColumns, int _filterAttr1, string filterAttr1_nametable, int _filterAttr2, string filterAttr2_nametable, bool _selfOpenClose)
+        public List<SqlRow> all(bool _allColumns, int _filterAttr1, string filterAttr1_nametable, int _filterAttr2, string filterAttr2_nametable)
         {
-            return all(_allColumns, true, _filterAttr1, filterAttr1_nametable, true, _filterAttr2, filterAttr2_nametable, _selfOpenClose);
+            return all(_allColumns, true, _filterAttr1, filterAttr1_nametable, true, _filterAttr2, filterAttr2_nametable);
         }
-        public List<SqlRow> all(bool _allColumns, bool _hasFilter1, int _filterAttr1, string filterAttr1_nametable, bool _hasFilter2, int _filterAttr2, string filterAttr2_nametable, bool _selfOpenClose)
+        public List<SqlRow> all(bool _allColumns, bool _hasFilter1, int _filterAttr1, string filterAttr1_nametable, bool _hasFilter2, int _filterAttr2, string filterAttr2_nametable)
         {
             try
             {
-                command.connectOpen(_selfOpenClose);
-
                 string sqlTableName = table.name;
                 List<SqlAttribut> sqlAttributsModel = table.attributesModels;
 
@@ -65,34 +63,32 @@ namespace ApiTrackers.DB_ORM
                         commandString += " AND " + filterAttr2_nametable + " = " + _filterAttr2 + " ";
                 }
 
-                List<SqlRow> rows = command.executeReader(table, commandString, false);
+                List<SqlRow> rows = command.executeReader(table, commandString);
 
-                command.connectClose(_selfOpenClose);
                 return rows;
             }
             catch
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
         }
 
-        public SqlRow row(bool _allColumns, int _id, bool _selfOpenClose)
+        public SqlRow row(bool _allColumns, int _id)
         {
-            return row(_allColumns, _id, command.config.defaultIdNameTable, _selfOpenClose);
+            return row(_allColumns, _id, command.config.defaultIdNameTable);
         }
-        public SqlRow row(bool _allColumns, int _filterAttr, string filterAttr_nametable, bool _selfOpenClose)
+        public SqlRow row(bool _allColumns, int _filterAttr, string filterAttr_nametable)
         {
-            return row(_allColumns, true, _filterAttr, filterAttr_nametable, false, 0, "", _selfOpenClose);
+            return row(_allColumns, true, _filterAttr, filterAttr_nametable, false, 0, "");
         }
-        public SqlRow row(bool _allColumns, int _filterAttr1, string filterAttr1_nametable, int _filterAttr2, string filterAttr2_nametable, bool _selfOpenClose)
+        public SqlRow row(bool _allColumns, int _filterAttr1, string filterAttr1_nametable, int _filterAttr2, string filterAttr2_nametable)
         {
-            return row(_allColumns, true, _filterAttr1, filterAttr1_nametable, true, _filterAttr2, filterAttr2_nametable, _selfOpenClose);
+            return row(_allColumns, true, _filterAttr1, filterAttr1_nametable, true, _filterAttr2, filterAttr2_nametable);
         }
-        public SqlRow row(bool _allColumns, bool hasFilter1, int _filterAttr1, string filterAttr1_nametable, bool hasFilter2, int _filterAttr2, string filterAttr2_nametable, bool _selfOpenClose)
+        public SqlRow row(bool _allColumns, bool hasFilter1, int _filterAttr1, string filterAttr1_nametable, bool hasFilter2, int _filterAttr2, string filterAttr2_nametable)
         {
             SqlSelect sqlSelect = new SqlSelect(table, command);
-            List<SqlRow> sqlRows = sqlSelect.all(_allColumns, hasFilter1, _filterAttr1, filterAttr1_nametable, hasFilter2, _filterAttr2, filterAttr2_nametable, _selfOpenClose);
+            List<SqlRow> sqlRows = sqlSelect.all(_allColumns, hasFilter1, _filterAttr1, filterAttr1_nametable, hasFilter2, _filterAttr2, filterAttr2_nametable);
             if (sqlRows != null && sqlRows.Count > 0) return sqlRows[0];
             return null;
         }
@@ -101,11 +97,9 @@ namespace ApiTrackers.DB_ORM
         {
             try
             {
-                command.connectOpen(_selfOpenClose);
+                if (_selfOpenClose) command.connectOpen();
 
-                int lastId = command.executeReaderMaxId(table.name, false);
-
-                command.connectClose(_selfOpenClose);
+                int lastId = command.executeReaderMaxId(table.name);
 
                 Console.WriteLine("Max Id = " + lastId + " .. " + table.name);
 
@@ -113,9 +107,12 @@ namespace ApiTrackers.DB_ORM
             }
             catch (MySqlException ex)
             {
-                command.connectClose(_selfOpenClose);
                 Console.WriteLine("BDDService - connection - err: " + ex);
                 throw new DatabaseRequestException();
+            }
+            finally
+            {
+                if (_selfOpenClose) command.connectClose();
             }
         }
 

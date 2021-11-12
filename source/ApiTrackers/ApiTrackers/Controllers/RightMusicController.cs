@@ -27,6 +27,7 @@ namespace ApiRightMusics.Controllers
         {
             try {
 
+                mainService.bdd.connectOpen();
 
                 if (idUser < 0 && idTracker < 0) 
                     return new ContentResult()
@@ -36,7 +37,7 @@ namespace ApiRightMusics.Controllers
                     };
                 else if(idUser < 0)         // Will Return   all users by tracker id 
                 {
-                    List<RightMusic> rightMusics_resp = mainService.bddRightMusics.selectRightMusics_bytrackerid(idTracker, true);
+                    List<RightMusic> rightMusics_resp = mainService.bddRightMusics.selectRightMusics_bytrackerid(idTracker);
                     if (rightMusics_resp != null)
                         return new ContentResult()
                         {
@@ -52,7 +53,7 @@ namespace ApiRightMusics.Controllers
                 }
                 else if (idTracker < 0)     // Will Return   all trackers by user id 
                 {
-                    List<RightMusic> rightMusics_resp = mainService.bddRightMusics.selectRightMusics_byuserid(idUser, true);
+                    List<RightMusic> rightMusics_resp = mainService.bddRightMusics.selectRightMusics_byuserid(idUser);
                     if (rightMusics_resp != null)
                         return new ContentResult()
                         {
@@ -68,7 +69,7 @@ namespace ApiRightMusics.Controllers
                 }
                 else                            // Will Return   the specific rightMusic object
                 {
-                    RightMusic rightMusic_resp = mainService.bddRightMusics.selectRightMusic(idTracker, idUser, true);
+                    RightMusic rightMusic_resp = mainService.bddRightMusics.selectRightMusic(idTracker, idUser);
                     if (rightMusic_resp!=null)
                         return new ContentResult()
                         {
@@ -91,6 +92,10 @@ namespace ApiRightMusics.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
 
         }
         [Route("")]
@@ -99,25 +104,24 @@ namespace ApiRightMusics.Controllers
         {
             try
             {
-                mainService.bdd.connectOpen(true); //<<<< todo mettre ceci dans bdd 
+                mainService.bdd.connectOpen();
                 MySqlTransaction mysqltransaction = mainService.bdd.getSqlConnection().BeginTransaction();
 
                 try
                 {
-                    RightMusic rightCheck = mainService.bddRightMusics.createRightMusic(dto.toRightMusic(), false);
+                    RightMusic rightCheck = mainService.bddRightMusics.createRightMusic(dto.toRightMusic());
 
                     mysqltransaction.Commit();
 
                     // Check 
-                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker, false);
-                    User userowner = mainService.bddUser.selectUser(tracker.idUser, false);
-                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser, false);
+                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker);
+                    User userowner = mainService.bddUser.selectUser(tracker.idUser);
+                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser);
                     
                     // Sending Mail
                     MailService mailService = new MailService();
                     mailService.sendMail_GivenWriteAccess(tracker, userowner, usergiven);
 
-                    mainService.bdd.connectClose(true);
                     return new ContentResult()
                     {
                         StatusCode = 200,
@@ -144,7 +148,6 @@ namespace ApiRightMusics.Controllers
                     Console.WriteLine("An exception of type " + ex1.GetType() + " was encountered while inserting the data.");
                     Console.WriteLine("Neither record was written to database.");
 
-                    mainService.bdd.connectClose(true);
                     return new ContentResult()
                     {
                         StatusCode = 500,
@@ -154,12 +157,15 @@ namespace ApiRightMusics.Controllers
             }
             catch
             {
-                mainService.bdd.connectClose(true);
                 return new ContentResult()
                 {
                     StatusCode = 500,
                     Content = Static.jsonResponseError(500, "Internal Connection Error.")
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 
@@ -169,17 +175,17 @@ namespace ApiRightMusics.Controllers
         {
             try
             {
-                mainService.bdd.connectOpen(true);
+                mainService.bdd.connectOpen();
                 MySqlTransaction mysqltransaction = mainService.bdd.getSqlConnection().BeginTransaction();
 
                 try
                 {
-                    RightMusic rightCheck = mainService.bddRightMusics.changeRightMusic(dto.toRightMusic(), false);
+                    RightMusic rightCheck = mainService.bddRightMusics.changeRightMusic(dto.toRightMusic());
 
                     // Check 
-                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker, false);
-                    User userowner = mainService.bddUser.selectUser(tracker.idUser, false);
-                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser, false);
+                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker);
+                    User userowner = mainService.bddUser.selectUser(tracker.idUser);
+                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser);
 
                     // Sending Mail
                     MailService mailService = new MailService();
@@ -187,7 +193,6 @@ namespace ApiRightMusics.Controllers
 
                     mysqltransaction.Commit();
 
-                    mainService.bdd.connectClose(true);
                     return new ContentResult()
                     {
                         StatusCode = 200,
@@ -214,7 +219,6 @@ namespace ApiRightMusics.Controllers
                     Console.WriteLine("An exception of type " + ex1.GetType() + " was encountered while inserting the data.");
                     Console.WriteLine("Neither record was written to database.");
 
-                    mainService.bdd.connectClose(true);
                     return new ContentResult()
                     {
                         StatusCode = 500,
@@ -224,12 +228,16 @@ namespace ApiRightMusics.Controllers
             }
             catch
             {
-                mainService.bdd.connectClose(true);
+                mainService.bdd.connectClose();
                 return new ContentResult()
                 {
                     StatusCode = 500,
                     Content = Static.jsonResponseError(500, "Internal Connection Error.")
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
       

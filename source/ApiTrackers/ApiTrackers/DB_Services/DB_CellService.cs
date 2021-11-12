@@ -35,28 +35,27 @@ namespace ApiCells.Services
 
         #region ******** public methods ********
 
-        public List<Note> selectCells(int _idTracker, bool _selfOpenClose)
+        public List<Note> selectCells(int _idTracker)
         {
-            List<SqlRow> rows = command.select().all(false, _idTracker, "idTracker", _selfOpenClose);
+            List<SqlRow> rows = command.select().all(false, _idTracker, "idTracker");
             List<Note> cells = new List<Note>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
                 cells.Add(convertSQLToCell(row));
             return cells;
         }
-        public Note selectCell(int _id, int _idTracker, bool _selfOpenClose)
+        public Note selectCell(int _id, int _idTracker)
         {
-            SqlRow row = command.select().row(false, _id, "id", _idTracker, "idTracker", _selfOpenClose);
+            SqlRow row = command.select().row(false, _id, "id", _idTracker, "idTracker");
             Note cell = convertSQLToCell(row);
             return cell;
         }
 
-        public Note insertCell(Note _cellModel, bool _selfOpenClose)
+        public Note insertCell(Note _cellModel)
         {
-            command.connectOpen(_selfOpenClose);
 
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.tableCells, false);
+            SqlRow sqlRowToInsert = new SqlRow(bdd.tableCells);
 
             sqlRowToInsert = convertCellToSQL(sqlRowToInsert, _cellModel);
 
@@ -66,31 +65,26 @@ namespace ApiCells.Services
                 sqlRowToInsert.getAttribute("idTracker").value
                 );
 
-            if (command.insert().insert(sqlRowToInsert, false))
+            if (command.insert().insert(sqlRowToInsert))
             {
                 int id2 = getLastId();
-                Note checkCell = selectCell(id2, idTracker, false);
+                Note checkCell = selectCell(id2, idTracker);
                 if (checkCell != null)
                 {
-                    command.connectClose(_selfOpenClose);
                     return checkCell;
                 }
             }
 
-            command.connectClose(_selfOpenClose);
             return null;
         }
 
-        public Note updateCell(Note _cellModel, int id, bool _selfOpenClose)
+        public Note updateCell(Note _cellModel, int id)
         {
             //TODO
 
-            command.connectOpen(_selfOpenClose);
-
-            SqlRow sqlRowToUpdate = command.select().row(false, id, false);
+            SqlRow sqlRowToUpdate = command.select().row(false, id);
             if (sqlRowToUpdate == null)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
             sqlRowToUpdate.setAttribute("id", id);
@@ -99,35 +93,30 @@ namespace ApiCells.Services
 
             // TODO REWORK 
 
-            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id, false);
+            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id);
             if (!checkUpdateCorrectly)
             {
-                command.connectClose(_selfOpenClose); 
                 return null;
             }
-            SqlRow sqlRowCheck = command.select().row(false, id, false);
+            SqlRow sqlRowCheck = command.select().row(false, id);
             Note cellUpdated = convertSQLToCell(sqlRowCheck);
 
-            command.connectClose(_selfOpenClose);
             return cellUpdated;
         }
-        public Note deleteCell(int _id, int _idUser, bool _selfOpenClose)
+        public Note deleteCell(int _id, int _idUser)
         {
             //TODO idUser
-            command.connectOpen(_selfOpenClose);
 
-            SqlRow rowToDelete = command.select().row(false, _id, false);
+            SqlRow rowToDelete = command.select().row(false, _id);
             Note cell = convertSQLToCell(rowToDelete);
             
             if (cell != null)
-                command.delete().delete(_id, false);
+                command.delete().delete(_id);
             else
             {
-                command.connectClose(_selfOpenClose);
                 throw new ForbiddenException();
             }
 
-            command.connectClose(_selfOpenClose);
 
             return cell;
         }

@@ -34,56 +34,46 @@ namespace ApiSamples.Services
 
         #region ******** public methods ********
 
-        public List<SampleAlias> selectSamplesAliasByIdUser(int _idUser, bool _selfOpenClose)
+        public List<SampleAlias> selectSamplesAliasByIdUser(int _idUser)
         {
-            command.connectOpen(_selfOpenClose);
-            List<SqlRow> rows = command.select().all(true, _idUser, "idUser", false);
+            List<SqlRow> rows = command.select().all(true, _idUser, "idUser");
             List<SampleAlias> samplesAlias = new List<SampleAlias>();
             if (rows == null)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
             foreach (SqlRow row in rows)
-                samplesAlias.Add(convertSQLToSampleAlias(row, false));
+                samplesAlias.Add(convertSQLToSampleAlias(row));
 
-            command.connectClose(_selfOpenClose);
             return samplesAlias;
         }
       
-        public SampleAlias selectSampleAlias(int _idUser, int _idSample, bool _selfOpenClose)
+        public SampleAlias selectSampleAlias(int _idUser, int _idSample)
         {
-            command.connectOpen(_selfOpenClose);
-            SqlRow row = command.select().row(true, _idUser, "idUser", _idSample, "idSample", false);
+            SqlRow row = command.select().row(true, _idUser, "idUser", _idSample, "idSample");
             if (row == null)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
-            SampleAlias sampleAlias = convertSQLToSampleAlias(row, false);
+            SampleAlias sampleAlias = convertSQLToSampleAlias(row);
 
-            command.connectClose(_selfOpenClose);
             return sampleAlias;
         }
-        private SampleAlias selectSamplesAliasById(int _id, bool _selfOpenClose)
+        private SampleAlias selectSamplesAliasById(int _id)
         {
-            command.connectOpen(_selfOpenClose);
-            SqlRow row = command.select().row(true, _id, "id", false);
+            SqlRow row = command.select().row(true, _id, "id");
             SampleAlias sampleAlias;
             if (row == null)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
-            sampleAlias = convertSQLToSampleAlias(row, false);
+            sampleAlias = convertSQLToSampleAlias(row);
 
-            command.connectClose(_selfOpenClose);
             return sampleAlias;
         }
 
-        public SampleAlias insertSampleAlias(SampleAlias _sampleAlias, bool _selfOpenClose)
+        public SampleAlias insertSampleAlias(SampleAlias _sampleAlias)
         {
-            bdd.connectOpen(_selfOpenClose);
             try { 
                 int id = getNextId();
                 SqlRow sqlRowToInsert = new SqlRow(bdd.tableSamplesAlias, false);
@@ -92,9 +82,9 @@ namespace ApiSamples.Services
                 sqlRowToInsert = convertSampleAliasToSQL(sqlRowToInsert, _sampleAlias);
                 sqlRowToInsert.setAttribute("id", id);
 
-                    if (command.insert().insert(sqlRowToInsert, false))
+                    if (command.insert().insert(sqlRowToInsert))
                     {
-                        SampleAlias checkSampleA = selectSamplesAliasById(id, false);
+                        SampleAlias checkSampleA = selectSamplesAliasById(id);
                             if (checkSampleA != null)
                                 return checkSampleA;
                     }
@@ -103,60 +93,50 @@ namespace ApiSamples.Services
             catch {
                 throw new TODOEXCEPTION();
             }
-            finally
-            {
-                bdd.connectClose(_selfOpenClose);
-            }
         }
 
-        public SampleAlias updateSampleAlias(SampleAlias _sampleAlias, bool _selfOpenClose)
+        public SampleAlias updateSampleAlias(SampleAlias _sampleAlias)
         {
-            command.connectOpen(_selfOpenClose);
 
             int id = _sampleAlias.id;
 
-            SqlRow sqlRowToUpdate = command.select().row(true, id, false);
+            SqlRow sqlRowToUpdate = command.select().row(true, id);
             if (sqlRowToUpdate == null)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
 
             sqlRowToUpdate = convertSampleAliasToSQL(sqlRowToUpdate, _sampleAlias);
             sqlRowToUpdate.setAttribute("id", id);
 
-            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id, false);
+            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id);
             if (!checkUpdateCorrectly)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
 
-            SqlRow sqlRowCheck = command.select().row(true, id, false);
-            SampleAlias sampleUpdated = convertSQLToSampleAlias(sqlRowCheck, false);
+            SqlRow sqlRowCheck = command.select().row(true, id);
+            SampleAlias sampleUpdated = convertSQLToSampleAlias(sqlRowCheck);
 
-            command.connectClose(_selfOpenClose);
             return sampleUpdated;
         }
-        public SampleAlias deleteSampleAlias(int _idUser, int _idSample, bool _selfOpenClose)
+        public SampleAlias deleteSampleAlias(int _idUser, int _idSample)
         {
-            command.connectOpen(_selfOpenClose);
 
             int _canControlSamples = 1;
 
-            SqlRow rowToDelete = command.select().row(true, _idUser, "idUser", _idSample, "idSample", false);
+            SqlRow rowToDelete = command.select().row(true, _idUser, "idUser", _idSample, "idSample");
                 
-            SampleAlias sampleA = convertSQLToSampleAlias(rowToDelete, false);
+            SampleAlias sampleA = convertSQLToSampleAlias(rowToDelete);
 
             if (_canControlSamples == 1)
                 if (sampleA != null) {
-                    command.delete().delete(_idUser, "idUser", _idSample, "idSample", false);
+                    command.delete().delete(_idUser, "idUser", _idSample, "idSample");
 
-                    SqlRow rowCheckIsDelete = command.select().row(true, _idUser, "idUser", _idSample, "idSample", false);
+                    SqlRow rowCheckIsDelete = command.select().row(true, _idUser, "idUser", _idSample, "idSample");
 
                     if (rowCheckIsDelete == null)
                     {
-                        command.connectClose(_selfOpenClose);
                         return sampleA;
                     }
 
@@ -164,12 +144,10 @@ namespace ApiSamples.Services
                 }
                 else
                 {
-                    command.connectClose(_selfOpenClose);
                     throw new ForbiddenException();
                 }
             else
             {
-                command.connectClose(_selfOpenClose);
                 throw new UnauthorisedException();
             }
         }
@@ -178,14 +156,12 @@ namespace ApiSamples.Services
 
         #region ******** convertions ******** 
 
-        private SampleAlias convertSQLToSampleAlias(SqlRow _sqlrow, bool _selfOpenClose)
+        private SampleAlias convertSQLToSampleAlias(SqlRow _sqlrow)
         {
 
-            command.connectOpen(_selfOpenClose);
 
             if (_sqlrow == null)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
                 
@@ -197,7 +173,6 @@ namespace ApiSamples.Services
             string idTest = Static.convertToString(_sqlrow.getAttribute("id").value);
             if (!int.TryParse(idTest, out _))
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
 
@@ -207,9 +182,8 @@ namespace ApiSamples.Services
 
             sample.idSample = Static.convertToInteger(_sqlrow.getAttribute("idSample").value);
 
-            sample.sample = main.bddSamples.selectSample(sample.idSample, false);
+            sample.sample = main.bddSamples.selectSample(sample.idSample);
 
-            command.connectClose(_selfOpenClose);
             return sample;
         }
         private SqlRow convertSampleAliasToSQL(SqlRow _sqlDest, SampleAlias _smpl)

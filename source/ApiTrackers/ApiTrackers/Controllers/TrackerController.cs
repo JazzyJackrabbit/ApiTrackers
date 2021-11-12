@@ -30,8 +30,10 @@ namespace ApiTrackers.Controllers
         [Route("")]
         public ContentResult GetTrackers()
         {
-            try { 
-                List<Tracker> trackers = mainService.bddTracker.selectTrackers(true);
+            try {
+                mainService.bdd.connectOpen();
+
+                List<Tracker> trackers = mainService.bddTracker.selectTrackers();
 
                 if (trackers != null)
                 {
@@ -58,14 +60,20 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         public ContentResult GetTracker(int id)
         {
-            try { 
-                Tracker tracker = mainService.bddTracker.selectTracker(id, true);
+            try {
+                mainService.bdd.connectOpen();
+
+                Tracker tracker = mainService.bddTracker.selectTracker(id);
 
                 if (tracker != null)
                     return new ContentResult()
@@ -88,19 +96,24 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         } 
 
         [Route("")]
         [HttpPost]
         public ContentResult CreateTracker([FromBody] TrackerCreateDTO dto)
         {
-            try     {
+            try{
+                mainService.bdd.connectOpen();
 
                 int idUser = dto.idUser;
 
                 Tracker trackerToInsert = dto.toTracker();
 
-                Tracker trackerResp = mainService.bddTracker.insertTracker(trackerToInsert, true);
+                Tracker trackerResp = mainService.bddTracker.insertTracker(trackerToInsert);
 
                 if (trackerResp != null)
                     return new ContentResult()
@@ -123,6 +136,10 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpDelete]
@@ -131,7 +148,7 @@ namespace ApiTrackers.Controllers
         {
             try
             {
-                //TODO AUTHENT TOKEN
+                mainService.bdd.connectOpen();
 
                 if (idUser < 0 && id < 0) return new ContentResult()
                 {
@@ -175,6 +192,10 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpPut]
         [Route("")]
@@ -183,11 +204,12 @@ namespace ApiTrackers.Controllers
            
             try
             {
-                //TODO   check  token authent    idUser == 
+                mainService.bdd.connectOpen();
+
                 int idUser = dto.idUser;
 
                 Tracker trackerToInsert = dto.toTracker();
-                Tracker trackerResp = mainService.bddTracker.updateTracker(trackerToInsert, dto.id, idUser, true);
+                Tracker trackerResp = mainService.bddTracker.updateTracker(trackerToInsert, dto.id, idUser);
 
                 if (trackerResp != null)
                     return new ContentResult()
@@ -209,6 +231,10 @@ namespace ApiTrackers.Controllers
                     StatusCode = 500,
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
        

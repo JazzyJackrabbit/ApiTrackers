@@ -30,8 +30,11 @@ namespace ApiTrackers.Controllers
         [Route("")]
         public ContentResult GetUsers()
         {
-            try { 
-                List<User> users = mainService.bddUser.selectUsers(true);
+            try {
+
+                mainService.bdd.connectOpen();
+
+                List<User> users = mainService.bddUser.selectUsers();
 
                 if (users != null)
                 {
@@ -58,14 +61,20 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         public ContentResult GetUser(int id)
         {
-            try { 
-                User user = mainService.bddUser.selectUser(id, true);
+            try
+            {
+                mainService.bdd.connectOpen();
+                User user = mainService.bddUser.selectUser(id);
 
                 if (user != null)
                     return new ContentResult()
@@ -87,6 +96,10 @@ namespace ApiTrackers.Controllers
                     StatusCode = 500,
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 
@@ -94,23 +107,25 @@ namespace ApiTrackers.Controllers
         [Route("")]
         public ContentResult CreateUser([FromBody] UserCreateDTO dto)
         {
-            try { 
-            User user = dto.toUser();
+            try
+            {
+                mainService.bdd.connectOpen();
+                User user = dto.toUser();
 
-            User userResp = mainService.bddUser.insertUser(user, true);
+                User userResp = mainService.bddUser.insertUser(user);
 
-            if (userResp != null)
-                return new ContentResult()
-                {
-                    StatusCode = 200,
-                    Content = Static.jsonResponseObject(200, userResp)
-                };
-            else
-                return new ContentResult()
-                {
-                    StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "error creation user")
-                };
+                if (userResp != null)
+                    return new ContentResult()
+                    {
+                        StatusCode = 200,
+                        Content = Static.jsonResponseObject(200, userResp)
+                    };
+                else
+                    return new ContentResult()
+                    {
+                        StatusCode = 404,
+                        Content = Static.jsonResponseError(404, "error creation user")
+                    };
             }
             catch (Exception ex)
             {
@@ -120,19 +135,25 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpDelete]
         [Route("")]
         public ContentResult DeleteUser([FromQuery] int id = -1)
         {
-            try {
+            try
+            {
+                mainService.bdd.connectOpen();
                 if (id < 0) return new ContentResult()
                 {
                     StatusCode = 404,
                     Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
 
-                User user = mainService.bddUser.deleteUser(id, true);
+                User user = mainService.bddUser.deleteUser(id);
 
                 if (user != null)
                     return new ContentResult()
@@ -155,14 +176,21 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpPut]
         [Route("")]
         public ContentResult UpdateUser([FromBody] UserUpdateDTO dto){
-            try { 
+
+            try
+            {
+                mainService.bdd.connectOpen();
                 User userToInsert = dto.toUser();
        
-                User userResp = mainService.bddUser.updateUser(userToInsert, dto.id, true);
+                User userResp = mainService.bddUser.updateUser(userToInsert, dto.id);
 
                 if (userResp != null)
                     return new ContentResult()
@@ -184,6 +212,10 @@ namespace ApiTrackers.Controllers
                     StatusCode = 500,
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 

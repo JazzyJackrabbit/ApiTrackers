@@ -18,24 +18,22 @@ namespace ApiTrackers.DB_ORM
             command = _command;
         }
 
-        public bool delete(int _id, bool _selfOpenClose)
+        public bool delete(int _id)
         {
-            return delete(_id, command.config.defaultIdNameTable, _selfOpenClose);
+            return delete(_id, command.config.defaultIdNameTable);
         }
-        public bool delete(int _whereValue1, string _whereTableName1, bool _selfOpenClose)
+        public bool delete(int _whereValue1, string _whereTableName1)
         {
-            return delete(true, _whereValue1, _whereTableName1, false, 0, "", _selfOpenClose);
+            return delete(true, _whereValue1, _whereTableName1, false, 0, "");
         }
-        public bool delete(int _whereValue1, string _whereTableName1, int _whereValue2, string _whereTableName2, bool _selfOpenClose)
+        public bool delete(int _whereValue1, string _whereTableName1, int _whereValue2, string _whereTableName2)
         {
-            return delete(true, _whereValue1, _whereTableName1, true, _whereValue2, _whereTableName2, _selfOpenClose);
+            return delete(true, _whereValue1, _whereTableName1, true, _whereValue2, _whereTableName2);
         }
         public bool delete(
             bool _hasWhereValue1, int _whereValue1, string _whereTableName1,
-            bool _hasWhereValue2, int _whereValue2, string _whereTableName2, 
-            bool _selfOpenClose)
+            bool _hasWhereValue2, int _whereValue2, string _whereTableName2)
         {
-            command.connectOpen(_selfOpenClose);
 
             try
             {
@@ -48,19 +46,14 @@ namespace ApiTrackers.DB_ORM
                         commandString += " AND " + _whereTableName2 + " = " + _whereValue2 + " ";
                 }
 
-                command.executeNonQuery(commandString, false);
+                command.executeNonQuery(commandString);
 
                 return true;
             }
             catch
             {
-                command.connectClose(_selfOpenClose);
 
                 return false;
-            }
-            finally
-            {
-                command.connectClose(_selfOpenClose);
             }
         }
     }

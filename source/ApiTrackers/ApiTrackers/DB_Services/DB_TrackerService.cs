@@ -33,38 +33,32 @@ namespace ApiTrackers.Services
 
         #region ******** public methods ********
 
-        public List<Tracker> selectTrackers(bool _autoOpenClose)
+        public List<Tracker> selectTrackers()
         {
-            command.connectOpen(_autoOpenClose);
 
             List<SqlRow> rows = command.select().all(false);
             List<Tracker> trackers = new List<Tracker>();
             if (rows == null)
             {
-                command.connectClose(_autoOpenClose);
                 return null;
             }
             foreach (SqlRow row in rows)
                 trackers.Add(convertSQLToTracker(row, false));
 
-            command.connectClose(_autoOpenClose);
             return trackers;
         }
-        public Tracker selectTracker(int _id, bool _autoOpenClose)
+        public Tracker selectTracker(int _id)
         {
-            command.connectOpen(_autoOpenClose);
 
-            SqlRow row = command.select().row(true, _id, false);
+            SqlRow row = command.select().row(true, _id);
             Tracker tracker = convertSQLToTracker(row, false);
 
-            command.connectClose(_autoOpenClose);
 
             return tracker;
         }
 
-        public Tracker insertTracker(Tracker _trackerModel, bool _autoOpenClose)
+        public Tracker insertTracker(Tracker _trackerModel)
         {
-            command.connectOpen(_autoOpenClose);
 
             int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.tableTrackers, false);
@@ -73,30 +67,24 @@ namespace ApiTrackers.Services
             sqlRowToInsert.setAttribute("id", id);
             sqlRowToInsert.setAttribute("idUser", _trackerModel.idUser);
 
-            if (command.insert().insert(sqlRowToInsert, false))
+            if (command.insert().insert(sqlRowToInsert))
             {
                 int id2 = getLastId();
-                Tracker checkTracker = selectTracker(id2, false);
+                Tracker checkTracker = selectTracker(id2);
                 if (checkTracker != null)
                 {
-                    command.connectClose(_autoOpenClose);
                     return checkTracker;
                 }
             }
 
-            command.connectClose(_autoOpenClose);
             return null;
         }
 
-        public Tracker updateTracker(Tracker _trackerModel, int id, int _idUser, bool _autoOpenClose)
+        public Tracker updateTracker(Tracker _trackerModel, int id, int _idUser)
         {
-
-            command.connectOpen(_autoOpenClose);
-
-            SqlRow sqlRowToUpdate = command.select().row(true, id, false);
+            SqlRow sqlRowToUpdate = command.select().row(true, id);
             if (sqlRowToUpdate == null)
             {
-                command.connectClose(_autoOpenClose); 
                 return null;
             }
 
@@ -111,32 +99,28 @@ namespace ApiTrackers.Services
                 throw new Exception();
 
             if (_trackerToUpdate.idUser != _idUser)
-                //if ()  //TODO rightMusics users
+
                 throw new ForbiddenException();
 
-            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id, false);
+            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id);
             if (!checkUpdateCorrectly)
             {
-                command.connectClose(_autoOpenClose);
                 return null;
             }
 
-            SqlRow sqlRowCheck = command.select().row(true, id, false);
+            SqlRow sqlRowCheck = command.select().row(true, id);
             Tracker trackerUpdated = convertSQLToTracker(sqlRowCheck, false);
 
-            command.connectClose(_autoOpenClose);
             return trackerUpdated;
         }
         public Tracker deleteTracker(int _id, int _idUser, bool _selfOpenClose)
         {
-            command.connectOpen(_selfOpenClose);
 
-            SqlRow rowToDelete = command.select().row(true, _id, false);
+            SqlRow rowToDelete = command.select().row(true, _id);
             Tracker tracker = convertSQLToTracker(rowToDelete, false);
 
             if (tracker == null)
             {
-                command.connectClose(_selfOpenClose);
                 throw new Exception();
             }
 
@@ -145,13 +129,11 @@ namespace ApiTrackers.Services
 
             if (tracker.idUser == _idUser)
             {
-                command.delete().delete(_id, false); //delete now
-                command.connectClose(_selfOpenClose);
+                command.delete().delete(_id); //delete now
             }
             else
                 throw new ForbiddenException();
 
-            command.connectClose(_selfOpenClose);
             return tracker;
         }
 
@@ -180,7 +162,7 @@ namespace ApiTrackers.Services
 
                 // get pistes
                 List<Piste> pistes = new List<Piste>();
-                List<Note> notes = main.bddCells.selectCells(tracker.idTracker, _selfOpenClose);
+                List<Note> notes = main.bddCells.selectCells(tracker.idTracker);
                 tracker.trackerContent.pistes[0].notes = notes;
 
                 return tracker;

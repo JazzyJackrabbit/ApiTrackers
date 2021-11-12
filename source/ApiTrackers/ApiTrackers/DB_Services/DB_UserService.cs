@@ -32,46 +32,42 @@ namespace ApiTrackers.Services
 
         #region ******** public methods ********
 
-        public List<User> selectUsers(bool _selfOpenClose)
+        public List<User> selectUsers()
         {
-            List<SqlRow> rows = command.select().all(_selfOpenClose);
+            List<SqlRow> rows = command.select().all();
             List<User> users = new List<User>();
             if (rows == null) return null;
             foreach (SqlRow row in rows)
                 users.Add(convertSQLToUser(row));
             return users;
         }
-        public User selectUser(int _id, bool _selfOpenClose)
+        public User selectUser(int _id)
         {
-            SqlRow row = command.select().row(true, _id, _selfOpenClose);
+            SqlRow row = command.select().row(true, _id);
             User user = convertSQLToUser(row);
             return user;
         }
         public User insertUser(bool _selfOpenClose)
         {
-            command.connectOpen(_selfOpenClose);
-
             int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.tableUsers, false);
 
             sqlRowToInsert.setAttribute("id", id);
 
-            if (command.insert().insert(sqlRowToInsert, false))
+            if (command.insert().insert(sqlRowToInsert))
             {
-                User checkUser = selectUser(id, false);
+                User checkUser = selectUser(id);
 
                 if (checkUser != null)
                 {
-                    command.connectClose(_selfOpenClose);
                     return checkUser;
                 }
             }
             
-            command.connectClose(_selfOpenClose);
             return null;
         }
 
-        public User insertUser(User _userModel, bool _selfOpenClose)
+        public User insertUser(User _userModel)
         {
             int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.tableUsers, false);
@@ -79,58 +75,49 @@ namespace ApiTrackers.Services
             sqlRowToInsert = convertUserToSQL(sqlRowToInsert, _userModel);
             sqlRowToInsert.setAttribute("id", id);
 
-            command.connectOpen(_selfOpenClose);
 
-            if (command.insert().insert(sqlRowToInsert, true))
+            if (command.insert().insert(sqlRowToInsert))
             {
                 int id2 = getLastId();
-                User checkUser = selectUser(id2, false);
+                User checkUser = selectUser(id2);
                 if (checkUser != null)
                 {
-                    command.connectClose(_selfOpenClose);
                     return checkUser;
                 }   
                 throw new DatabaseRequestException();
             }
-            command.connectClose(_selfOpenClose);
             return null;
         }
-        public User updateUser(User _userModel, int id, bool _selfOpenClose)
+        public User updateUser(User _userModel, int id)
         {
-            command.connectOpen(_selfOpenClose);
 
-            SqlRow sqlRowToUpdate = command.select().row(true, id, false);
+            SqlRow sqlRowToUpdate = command.select().row(true, id);
             if (sqlRowToUpdate == null)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
 
             sqlRowToUpdate = convertUserToSQL(sqlRowToUpdate, _userModel);
             sqlRowToUpdate.setAttribute("id", id);
 
-            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id, false);
+            bool checkUpdateCorrectly = command.update().update(sqlRowToUpdate, id);
             if (!checkUpdateCorrectly)
             {
-                command.connectClose(_selfOpenClose);
                 return null;
             }
-            SqlRow sqlRowCheck = command.select().row(true, id, false);
+            SqlRow sqlRowCheck = command.select().row(true, id);
             User userUpdated = convertSQLToUser(sqlRowCheck);
 
-            command.connectClose(_selfOpenClose);
             return userUpdated;
         }
-        public User deleteUser(int _id, bool _selfOpenClose)
+        public User deleteUser(int _id)
         {
-            command.connectOpen(_selfOpenClose);
 
-            SqlRow rowToDelete = command.select().row(true, _id, false);
+            SqlRow rowToDelete = command.select().row(true, _id);
             User user = convertSQLToUser(rowToDelete);
             if (user != null)
-                command.delete().delete(_id, false); //delete now
+                command.delete().delete(_id); //delete now
 
-            command.connectClose(_selfOpenClose);
             return user;
         }
 

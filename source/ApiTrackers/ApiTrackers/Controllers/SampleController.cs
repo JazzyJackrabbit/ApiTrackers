@@ -24,8 +24,9 @@ namespace ApiSamples.Controllers
         public ContentResult GetSamples()
         {
             try {
+                mainService.bdd.connectOpen();
 
-                List<Sample> samples = mainService.bddSamples.selectSamples(true);
+                List<Sample> samples = mainService.bddSamples.selectSamples();
 
                 if (samples != null)
                 {
@@ -52,14 +53,20 @@ namespace ApiSamples.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         public ContentResult GetSample(int id)
         {
-            try { 
-                Sample sample = mainService.bddSamples.selectSample(id, true);
+            try
+            {
+                mainService.bdd.connectOpen();
+                Sample sample = mainService.bddSamples.selectSample(id);
 
                 if (sample != null)
                     return new ContentResult()
@@ -81,6 +88,11 @@ namespace ApiSamples.Controllers
                     StatusCode = 500,
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
+
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 
@@ -88,10 +100,13 @@ namespace ApiSamples.Controllers
         [HttpPost]
         public ContentResult CreateSample([FromBody] SampleCreateDTO dto)
         {
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
+
                 Sample sampleToInsert = dto.toSample();
 
-                Sample sampleResp = mainService.bddSamples.insertSample(sampleToInsert, true);
+                Sample sampleResp = mainService.bddSamples.insertSample(sampleToInsert);
 
                 if (sampleResp != null)
                     return new ContentResult()
@@ -114,6 +129,10 @@ namespace ApiSamples.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpDelete]
@@ -122,6 +141,8 @@ namespace ApiSamples.Controllers
         {
             try
             {
+                mainService.bdd.connectOpen();
+
                 int idUser = 1;
                 //TODO AUTHENT TOKEN
 
@@ -131,7 +152,7 @@ namespace ApiSamples.Controllers
                     Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
 
-                Sample sample = mainService.bddSamples.deleteSample(id, idUser, true);
+                Sample sample = mainService.bddSamples.deleteSample(id, idUser);
 
                 if (sample != null)
                     return new ContentResult()
@@ -162,14 +183,20 @@ namespace ApiSamples.Controllers
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpPut]
         [Route("")]
         public ContentResult UpdateSample([FromBody] SampleUpdateDTO dto)
         {
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
                 Sample sampleToInsert = dto.toSample();
-                 Sample sampleResp = mainService.bddSamples.updateSample(sampleToInsert, dto.id, true);
+                 Sample sampleResp = mainService.bddSamples.updateSample(sampleToInsert, dto.id);
 
                 if (sampleResp != null)
                     return new ContentResult()
@@ -191,6 +218,10 @@ namespace ApiSamples.Controllers
                     StatusCode = 500,
                     Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 

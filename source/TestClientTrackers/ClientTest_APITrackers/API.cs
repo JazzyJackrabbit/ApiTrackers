@@ -16,12 +16,13 @@ namespace ClientTest_APITrackers
 {
     public class API
     {
-        static Uri ServerUrl = new Uri("https://localhost:44328/");
+        static Uri ServerUrl;
 
         MainWindow main;
-        public API(MainWindow _main)
+        public API(MainWindow _main, string server = "https://localhost:5001/")
         {
             main = _main;
+            ServerUrl = new Uri(server);
         }
 
         // CELL

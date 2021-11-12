@@ -169,6 +169,7 @@
             <Button x:Name="btn_z2" Content="2" Click="set2Rows" Background="#963" HorizontalAlignment="Left"  VerticalAlignment="Top" Cursor="Hand" Margin="10,85,0,0"/>
             <Button x:Name="btn_z1_Copy1" Content="3" Click="set3Rows" Background="#963" HorizontalAlignment="Left"  VerticalAlignment="Top" Cursor="Hand" Margin="10,48,0,0"/>
             <Button x:Name="btn_z1_Copy2" Content="4" Click="set4Rows" Background="#963" HorizontalAlignment="Left"  VerticalAlignment="Top" Cursor="Hand" Margin="9,11,0,0"/>
+            <TextBox x:Name="tb_server" Background="#FFF" TextChanged="tb_server_TextChanged" HorizontalAlignment="Left" Margin="9,244,0,0" Text="https://localhost:44328/" TextWrapping="Wrap" VerticalAlignment="Top" Width="279" Cursor="IBeam"/>
         </Grid>
         <Grid/>
     </Grid>

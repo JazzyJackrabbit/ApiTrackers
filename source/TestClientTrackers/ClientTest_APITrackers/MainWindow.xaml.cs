@@ -305,9 +305,10 @@ namespace ClientTest_APITrackers
 
         public API api()
         {
-            return new API(this);
+            return new API(this, tb_server.Text);
         }
 
+        
 
         public void display(Grid _gridChild)
         {
@@ -469,6 +470,11 @@ namespace ClientTest_APITrackers
         private void grid_contents_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             sizeRows();
+
+        }
+
+        private void tb_server_TextChanged(object sender, TextChangedEventArgs e)
+        {
 
         }
     }

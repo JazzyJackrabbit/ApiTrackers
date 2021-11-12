@@ -20,6 +20,9 @@ namespace ApiTrackers.Objects
         [JsonProperty(PropertyName = "idLogo")]
         public int idLogo;
 
+        [JsonIgnore]
+        public int localInstrumentId = 0;
+
         public Sample()
         {
             id = 1;

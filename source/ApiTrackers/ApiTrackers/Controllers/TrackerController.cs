@@ -94,7 +94,7 @@ namespace ApiTrackers.Controllers
         [HttpPost]
         public ContentResult CreateTracker([FromBody] TrackerCreateDTO dto)
         {
-            try {
+            try     {
 
                 int idUser = dto.idUser;
 

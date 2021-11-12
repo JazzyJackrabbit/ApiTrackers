@@ -83,6 +83,7 @@ namespace ApiTrackers.Services
                     return checkTracker;
                 }
             }
+
             command.connectClose(_autoOpenClose);
             return null;
         }

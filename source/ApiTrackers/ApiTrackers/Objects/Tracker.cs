@@ -53,7 +53,6 @@ namespace ApiTrackers
         [JsonIgnore]
         public IList<Piste> pistes { get; set; }
 
-
         [JsonProperty(PropertyName = "notes", NullValueHandling = NullValueHandling.Include)]
         public JArray noteArray { 
             get {

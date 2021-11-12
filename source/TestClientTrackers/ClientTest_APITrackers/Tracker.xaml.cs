@@ -245,10 +245,11 @@ namespace ClientTest_APITrackers
             tb_bpm.Text = "";
             tb_comments.Text = "";
 
-
+            try { 
             ((TrackerRowUserControl)main.trackerCtrlWindow.lv.Items[0])
                                          .listbox_notes.Items.Clear();
-
+            }
+            catch { }
         }
 
         public void openInterface()

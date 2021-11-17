@@ -130,17 +130,13 @@ namespace ApiTrackers.Services
             try
             {
                 User user = new User();
-                user.id = Static.convertToInteger(_sqlrow.getAttribute( "id").value);
-
-                //test id
-                string idTest = Static.convertToString(_sqlrow.getAttribute( "id").value);
-                if (!int.TryParse(idTest, out _)) return null;
-
-                user.mail = Static.convertToString(_sqlrow.getAttribute( "mail").value);
-                user.passwordHash = Static.convertToString(_sqlrow.getAttribute( "passwordHash").value);
-                user.pseudo = Static.convertToString(_sqlrow.getAttribute( "pseudo").value);
-                user.recoverMails = Static.convertToInteger(_sqlrow.getAttribute( "recoverMails").value);
+                user.id = Static.convertToInteger(_sqlrow.getAttribute("id").value);
                     
+                user.mail = Static.convertToString(_sqlrow.getAttribute("mail").value);
+                user.passwordHash = Static.convertToString(_sqlrow.getAttribute("passwordHash").value);
+                user.pseudo = Static.convertToString(_sqlrow.getAttribute("pseudo").value);
+                user.recoverMails = Static.convertToInteger(_sqlrow.getAttribute("recoverMails").value);
+                
                 return user;
             }
             catch (Exception ex)

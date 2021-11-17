@@ -107,6 +107,7 @@ namespace MailingTest
                 }
             } else throw new InvalidMailAddressServerException();
         }
+
         bool IsValidEmail(string email)
         {
             try

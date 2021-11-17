@@ -5,6 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <COMReference Include="{bee4bfec-6683-3e67-9167-3c0cbc68f40a}">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>4</VersionMinor>
+      <VersionMajor>2</VersionMajor>
+      <Guid>bee4bfec-6683-3e67-9167-3c0cbc68f40a</Guid>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flurl" Version="3.0.2" />
+    <PackageReference Include="Flurl.Http" Version="3.2.0" />
+    <PackageReference Include="libmodplug" Version="0.8.8.5" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.1" />
     <PackageReference Include="MySql.Data" Version="8.0.27" />
     <PackageReference Include="MySqlConnector" Version="1.3.14" />
@@ -19,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\libSharpMod\SharpMod_sourceCode\SharpMod.Win\SharpMod.Win.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\SharpMik-lib c#-changed 1\SharpMik\SharpMikNAudio.csproj" />
   </ItemGroup>
 
 </Project>

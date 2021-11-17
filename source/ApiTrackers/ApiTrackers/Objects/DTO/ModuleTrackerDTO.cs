@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
-using SharpMod;
-using SharpMod.Song;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ApiTrackers.Objects
@@ -14,18 +13,11 @@ namespace ApiTrackers.Objects
     {
 
         Tracker tracker = null;
-        SongModule module = null;
+        SharpMik.Module module = null;
 
-        public ModuleTrackerDTO(IFormFile _fileContent)
+        public ModuleTrackerDTO(SharpMik.Module _module)
         {
-            if (_fileContent.Length > 0)
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    _fileContent.CopyTo(ms);
-                    module = ModuleLoader.Instance.LoadModule(ms);
-                }
-            }
+            module = _module;
         }
 
         public Tracker getTracker()
@@ -35,11 +27,11 @@ namespace ApiTrackers.Objects
 
         public Tracker moduleToTracker(User _user)
         {
-            string songName = module.SongName;
-            string modType = module.ModType;
-            short speed = module.InitialSpeed;
-            short tempo = module.InitialTempo;
-            string comment = module.Comment;
+            string songName = module.songname;
+            string modType = module.modtype;
+            short speed = module.initspeed;
+            ushort tempo = module.inittempo;
+            string comment = module.comment;
 
             Tracker tempTracker = new Tracker();
             tempTracker.idUser = _user.id;

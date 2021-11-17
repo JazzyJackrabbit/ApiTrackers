@@ -12,6 +12,7 @@ using System.Text;
 using ApiTrackers.ApiParams;
 using ApiTrackers.DTO_ApiParameters;
 using ApiTrackers.Exceptions;
+using System.Net;
 
 namespace ApiTrackers.Controllers
 {
@@ -107,8 +108,8 @@ namespace ApiTrackers.Controllers
         [Route("")]
         public ContentResult CreateUser([FromBody] UserCreateDTO dto)
         {
-            try
-            {
+            try { 
+ 
                 mainService.bdd.connectOpen();
                 User user = dto.toUser();
 
@@ -146,6 +147,7 @@ namespace ApiTrackers.Controllers
         {
             try
             {
+
                 mainService.bdd.connectOpen();
                 if (id < 0) return new ContentResult()
                 {

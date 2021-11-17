@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SharpMod;
-using SharpMod.Song;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,18 +9,11 @@ namespace ApiTrackers.Objects
     {
 
         List<Sample> samples = null;
-        SongModule module = null;
+        SharpMik.Module module = null;
 
-        public ModuleSamplesDTO(IFormFile _fileContent)
+        public ModuleSamplesDTO(SharpMik.Module _module)
         {
-            if (_fileContent.Length > 0)
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    _fileContent.CopyTo(ms);
-                    module = ModuleLoader.Instance.LoadModule(ms);
-                }
-            }
+            module = _module; 
         }
         public List<Sample> getSamples()
         {
@@ -33,37 +24,44 @@ namespace ApiTrackers.Objects
         {
             List<Sample> tempSamples = new List<Sample>();
 
-            foreach (Instrument instrument in module.Instruments)
+            if (module.instruments == null) return new List<Sample>();
+            foreach (SharpMik.INSTRUMENT instru in module.instruments)
             {
                 int posISample = 0;
-                foreach (SharpMod.Song.Sample sample in instrument.Samples)
-                {
-                    Byte[] sampleBytes = sample.SampleBytes;
-                    string sampleName = sample.SampleName;
-                    short panning = sample.Panning;
-                    short volume = sample.Volume;
+                  foreach (SharpMik.SAMPLE sample in module.samples)
+                    {
+                    foreach (ushort sampleN in instru.samplenumber)
+                        if (sampleN == posISample)
+                        {
+                            Byte[] sampleBytes = instru.samplenote;
+                            string sampleName = sample.samplename;
+                            short panning = sample.panning;
+                            short volume = sample.volume;
 
-                    Tuple<string, string> fileTuple = filepath(_samplesPath, sampleName);
-                    string pathSample = fileTuple.Item1;
-                    string filenameSample = fileTuple.Item2;
+                            Tuple<string, string> fileTuple = filepath(_samplesPath, sampleName);
+                            string pathSample = fileTuple.Item1;
+                            string filenameSample = fileTuple.Item2;
 
-                    if (_makeFiles)
-                        if (!saveDirectorySample(sampleBytes, pathSample)) { 
-                            pathSample = "Unknown";
+                            if (_makeFiles)
+                                if (!saveDirectorySample(sampleBytes, pathSample))
+                                {
+                                    pathSample = "Unknown";
+                                }
+                                else
+                                    pathSample = "Unknown";
+
+                            Sample sampl = new Sample();
+                            sampl.name = sampleName;
+                            sampl.idLogo = 100; // module
+                            sampl.color = "#dddddd";
+                            sampl.linkSample = pathSample;
+                            sampl.localInstrumentId = posISample;
+
+                            samples.Add(sampl);
+                            posISample++;
+
                         }
-                    else
-                        pathSample = "Unknown";
-                    
-                    Sample sampl = new Sample();
-                    sampl.name = sampleName;
-                    sampl.idLogo = 100; // module
-                    sampl.color = "#dddddd";
-                    sampl.linkSample = pathSample;
-                    sampl.localInstrumentId = posISample;
-
-                    samples.Add(sampl);
-                    posISample++;
-                }
+                  }
             }
 
             return tempSamples;

@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SharpMod;
-using SharpMod.Song;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,18 +11,11 @@ namespace ApiTrackers.Objects
     {
 
         List<Piste> pistes = null;
-        SongModule module = null;
+        SharpMik.Module module = null;
 
-        public ModulePistesDTO(IFormFile _fileContent)
+        public ModulePistesDTO(SharpMik.Module _module)
         {
-            if (_fileContent.Length > 0)
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    _fileContent.CopyTo(ms);
-                    module = ModuleLoader.Instance.LoadModule(ms);
-                }
-            }
+            module = _module;
         }
 
         public List<Piste> getPistes()
@@ -35,16 +26,26 @@ namespace ApiTrackers.Objects
         public List<Piste> moduleToPistes(Tracker _tracker)
         {
             pistes = new List<Piste>();
-            foreach (Pattern pattern in module.Patterns)
-                for (int j = 0; j < pattern.Tracks.Count; j++)
-                {
-                    Piste piste = new Piste();
-                    piste.id = j;
-                    piste.color = "#ddd";
-                    piste.name = "Piste #"+(j+1).ToString();
 
-                    pistes.Add(piste);
-                }
+            /*
+            int posI = 0;
+            //foreach (byte[] patternI in module.tracks) 
+            foreach (byte[] track in module.tracks)
+            {
+                Piste piste = new Piste();
+                piste.id = posI;
+                piste.color = "#ddd";
+                piste.name = "Piste #" + (posI + 1).ToString();
+
+                pistes.Add(piste);
+                posI++;
+            }
+            */
+
+            pistes.Add(new Piste());
+
+            _tracker.trackerContent.pistes = pistes;
+
             return pistes;
         }
 

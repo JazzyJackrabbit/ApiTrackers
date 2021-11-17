@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using SharpMod;
-using SharpMod.Song;
+﻿using ApiTrackers.DTO_ApiParameters.Module;
+using Microsoft.AspNetCore.Http;
+using SharpMik;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ApiTrackers.Objects
@@ -12,19 +13,12 @@ namespace ApiTrackers.Objects
     public class ModuleCellsDTO
     {
 
-        List<Note> cells = null;
-        SongModule module = null;
+        List<Note> cells = new List<Note>();
+        SharpMik.Module module = null;
 
-        public ModuleCellsDTO(IFormFile _fileContent)
+        public ModuleCellsDTO(SharpMik.Module _module)
         {
-            if (_fileContent.Length > 0)
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    _fileContent.CopyTo(ms);
-                    module = ModuleLoader.Instance.LoadModule(ms);
-                }
-            }
+            module = _module;
         }
 
         public List<Note> getCells()
@@ -32,44 +26,52 @@ namespace ApiTrackers.Objects
             return cells;
         }
 
-        public List<Note> moduleToCells(Tracker _tracker, Piste _piste, List<Sample> _samples)
+        public List<Note> moduleToCells(Tracker _tracker, List<Piste> _pistes, List<Sample> _samples)
         {
-            foreach (Pattern pattern in module.Patterns)
-                for (int j = 0; j < pattern.Tracks.Count; j++)
+            int posCount = 8;
+            foreach (byte[] track in module.tracks)
+            {
+                if(posCount>1)
+                foreach (byte cellI in track) //array of numtrk pointers to tracks
                 {
-                    Track track = pattern.Tracks[j];
-
-                    int PosICell = 0;
-                    foreach (PatternCell cell in track.Cells)
+                    try
                     {
-                        short effect = cell.Effect;
-                        short effectData = cell.EffectData;
-                        short instrument = cell.Instrument; // < local file sample ID 
-                        short period = cell.Period;
-                        int? noteValue = cell.Note;
-                        int? octaveValue = cell.Octave;
-                        double position = PosICell * 256;
+                        MP_CONTROL controlCell = module.control[cellI];
+
+                        short effect = controlCell.sseffect;
+                        short effectVolume = controlCell.voleffect;
+                        short instrument = controlCell.dct; // < local file sample ID 
+                        ushort period = controlCell.wantedperiod;
+                        int? noteValue = controlCell.anote;
+                        int? octaveValue = 5; //;
+                        double position = cellI * 256;
 
                         string OctaveNote = "{\"O\":" + octaveValue + ", \"N\":" + noteValue + "}";
 
-                        Note note = new Note(_tracker, _piste, position, OctaveNote);
+
+                        Piste pisteCurrent = _pistes[0];
+
+                        Note note = new Note(_tracker, pisteCurrent, position, OctaveNote);
 
                         note.effect = new Effect(effect);
                         note.freqSample = 1;
 
                         note.sample = new Sample();
                         foreach (Sample sampleFind in _samples)
-                            if(sampleFind.localInstrumentId == instrument)
+                            if (sampleFind.localInstrumentId == instrument)
                                 note.sample = sampleFind;
 
                         note.surround = new Surround();
                         note.volume = 1;
 
                         cells.Add(note);
-                        PosICell++;
                     }
+                    catch { }
 
                 }
+                posCount--;
+            }
+              
             return cells;
         }
 

@@ -169,7 +169,7 @@ namespace ApiTrackers.Controllers
                     Content = Static.jsonResponseError(404, "id attribute missing.")
                 };
 
-                Tracker tracker = mainService.bddTracker.deleteTracker(id, idUser, true);
+                Tracker tracker = mainService.bddTracker.deleteTracker(id, idUser);
 
                 if (tracker != null)
                     return new ContentResult()

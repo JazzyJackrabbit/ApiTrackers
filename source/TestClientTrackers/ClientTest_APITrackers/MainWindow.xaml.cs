@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace ClientTest_APITrackers
         public RightMusic rightMusicWindow; // sample
         public ListWindow listWindow;
         public SampleAlias sampleAliasWindow;
+        public UploadWindow uploadWindow;
 
         public Grid Grid_trackerCtrlWindow; // tracker
         public Grid Grid_cellControlWindow; // cell
@@ -36,6 +38,7 @@ namespace ClientTest_APITrackers
         public Grid Grid_rightMusicWindow; // sample
         public Grid Grid_listWindow; // sample
         public Grid Grid_sampleAliasWindow; // sample
+        public Grid Grid_UploadWindow; // sample
 
         public Label title1 = new Label();
         public Label title2 = new Label();
@@ -55,6 +58,7 @@ namespace ClientTest_APITrackers
             rightMusicWindow = new RightMusic(this);
             listWindow = new ListWindow();
             sampleAliasWindow = new SampleAlias(this);
+            uploadWindow = new UploadWindow(this);
 
             Grid child = Grid_userWindow = (Grid)userWindow.grid_content.Children[0];
             userWindow.grid_content.Children.Clear();
@@ -84,6 +88,10 @@ namespace ClientTest_APITrackers
             sampleAliasWindow.grid_content.Children.Clear();
             //grid_content.Children.Add(child);
 
+            child = Grid_UploadWindow = (Grid)uploadWindow.grid_content.Children[0];
+            uploadWindow.grid_content.Children.Clear();
+
+
             title1.Content = "--";
             title2.Content = "--";
             title3.Content = "--";
@@ -96,6 +104,7 @@ namespace ClientTest_APITrackers
             Grid_rightMusicWindow.Name = "RightMusics";
             Grid_listWindow.Name = "List";
             Grid_sampleAliasWindow.Name = "SamplesAlias";
+            Grid_UploadWindow.Name = "Upload";
 
 
             invisibilityGridsAndButtons();
@@ -110,6 +119,7 @@ namespace ClientTest_APITrackers
             btn_samplesAlias.Background = b1;
             btn_trackers.Background = b1;
             btn_users.Background = b1;
+            btn_upload.Background = b1;
         }
        Brush b2 = new SolidColorBrush(Color.FromRgb((byte)(140), (byte)(50), (byte)(50)));
 
@@ -118,6 +128,12 @@ namespace ClientTest_APITrackers
             goUserView();
         }
 
+        private void UploadClick(object sender, RoutedEventArgs e)
+        {
+            invisibilityGridsAndButtons();
+            display(Grid_UploadWindow); //.Visibility = Visibility.Visible; //
+            btn_upload.Background = b2;
+        }
         public void goUserView()
         {
             invisibilityGridsAndButtons();
@@ -350,7 +366,6 @@ namespace ClientTest_APITrackers
             try { title2.Content = ((Grid)grid_content_2.Children[0]).Name + "  "; } catch { title2.Content = "...  "; }
             try { title3.Content = ((Grid)grid_content_3.Children[0]).Name + "  "; } catch { title3.Content = "...  "; }
             try { title4.Content = ((Grid)grid_content_4.Children[0]).Name + "  "; } catch { title4.Content = "...  "; }
-
         }
 
         public void displaySuite(Grid _gridChild)
@@ -423,8 +438,6 @@ namespace ClientTest_APITrackers
             grid_content_4.Width = width;
 
 
-        
-
         }
 
         private void set4Rows(object sender, RoutedEventArgs e)
@@ -473,8 +486,105 @@ namespace ClientTest_APITrackers
 
         }
 
+
         private void tb_server_TextChanged(object sender, TextChangedEventArgs e)
         {
+        }
+
+        private void TestsClick(object sender, RoutedEventArgs e)
+        {
+            logLine("= = = = ^^^ START TEST ^^^ = = = = = = = = = = = = = = = = = = ");
+            logLine("= = = = ^^^ START TEST ^^^ = = = = = = = = = = = = = = = = = = = = ");
+            logLine("= = = = ^^^ START TEST ^^^ = = = = = = = = = = = = = = = = = = = = ");
+            logLine("= = = = ^^^ START TEST ^^^ = = = = = = = = = = = = = = = = = = = = ");
+            logLine("= = = = ^^^ START TEST ^^^  = = = = = = = = = = = = = = = = = = = ");
+
+            JObject jsonUser = new JObject{
+                //new JProperty("id", 1),
+                new JProperty("mail", "imjazzyjackrabbit@gmail.com"),
+                new JProperty("permissions", "Edit"),
+                new JProperty("passwordHash", "password"),
+                new JProperty("pseudo", "pseudoTest"),
+                new JProperty("wantReceiveMails", 1)
+            };
+            JObject jsonUser2 = new JObject{
+                new JProperty("mail", "imjazzyjackrabbit@gmail.com"),
+                new JProperty("permissions", "Edit"),
+                new JProperty("passwordHash", "password"),
+                new JProperty("pseudo", "pseudoTest2"),
+                new JProperty("wantReceiveMails", 1)
+            };
+
+
+            JObject resultUser =
+                new API(this).INSERT_User(jsonUser);
+            int idUser = Convert.ToInt32(resultUser.GetValue("id").ToString());
+
+            JObject resultUser2 =
+                            new API(this).INSERT_User(jsonUser2);
+            int idUser2 = Convert.ToInt32(resultUser2.GetValue("id").ToString());
+
+
+            JObject jsonTracker = new JObject{
+                new JProperty("id", 1),
+                new JProperty("idUser", idUser),
+                new JProperty("artist", "artistTest"),
+                new JProperty("title", "titleTest"),
+                new JProperty("bpm", "bpmTest"),
+                new JProperty("comments", "commentsTest"),
+                new JProperty("coprightInformations", "test")
+            };
+
+
+            JObject resultTracker =
+                new API(this).INSERT_Tracker(idUser, jsonTracker);
+            int idTracker = Convert.ToInt32(resultTracker.GetValue("id").ToString());
+
+
+            JObject jsonSample = new JObject{
+                new JProperty("id", 1),
+                new JProperty("idLogo", 1),
+                new JProperty("name", "nameTestOriginal"),
+                new JProperty("color", "colornameTestOriginal"),
+                new JProperty("linkSample", "link Sample")
+            };
+
+            JObject resultSample = new API(this).INSERT_Sample(jsonSample);
+            int idSample = Convert.ToInt32(resultSample.GetValue("id").ToString());
+
+
+            JObject jsonSampleAlias = new JObject{
+                    new JProperty("idUser", idUser),
+                    new JProperty("idLogo", 1),
+                    new JProperty("name", "nameTestALIAS"),
+                    new JProperty("color", "colorTestALIAS"),
+                    new JProperty("idSample", 1)
+            };
+
+
+            JObject resultSampleAlias = new API(this).INSERT_SampleAlias(jsonSampleAlias);
+
+
+
+            JObject jsonCell = new JObject
+            {
+                new JProperty("volume", 0.80),
+                new JProperty("frequence", 0.85),
+                new JProperty("idTracker", idTracker),
+                new JProperty("id", 1),
+                new JProperty("idUser", idUser)
+            };
+
+
+            new API(this).INSERT_Cell(idTracker, jsonCell);
+
+            JObject jsonRightMusic = new JObject{
+                    new JProperty("idTracker", idTracker),
+                    new JProperty("idUser", idUser2),
+                    new JProperty("right", "Edit"),
+            };
+
+            JObject resultRM = new API(this).INSERT_RightMusic(jsonRightMusic);
 
         }
     }

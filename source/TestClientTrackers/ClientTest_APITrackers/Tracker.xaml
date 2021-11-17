@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Tracker" MinHeight="375" MinWidth="610" Width="897" >
     <Grid x:Name="grid_content_Parent" Background="#bbb">
-      
+
         <Grid Grid.RowSpan="2">
             <Grid x:Name="grid_content" Margin="0,161,0,0" Background="#888"/>
             <Grid Height="161" VerticalAlignment="Top">

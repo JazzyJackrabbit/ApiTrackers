@@ -43,7 +43,7 @@ namespace ApiTrackers.Services
                 return null;
             }
             foreach (SqlRow row in rows)
-                trackers.Add(convertSQLToTracker(row, false));
+                trackers.Add(convertSQLToTracker(row));
 
             return trackers;
         }
@@ -51,7 +51,7 @@ namespace ApiTrackers.Services
         {
 
             SqlRow row = command.select().row(true, _id);
-            Tracker tracker = convertSQLToTracker(row, false);
+            Tracker tracker = convertSQLToTracker(row);
 
 
             return tracker;
@@ -90,7 +90,7 @@ namespace ApiTrackers.Services
 
             sqlRowToUpdate = convertTrackerToSQL(sqlRowToUpdate, _trackerModel);
 
-            Tracker _trackerToUpdate = convertSQLToTracker(sqlRowToUpdate, false);
+            Tracker _trackerToUpdate = convertSQLToTracker(sqlRowToUpdate);
 
             sqlRowToUpdate.setAttribute("id", id);
             sqlRowToUpdate.setAttribute("idUser", _trackerToUpdate.idUser);
@@ -109,15 +109,15 @@ namespace ApiTrackers.Services
             }
 
             SqlRow sqlRowCheck = command.select().row(true, id);
-            Tracker trackerUpdated = convertSQLToTracker(sqlRowCheck, false);
+            Tracker trackerUpdated = convertSQLToTracker(sqlRowCheck);
 
             return trackerUpdated;
         }
-        public Tracker deleteTracker(int _id, int _idUser, bool _selfOpenClose)
+        public Tracker deleteTracker(int _id, int _idUser)
         {
 
             SqlRow rowToDelete = command.select().row(true, _id);
-            Tracker tracker = convertSQLToTracker(rowToDelete, false);
+            Tracker tracker = convertSQLToTracker(rowToDelete);
 
             if (tracker == null)
             {
@@ -141,7 +141,7 @@ namespace ApiTrackers.Services
 
         #region ******** convertions ******** 
 
-        private Tracker convertSQLToTracker(SqlRow _sqlrow, bool _selfOpenClose)
+        private Tracker convertSQLToTracker(SqlRow _sqlrow)
         {
             if (_sqlrow == null) return null;
             try

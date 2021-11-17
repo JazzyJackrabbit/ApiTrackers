@@ -1,0 +1,20 @@
+﻿<Window x:Class="ClientTest_APITrackers.UploadWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientTest_APITrackers"
+        mc:Ignorable="d"
+        Title="UploadWindow" Height="209" Width="448">
+    <Grid x:Name="grid_content">
+        <Grid Background="#bbb" Visibility="Hidden">
+            <TextBox x:Name="tb_path" Background="#fff" HorizontalAlignment="Left"  Margin="10,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="324" Height="32" Cursor="IBeam"/>
+            <TextBox x:Name="tb_idUser" Background="#ffb" HorizontalAlignment="Left" Margin="242,82,0,0" Text="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="92" RenderTransformOrigin="0.588,1.471"/>
+            <Label Content="idUser" HorizontalAlignment="Left" Margin="189,80,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.207,-0.732"/>
+            <Button Content="SEND" Click="Button_Click" Margin="36,87,0,0" Cursor="Hand" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"/>
+            <Label Content="path (format .MOD)" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.207,-0.732"/>
+        </Grid>
+        <Label Content="TODO " HorizontalAlignment="Left" Margin="31,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.207,-0.732"/>
+
+    </Grid>
+</Window>

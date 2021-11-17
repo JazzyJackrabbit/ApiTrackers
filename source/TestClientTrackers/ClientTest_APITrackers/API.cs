@@ -22,7 +22,7 @@ namespace ClientTest_APITrackers
         public API(MainWindow _main, string server = "https://localhost:5001/")
         {
             main = _main;
-            ServerUrl = new Uri(server);
+            ServerUrl = new Uri(main.tb_server.Text);
         }
 
         // CELL
@@ -148,7 +148,7 @@ namespace ClientTest_APITrackers
 
         
 
-        internal Object INSERT_Tracker(int idUser, JObject json)
+        internal JObject INSERT_Tracker(int idUser, JObject json)
         {
             string url = ServerUrl + "Trackers"; string resp = "";
             main.logLine(">>> URL : " + url);
@@ -519,6 +519,65 @@ namespace ClientTest_APITrackers
                ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
             if (v.GetType() == typeof(JArray)) return (JArray)v;
             return (JObject)v;
+        }
+
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+        // UPLOAD
+
+        internal JContainer UploadFiles(FileStream file, int idUser = -1)
+        {
+            /*
+            
+            var localFilePath = HttpContext.Current.Server.MapPath("~/timetable.jpg");
+
+            string url = ServerUrl + "Upload/"+ idUser, resp = "";
+            main.logLine(">>> URL : " + url);
+
+            StreamReader reader = new StreamReader(file);
+            string textFile = reader.ReadToEnd();
+
+            var request = (HttpWebRequest)WebRequest.Create(url);
+
+            //var postData = "fileContent=";
+            //postData += "&thing2=world";
+            //var data = Encoding.ASCII.GetBytes(textFile);
+
+            byte[] bytesFile = Encoding.ASCII.GetBytes(textFile);
+
+            request.Method = "POST";
+            request.ContentLength = bytesFile.Length;
+
+            JObject obj = new JObject(request.GetRequestStream());
+            {
+                stream.Write(bytesFile, 0, bytesFile.Length);
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+                main.logSuite(">>> RESP : " + responseString);
+                object v = JsonConvert.DeserializeObject(
+                    ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
+                if (v.GetType() == typeof(JArray)) return (JArray)v;
+                return (JObject)v;
+            }
+
+            */
+
+            return null;
+
         }
 
     }

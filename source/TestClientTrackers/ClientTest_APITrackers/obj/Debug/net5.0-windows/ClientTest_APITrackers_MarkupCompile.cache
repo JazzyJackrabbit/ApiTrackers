@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET5_0;NETCOREAPP
 D:\Dev\GITHUB\ApiTrackers\ApiTrackers\source\TestClientTrackers\ClientTest_APITrackers\App.xaml
-11-1478886795
+12-16943239
 11241019979212
-16602465799
+181724863191
 2681762550366
-CellControlWindow.xaml;ListWindow.xaml;MainWindow.xaml;RightMusic.xaml;Sample.xaml;SampleAlias.xaml;SubCellControl.xaml;SubCellEmptyControl.xaml;Tracker.xaml;TrackerRowUserControl.xaml;User__Window.xaml;
+CellControlWindow.xaml;ListWindow.xaml;MainWindow.xaml;RightMusic.xaml;Sample.xaml;SampleAlias.xaml;SubCellControl.xaml;SubCellEmptyControl.xaml;Tracker.xaml;TrackerRowUserControl.xaml;UploadWindow.xaml;User__Window.xaml;
 
 False
 

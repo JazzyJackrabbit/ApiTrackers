@@ -5,15 +5,25 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 
 namespace ApiTrackers
 {
     public static class Static
     {
+        public static string MakeValidFileName(string name)
+        {
+            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
+            string invalidRegStr = string.Format(@"(?!([a-zA-Z]|[0-9]|(-|_))|\s).", invalidChars);
 
+            // "azerty1234567890_- "       _
+
+            return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
+        }
         public static JArray ConvertToJArray<T>(List<T> _arr)
         {
             JArray arrJson = new JArray();
@@ -47,41 +57,58 @@ namespace ApiTrackers
             catch { }
             return new JObject();
         }
-        /*public static JContainer ConvertToJContainer<T>(T _obj)
-        {
-           
-            if (_obj.GetType() == new List<T>().GetType())
-            {
-                IList objList = (IList)_obj;
-                int count = objList.Count; // The LINQ conversions will lose this information  
-                IEnumerable<T> list = objList.Cast<T>();
-                List<T> lt = new List<T>();
-                foreach (T t in list) lt.Add(t);
-                return ConvertToJArray<T>(lt);
-            }
-            if (_obj.GetType() == typeof(T))
-            {
-                return ConvertToJObject(_obj);
-            }
 
-            try
-            {
-                if (_obj.GetType() == "".GetType())
-                    return (JObject)JsonConvert.DeserializeObject(_obj.ToString());
-            }
-            catch { }
-            try
-            {
-                return (JObject)JsonConvert.DeserializeObject(_obj.ToString());
-            }
-            catch { }
-            try
-            {
-                return (JObject)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(_obj));
-            }
-            catch { }
-            return new JObject();
-        }*/
+
+        public static void WriteWavHeader(MemoryStream stream, bool isFloatingPoint, ushort channelCount, ushort bitDepth, int sampleRate, int totalSampleCount)
+        {
+            stream.Position = 0;
+
+            // RIFF header.
+            // Chunk ID.
+            stream.Write(Encoding.ASCII.GetBytes("RIFF"), 0, 4);
+
+            // Chunk size.
+            stream.Write(BitConverter.GetBytes(((bitDepth / 8) * totalSampleCount) + 36), 0, 4);
+
+            // Format.
+            stream.Write(Encoding.ASCII.GetBytes("WAVE"), 0, 4);
+
+
+
+            // Sub-chunk 1.
+            // Sub-chunk 1 ID.
+            stream.Write(Encoding.ASCII.GetBytes("fmt "), 0, 4);
+
+            // Sub-chunk 1 size.
+            stream.Write(BitConverter.GetBytes(16), 0, 4);
+
+            // Audio format (floating point (3) or PCM (1)). Any other format indicates compression.
+            stream.Write(BitConverter.GetBytes((ushort)(isFloatingPoint ? 3 : 1)), 0, 2);
+
+            // Channels.
+            stream.Write(BitConverter.GetBytes(channelCount), 0, 2);
+
+            // Sample rate.
+            stream.Write(BitConverter.GetBytes(sampleRate), 0, 4);
+
+            // Bytes rate.
+            stream.Write(BitConverter.GetBytes(sampleRate * channelCount * (bitDepth / 8)), 0, 4);
+
+            // Block align.
+            stream.Write(BitConverter.GetBytes((ushort)channelCount * (bitDepth / 8)), 0, 2);
+
+            // Bits per sample.
+            stream.Write(BitConverter.GetBytes(bitDepth), 0, 2);
+
+
+
+            // Sub-chunk 2.
+            // Sub-chunk 2 ID.
+            stream.Write(Encoding.ASCII.GetBytes("data"), 0, 4);
+
+            // Sub-chunk 2 size.
+            stream.Write(BitConverter.GetBytes((bitDepth / 8) * totalSampleCount), 0, 4);
+        }
 
         public static string removeLastCharacter(string text)
         {

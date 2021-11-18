@@ -4,9 +4,6 @@ using ApiTrackers.Exceptions;
 using ApiTrackers.Objects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using static ApiTrackers.SqlDatabase;
 
 namespace ApiTrackers.Services
 {
@@ -47,26 +44,7 @@ namespace ApiTrackers.Services
             User user = convertSQLToUser(row);
             return user;
         }
-        public User insertUser(bool _selfOpenClose)
-        {
-            int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.tableUsers, false);
-
-            sqlRowToInsert.setAttribute("id", id);
-
-            if (command.insert().insert(sqlRowToInsert))
-            {
-                User checkUser = selectUser(id);
-
-                if (checkUser != null)
-                {
-                    return checkUser;
-                }
-            }
-            
-            return null;
-        }
-
+       
         public User insertUser(User _userModel)
         {
             int id = getNextId();

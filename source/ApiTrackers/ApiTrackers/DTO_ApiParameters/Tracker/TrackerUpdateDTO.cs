@@ -19,7 +19,7 @@
             trackerToInsert.trackerMetadata.title = title;
             trackerToInsert.trackerMetadata.comments = comments;
             trackerToInsert.trackerMetadata.copyrightInformation = coprightInformations;
-
+            //todo: tocheck: trackerToInsert.idTracker = id;
             trackerToInsert.idUser = idUser;
 
             return trackerToInsert;

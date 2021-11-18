@@ -11,9 +11,9 @@ namespace ApiTrackers.Objects
     {
 
         List<Piste> pistes = null;
-        SharpMik.Module module = null;
+        Stream module = null;
 
-        public ModulePistesDTO(SharpMik.Module _module)
+        public ModulePistesDTO(Stream _module)
         {
             module = _module;
         }
@@ -26,21 +26,6 @@ namespace ApiTrackers.Objects
         public List<Piste> moduleToPistes(Tracker _tracker)
         {
             pistes = new List<Piste>();
-
-            /*
-            int posI = 0;
-            //foreach (byte[] patternI in module.tracks) 
-            foreach (byte[] track in module.tracks)
-            {
-                Piste piste = new Piste();
-                piste.id = posI;
-                piste.color = "#ddd";
-                piste.name = "Piste #" + (posI + 1).ToString();
-
-                pistes.Add(piste);
-                posI++;
-            }
-            */
 
             pistes.Add(new Piste());
 

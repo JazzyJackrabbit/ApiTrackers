@@ -1,6 +1,8 @@
 ﻿using ApiTrackers.DTO_ApiParameters.Module;
 using Microsoft.AspNetCore.Http;
 using SharpMik;
+using SharpMik.Drivers;
+using SharpMik.Player;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,9 +16,9 @@ namespace ApiTrackers.Objects
     {
 
         List<Note> cells = new List<Note>();
-        SharpMik.Module module = null;
+        Stream module = null;
 
-        public ModuleCellsDTO(SharpMik.Module _module)
+        public ModuleCellsDTO(Stream _module)
         {
             module = _module;
         }
@@ -26,52 +28,65 @@ namespace ApiTrackers.Objects
             return cells;
         }
 
-        public List<Note> moduleToCells(Tracker _tracker, List<Piste> _pistes, List<Sample> _samples)
+        public List<Note> moduleToCells(Tracker _tracker, List<Sample> _samples)
         {
-            int posCount = 8;
-            foreach (byte[] track in module.tracks)
+
+            MikMod player;
+            player = new MikMod();
+            player.Init<NoAudio>("temp.wav");
+            SharpMik.Module moduleSharpMik = player.LoadModule(module);
+
+            cells = new List<Note>();
+
+            for(int p = 0; p < moduleSharpMik.patterns.Length; p++)
             {
-                if(posCount>1)
-                foreach (byte cellI in track) //array of numtrk pointers to tracks
-                {
-                    try
-                    {
-                        MP_CONTROL controlCell = module.control[cellI];
+                ushort patternsId = moduleSharpMik.patterns[p];
+            }
+            //TODO:
+            /*
+            for (int i = 0; i < moduleSharpMik.tracks.Length; i++)
+            {
+              for (int j = 0; j < moduleSharpMik.tracks[i].Length; j++)
+               {
+                   byte cellI = moduleSharpMik.tracks[i][j];
+                   try
+                   {
+                       if(cellI < moduleSharpMik.control.Length) { 
+                           MP_CONTROL controlCell = moduleSharpMik.control[cellI];
 
-                        short effect = controlCell.sseffect;
-                        short effectVolume = controlCell.voleffect;
-                        short instrument = controlCell.dct; // < local file sample ID 
-                        ushort period = controlCell.wantedperiod;
-                        int? noteValue = controlCell.anote;
-                        int? octaveValue = 5; //;
-                        double position = cellI * 256;
+                           short effect = controlCell.sseffect;
+                           short effectVolume = controlCell.voleffect;
+                           short instrument = controlCell.dct; // < local file sample ID 
+                           ushort period = controlCell.wantedperiod;
+                           int? noteValue = controlCell.anote;
+                           int? octaveValue = 5; //;
+                           double position = cellI * 256;
 
-                        string OctaveNote = "{\"O\":" + octaveValue + ", \"N\":" + noteValue + "}";
+                           string OctaveNote = "{\"O\":" + octaveValue + ", \"N\":" + noteValue + "}";
 
+                           Piste pisteCurrent = _tracker.trackerContent.pistes[0];
 
-                        Piste pisteCurrent = _pistes[0];
+                           Note note = new Note(_tracker, pisteCurrent, position, OctaveNote);
 
-                        Note note = new Note(_tracker, pisteCurrent, position, OctaveNote);
+                           note.effect = new Effect(effect);
+                           note.freqSample = 1;
 
-                        note.effect = new Effect(effect);
-                        note.freqSample = 1;
+                           note.sample = new Sample();
+                           foreach (Sample sampleFind in _samples)
+                               //if (sampleFind.linkSample == instrument)
+                                   note.sample = sampleFind;
 
-                        note.sample = new Sample();
-                        foreach (Sample sampleFind in _samples)
-                            if (sampleFind.localInstrumentId == instrument)
-                                note.sample = sampleFind;
+                           note.surround = new Surround();
+                           note.volume = 1;
 
-                        note.surround = new Surround();
-                        note.volume = 1;
-
-                        cells.Add(note);
-                    }
-                    catch { }
+                           cells.Add(note);
+                       }
+                   }
+                   catch { }
 
                 }
-                posCount--;
-            }
-              
+            }*/
+
             return cells;
         }
 

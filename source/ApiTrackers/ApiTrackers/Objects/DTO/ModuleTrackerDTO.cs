@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
+using SharpMik.Drivers;
+using SharpMik.Player;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,9 +15,9 @@ namespace ApiTrackers.Objects
     {
 
         Tracker tracker = null;
-        SharpMik.Module module = null;
+        Stream module = null;
 
-        public ModuleTrackerDTO(SharpMik.Module _module)
+        public ModuleTrackerDTO(Stream _module)
         {
             module = _module;
         }
@@ -27,11 +29,16 @@ namespace ApiTrackers.Objects
 
         public Tracker moduleToTracker(User _user)
         {
-            string songName = module.songname;
-            string modType = module.modtype;
-            short speed = module.initspeed;
-            ushort tempo = module.inittempo;
-            string comment = module.comment;
+            MikMod player;
+            player = new MikMod();
+            player.Init<NoAudio>("temp.wav");
+            SharpMik.Module moduleSharpMik = player.LoadModule(module);
+
+            string songName = moduleSharpMik.songname;
+            string modType = moduleSharpMik.modtype;
+            short speed = moduleSharpMik.initspeed;
+            ushort tempo = moduleSharpMik.inittempo;
+            string comment = moduleSharpMik.comment;
 
             Tracker tempTracker = new Tracker();
             tempTracker.idUser = _user.id;

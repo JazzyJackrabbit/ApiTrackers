@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SharpMik;
+using SharpMik.Drivers;
+using SharpMik.Player;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Media;
 
 namespace ApiTrackers.Objects
 {
@@ -9,9 +13,9 @@ namespace ApiTrackers.Objects
     {
 
         List<Sample> samples = null;
-        SharpMik.Module module = null;
+        Stream module = null;
 
-        public ModuleSamplesDTO(SharpMik.Module _module)
+        public ModuleSamplesDTO(Stream _module)
         {
             module = _module; 
         }
@@ -22,13 +26,83 @@ namespace ApiTrackers.Objects
 
         public List<Sample> moduleToSamples(bool _makeFiles = false, string _samplesPath = "")
         {
+
             List<Sample> tempSamples = new List<Sample>();
 
-            if (module.instruments == null) return new List<Sample>();
-            foreach (SharpMik.INSTRUMENT instru in module.instruments)
+            MikMod player;
+            player = new MikMod();
+            player.Init<NoAudio>("temp.wav");
+            SharpMik.Module m = player.LoadModule(module);
+
+            foreach (SAMPLE sample in m.samples)
             {
+                try { 
+                    short[] buffer = sample.buffer;
+
+                    string sampleName = sample.samplename;
+                    short panning = sample.panning;
+                    short volume = sample.volume;
+
+                    string filepathsample = "NONE";
+                    string filenameonly = "NONE";
+
+                    Sample sampleApi = new Sample();
+
+                    if (buffer != null && _makeFiles)
+                    {  
+                        MemoryStream wavSample = new MemoryStream();
+
+                        Static.WriteWavHeader(wavSample, false, 1, 16, 20000, buffer.Length);
+
+
+                        for (int i = 0; i < buffer.Length; i++)
+                        {
+                            Int16 v = buffer[i];
+                            byte[] b = BitConverter.GetBytes(v);
+
+                            wavSample.Write(b, 0, b.Length);
+                        }
+
+                        wavSample.Position = -0;
+
+                        filenameonly = Static.MakeValidFileName(sampleName) + ".wav";
+                        filepathsample = _samplesPath + @"\" + filenameonly;
+
+                        sampleApi.streamModule = wavSample;
+
+                        using (var fileStream = File.Create(filepathsample))
+                        {
+                            wavSample.Seek(0, SeekOrigin.Begin);
+                            wavSample.CopyTo(fileStream);
+                        }
+
+                    }
+
+                    sampleApi.name = sampleName;
+                    sampleApi.linkSample = filenameonly; // filepathsample;
+                    sampleApi.idLogo = 50;
+                    sampleApi.color = "#dddddd";
+
+                    tempSamples.Add(sampleApi);
+
+                }
+                catch { }
+
+            };
+
+
+            // module.samples[].
+
+
+
+            //if (module.instruments == null) return new List<Sample>();
+            /*foreach (SharpMik.INSTRUMENT instru in module.instruments)
+            {
+                instru.samplenote = instru.samplenote;
+                instru.samplenote = instru.samplenote;
+
                 int posISample = 0;
-                  foreach (SharpMik.SAMPLE sample in module.samples)
+                  foreach (SharpMik.SAMPLE sample in  module.samples)
                     {
                     foreach (ushort sampleN in instru.samplenumber)
                         if (sampleN == posISample)
@@ -63,7 +137,7 @@ namespace ApiTrackers.Objects
                         }
                   }
             }
-
+            */
             return tempSamples;
 
         }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 using Flurl.Http;
 
 namespace ApiTrackers.Services
@@ -16,15 +16,15 @@ namespace ApiTrackers.Services
             main = _main;
         }
 
-        public static Stream PostUrl(string _url)
+        public static Stream PostUrlWithoutData(string _url)
         {
-            return PostUrlAsync(_url).Result;
+            return PostUrlWithoutDataAsync(_url).Result;
         }
 
-        internal static async Task<Stream> PostUrlAsync(string _url)
+        internal static async Task<Stream> PostUrlWithoutDataAsync(string _url)
         {
             return await _url
-            .PostUrlEncodedAsync(new { thing1 = "hello", thing2 = "world" })
+            .PostUrlEncodedAsync(new {})
             .ReceiveStream();
         }
 

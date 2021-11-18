@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace ApiTrackers.Objects
         public int idLogo;
 
         [JsonIgnore]
-        public int localInstrumentId = 0;
+        public Stream streamModule;
 
         public Sample()
         {

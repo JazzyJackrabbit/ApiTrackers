@@ -10,6 +10,7 @@ using System.Text;
 using System.Linq;
 using System.Web;
 using System.Diagnostics;
+using Newtonsoft.Json.Linq;
 
 namespace ApiTrackers.Controllers
 {
@@ -43,22 +44,43 @@ namespace ApiTrackers.Controllers
                  Module module = new Module(userTest, id_ModArchive);
 
 
-
                 mainService.bddTracker.insertTracker(module.getTracker());
 
-                foreach(Sample sample in module.getSamples()) { 
-                    mainService.bddSamples.insertSample(sample);
+                JArray respArr = new JArray();
+
+                foreach (Sample sample in module.getSamples()) {
+
+                    JObject objrow = new JObject();
+
+                    if (sample != null)
+                    {
+                        Sample sampleRespInsert = mainService.bddSamples.insertSample(sample);
+
+                        if (sampleRespInsert != null)
+                        {
+                            objrow.Add("sample", Static.ConvertToJObject(sampleRespInsert));
+                        }
+                        else
+                        {
+                            objrow.Add("sample", "KO");
+                        }
+                    }
+                    else
+                    {
+                        objrow.Add("sample", "KO");
+                    }
+
+                    respArr.Add(objrow);
+
                 }
 
-                foreach (Note note in module.getNotes())
-                    mainService.bddCells.insertCell(note);
-                
-
+                JObject respSamples = new JObject();
+                respSamples.Add("samples", respArr);
 
                 return new ContentResult()
                 {
                     StatusCode = 200,
-                    Content = Static.jsonResponseObject(200, "==> ")
+                    Content = Static.jsonResponseObject(200, respSamples)
                 };
 
             }
@@ -66,8 +88,8 @@ namespace ApiTrackers.Controllers
             {
                 return new ContentResult()
                 {
-                    StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    StatusCode = 400,
+                    Content = Static.jsonResponseError(400, "Error Traitment Module from ModArchive: " + ex.Message)
                 };
             }
             finally

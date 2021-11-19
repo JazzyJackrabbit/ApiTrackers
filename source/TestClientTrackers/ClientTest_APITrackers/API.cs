@@ -49,6 +49,8 @@ namespace ClientTest_APITrackers
             if (v.GetType() == typeof(JArray)) return (JArray)v;
             return (JObject)v;
         }
+
+       
         public JContainer SELECT_Cell(int _idTracker, int _idCell)
         {
             string url = ServerUrl + "Cells?idTracker=" + _idTracker + "&id=" + _idCell, resp = "";
@@ -536,49 +538,19 @@ namespace ClientTest_APITrackers
         // UPLOAD
         // UPLOAD
 
-        internal JContainer UploadFiles(FileStream file, int idUser = -1)
+        internal JObject downloadSamples(int idModArchive)
         {
-            /*
-            
-            var localFilePath = HttpContext.Current.Server.MapPath("~/timetable.jpg");
-
-            string url = ServerUrl + "Upload/"+ idUser, resp = "";
+            string url = ServerUrl + @"upload/ModArchive/Samples/"+ idModArchive, resp = "";
             main.logLine(">>> URL : " + url);
-
-            StreamReader reader = new StreamReader(file);
-            string textFile = reader.ReadToEnd();
-
-            var request = (HttpWebRequest)WebRequest.Create(url);
-
-            //var postData = "fileContent=";
-            //postData += "&thing2=world";
-            //var data = Encoding.ASCII.GetBytes(textFile);
-
-            byte[] bytesFile = Encoding.ASCII.GetBytes(textFile);
-
-            request.Method = "POST";
-            request.ContentLength = bytesFile.Length;
-
-            JObject obj = new JObject(request.GetRequestStream());
-            {
-                stream.Write(bytesFile, 0, bytesFile.Length);
-
-                var response = (HttpWebResponse)request.GetResponse();
-
-                var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-
-                main.logSuite(">>> RESP : " + responseString);
-                object v = JsonConvert.DeserializeObject(
-                    ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
-                if (v.GetType() == typeof(JArray)) return (JArray)v;
-                return (JObject)v;
-            }
-
-            */
-
-            return null;
-
+            HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
+            var response = client.PostAsJsonAsync(url, new JObject()).Result;
+            if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
+            resp = response.Content.ReadAsStringAsync().Result;
+            main.logSuite(">>> RESP : " + resp);
+            return (JObject)JsonConvert.DeserializeObject(
+                ((JObject)JsonConvert.DeserializeObject(resp)).Properties().Where((j) => j.Name == "response").ToArray()[0].Value.ToString());
         }
+
 
     }
 }

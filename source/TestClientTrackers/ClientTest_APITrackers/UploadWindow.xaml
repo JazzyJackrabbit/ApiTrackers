@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ClientTest_APITrackers"
         mc:Ignorable="d"
         Title="UploadWindow" Height="209" Width="448">
-    <Grid x:Name="grid_content">
+    <Grid x:Name="grid_content" Background="#ddd">
         <Grid Background="#bbb" Visibility="Hidden">
             <TextBox x:Name="tb_path" Background="#fff" HorizontalAlignment="Left"  Margin="10,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="324" Height="32" Cursor="IBeam"/>
             <TextBox x:Name="tb_idUser" Background="#ffb" HorizontalAlignment="Left" Margin="242,82,0,0" Text="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="92" RenderTransformOrigin="0.588,1.471"/>
@@ -14,7 +14,10 @@
             <Button Content="SEND" Click="Button_Click" Margin="36,87,0,0" Cursor="Hand" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"/>
             <Label Content="path (format .MOD)" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.207,-0.732"/>
         </Grid>
-        <Label Content="TODO " HorizontalAlignment="Left" Margin="31,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.207,-0.732"/>
+        <Label Content="&lt;API&gt;  /upload/ModArchive/Samples/" HorizontalAlignment="Left" Margin="10,19,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.207,-0.732" Width="226" Height="28"/>
+        <TextBox x:Name="tb_idMODARCHIVE" Background="#fe9" HorizontalAlignment="Left" Margin="241,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Cursor="IBeam"/>
+        <Label Content="(id modArchive API)" HorizontalAlignment="Left" Margin="241,49,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.207,-0.732" Width="120" Height="28"/>
+        <Button Content="download on API" HorizontalAlignment="Left" Margin="36,63,0,0" Click="Button_Click_1" VerticalAlignment="Top" Height="32" Width="174" Cursor="Hand"/>
 
     </Grid>
 </Window>

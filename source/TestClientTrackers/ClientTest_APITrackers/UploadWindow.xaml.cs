@@ -27,6 +27,9 @@ namespace ClientTest_APITrackers
             InitializeComponent();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        { }
+            
         // download from api
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {

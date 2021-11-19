@@ -10,22 +10,22 @@ namespace ApiTrackers.Objects
     public class User
     {
         [JsonProperty(PropertyName = "id")]
-        public int id;
+        public int id { get; set; }
 
         [JsonProperty(PropertyName = "isEnable")]
-        public int isEnable;
+        public int isEnable { get; set; }
 
         [JsonProperty(PropertyName = "mail")]
-        public string mail;
-      
+        public string mail { get; set; }
+
         [JsonProperty(PropertyName = "pseudo")]
-        public string pseudo;
-       
+        public string pseudo { get; set; }
+
         [JsonProperty(PropertyName = "passwordHash")]
-        public string passwordHash;
-       
+        public string passwordHash { get; set; }
+
         [JsonProperty(PropertyName = "recoverMails")]
-        public int recoverMails = 1; // 0=false  1=true
+        public int recoverMails { get; set; }  = 1; // 0=false  1=true
 
 
         public User(string _pseudo, string _mail, string _passwordHash)

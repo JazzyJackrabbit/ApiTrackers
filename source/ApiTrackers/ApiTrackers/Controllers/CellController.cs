@@ -35,7 +35,7 @@ namespace ApiCells.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseArray(200, typeof(Note), cells)
+                            Content = ObjectUtils.JsonResponseBuilder(200, cells)
                         };
                     }
                     else
@@ -43,7 +43,7 @@ namespace ApiCells.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 404,
-                            Content = Static.jsonResponseError(404, "error getting cells")
+                            Content = ObjectUtils.JsonResponseBuilder(404, "error getting cells")
                         };
                     }
                 }
@@ -55,13 +55,13 @@ namespace ApiCells.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseObject(200, typeof(Note), cell)
+                            Content = ObjectUtils.JsonResponseBuilder(200, cell)
                         };
                     else
                         return new ContentResult()
                         {
                             StatusCode = 404,
-                            Content = Static.jsonResponseError(404, "unfounded cell")
+                            Content = ObjectUtils.JsonResponseBuilder(404, "unfounded cell")
                         };
                 }
             }
@@ -70,7 +70,7 @@ namespace ApiCells.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -91,13 +91,13 @@ namespace ApiCells.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Note), cellResp)
+                        Content = ObjectUtils.JsonResponseBuilder(200, cellResp)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error creation cell")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error creation cell")
                     };
             }
             catch (Exception ex)
@@ -105,7 +105,7 @@ namespace ApiCells.Controllers
                 return new ContentResult()
         {
             StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
     }
 }
@@ -123,8 +123,8 @@ namespace ApiCells.Controllers
 
                 if(id<0) return new ContentResult()
                 {
-                    StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "id attribute missing.")
+                    StatusCode = 403,
+                    Content = ObjectUtils.JsonResponseBuilder(404, "unauthorized access.")
                 };
 
                 Note cell = mainService.bddCells.deleteCell(id, idUser);
@@ -135,13 +135,13 @@ namespace ApiCells.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Note), cell)
+                        Content = ObjectUtils.JsonResponseBuilder(200, cell)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "unfounded cell")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "unfounded cell")
                     };
             }
             catch (ForbiddenException ex)
@@ -149,7 +149,7 @@ namespace ApiCells.Controllers
                 return new ContentResult()
                 {
                     StatusCode = ex.code,
-                    Content = Static.jsonResponseError(ex.code, ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(ex.code, ex.Message)
                 };
             }
             catch (Exception ex)
@@ -157,7 +157,7 @@ namespace ApiCells.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -176,13 +176,13 @@ namespace ApiCells.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Note), cellResp)
+                        Content = ObjectUtils.JsonResponseBuilder(200, cellResp)
                     };
                 else 
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error modifying cell")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error modifying cell")
                     };
             }
             catch (Exception ex)
@@ -190,7 +190,7 @@ namespace ApiCells.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }

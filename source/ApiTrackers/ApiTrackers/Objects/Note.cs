@@ -6,7 +6,7 @@ namespace ApiTrackers
     public class Note
     {
         [JsonProperty(PropertyName = "id")]
-        public int id;
+        public int id { get; set; }
 
         [JsonIgnore]
         public Tracker parentTracker;
@@ -15,13 +15,13 @@ namespace ApiTrackers
         public int idTracker { get { return parentTracker.idTracker; } set { idTracker = parentTracker.idTracker; } }
 
         [JsonProperty(PropertyName = "position")]
-        public double position;
+        public double position { get; set; }
         [JsonIgnore]
         public Sample sample;
         [JsonProperty(PropertyName = "frequence")]
-        public double freqSample;
+        public double freqSample { get; set; }
         [JsonProperty(PropertyName = "volume")]
-        public double volume;
+        public double volume { get; set; }
         [JsonIgnore]
         public Surround surround;
 
@@ -39,11 +39,11 @@ namespace ApiTrackers
         [JsonProperty(PropertyName = "idPiste", NullValueHandling = NullValueHandling.Include)]
         public int idPiste { get { return piste.id; } set { idPiste = piste.id; } }
 
-        [JsonProperty(PropertyName = "key")]
-        public string key;
+        [JsonProperty(PropertyName = "positionKey")]
+        public string positionKey { get; set; }
 
 
-        public Note(Tracker _parentTracker, Piste _parentPiste, double _position, string _key)
+        public Note(Tracker _parentTracker, Piste _parentPiste, double _position, string _positionKey)
         {
             parentTracker = _parentTracker;
             piste                 = _parentPiste;
@@ -53,13 +53,13 @@ namespace ApiTrackers
             effect = new Effect();
             sample = new Sample();
             surround = new Surround().setStereo();
-            key = _key;
+            positionKey = _positionKey;
         }
 
         public Note()
         {
             parentTracker = new Tracker();
-            piste                 = new Piste();
+            piste = new Piste();
             position = 0;
             freqSample = 1;
             volume = 1;
@@ -67,7 +67,7 @@ namespace ApiTrackers
             sample = new Sample();
             surround = new Surround().setStereo();
           
-            key = "C-5";
+            positionKey = "C-5";
         }
 
     }

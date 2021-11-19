@@ -15,11 +15,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\libSharpMod\SharpMod_sourceCode\SharpMod.Win\SharpMod.Win.csproj" />
+    <ProjectReference Include="D:\Cours\Webservices\SharpMod\SharpMod.Win\SharpMod.Win.csproj" />
   </ItemGroup>
 
 </Project>

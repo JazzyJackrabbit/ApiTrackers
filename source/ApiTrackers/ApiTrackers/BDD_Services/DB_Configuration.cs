@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ namespace ApiTrackers.BDD_Services
 
         internal string defaultIdNameTable = "id";
 
-            public SqlTable sqlTableRightMusics;
-            public SqlTable sqlTableSamples;
+        public SqlTable sqlTableRightMusics;
+        public SqlTable sqlTableSamples;
         public SqlTable sqlTableUsers;
         public SqlTable sqlTableTrackers;
         public SqlTable sqlTableCells;
@@ -24,7 +25,6 @@ namespace ApiTrackers.BDD_Services
         public void db_tablesDefinition(List<SqlTable> _sqlTables)
         {
             if (_sqlTables == null) _sqlTables = new List<SqlTable>();
-
             _sqlTables.Add(sqlTableUsers = new SqlTable("Users", new List<SqlAttribut> {
                 new SqlAttribut("id", "id", typeSql.tInt),
                 new SqlAttribut("pseudo", "pseudo", typeSql.tVarchar),
@@ -69,7 +69,7 @@ namespace ApiTrackers.BDD_Services
                 new SqlAttribut("id","id", typeSql.tInt),
                 new SqlAttribut(sqlTableUsers, "idUser","idUser",typeSql.tInt),
                 new SqlAttribut(sqlTableTrackers, "idTracker","idTracker",typeSql.tInt),
-                new SqlAttribut("rightValue","rightValue",typeSql.tInt),
+                new SqlAttribut("canEdit","canEdit",typeSql.tInt),
             }));
         }
     }

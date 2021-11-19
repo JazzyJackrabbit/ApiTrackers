@@ -5,7 +5,7 @@ namespace ApiTrackers.ApiParams
     {
         public string artist { get; set; }
         public string title { get; set; }
-        public string bpm { get; set; }
+        public double bpm { get; set; }
         public string comments { get; set; }
         public string coprightInformations { get; set; }
         public int idUser { get; set; }

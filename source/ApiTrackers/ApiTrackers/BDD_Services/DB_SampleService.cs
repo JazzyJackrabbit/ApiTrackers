@@ -14,18 +14,15 @@ namespace ApiSamples.Services
     {
         DB_MainService bdd;
         MainService main;
-        private int lastId = -1;
 
         public DB_SampleService(MainService _main)
         {
             main = _main;
             bdd = _main.bdd;
-
-            lastId = bdd.db_config.sqlTableSamples.selectLastID(_main);
         }
 
-        public int getLastId() { return lastId; }
-        public int getNextId() { lastId++; return lastId; }
+        public int getLastId() { return bdd.db_config.sqlTableSamples.selectLastID(main); }
+        public int getNextId() { return bdd.db_config.sqlTableSamples.selectLastID(main) + 1; }
 
         #region ******** public methods ********
 
@@ -51,10 +48,8 @@ namespace ApiSamples.Services
             int _canControlSamples = 1;
 
             int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableSamples);
 
-            sqlRowToInsert = convertSampleToSQL(sqlRowToInsert, _sampleModel);
-            sqlRowToInsert.setAttribute("id", id);
+            SqlRow sqlRowToInsert = convertSampleToSQL(_sampleModel, id);
 
             if (_canControlSamples == 1)
                 if (bdd.insert(bdd.db_config.sqlTableSamples, sqlRowToInsert))
@@ -77,8 +72,7 @@ namespace ApiSamples.Services
 
             if (_canControlSamples != 1) return null;
 
-            sqlRowToUpdate = convertSampleToSQL(sqlRowToUpdate, _sampleModel);
-            sqlRowToUpdate.setAttribute("id", id);
+            sqlRowToUpdate = convertSampleToSQL(_sampleModel);
 
             bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableSamples, sqlRowToUpdate, id);
             if (!checkUpdateCorrectly) return null;
@@ -94,13 +88,13 @@ namespace ApiSamples.Services
             int _canControlSamples = 1;
 
             SqlRow rowToDelete = bdd.selectOnlyRow(bdd.db_config.sqlTableSamples, true, _id);
+            if (rowToDelete == null)
+                throw new OwnException(); //todo put a notFoundException
             Sample sample = convertSQLToSample(rowToDelete);
             
             if (_canControlSamples == 1)
                 if (sample != null)   
                     bdd.delete(bdd.db_config.sqlTableSamples, _id); 
-                else
-                    throw new ForbiddenException();
             else
                 throw new UnauthorisedException();
             return sample;
@@ -116,17 +110,17 @@ namespace ApiSamples.Services
             try
             {
                 Sample sample = new Sample();
-                sample.id = Static.convertToInteger(_sqlrow.getAttribute("id").value);
+                sample.id = Utils.ConvertToInteger(_sqlrow.getAttribute("id").value);
 
                 //test id
-                string idTest = Static.convertToString(_sqlrow.getAttribute("id").value);
+                string idTest = Utils.ConvertToString(_sqlrow.getAttribute("id").value);
                 if (!int.TryParse(idTest, out _)) return null;
 
-                sample.id = Static.convertToInteger(_sqlrow.getAttribute("id").value);
-                sample.color = Static.convertToString(_sqlrow.getAttribute("color").value);
-                sample.idLogo = Static.convertToInteger(_sqlrow.getAttribute("idLogo").value);
-                sample.linkSample = Static.convertToString(_sqlrow.getAttribute("linkSample").value);
-                sample.name = Static.convertToString(_sqlrow.getAttribute("name").value);
+                sample.id = Utils.ConvertToInteger(_sqlrow.getAttribute("id").value);
+                sample.color = Utils.ConvertToString(_sqlrow.getAttribute("color").value);
+                sample.idLogo = Utils.ConvertToInteger(_sqlrow.getAttribute("idLogo").value);
+                sample.linkSample = Utils.ConvertToString(_sqlrow.getAttribute("linkSample").value);
+                sample.name = Utils.ConvertToString(_sqlrow.getAttribute("name").value);
                 return sample;
             }
             catch (Exception ex)
@@ -135,24 +129,31 @@ namespace ApiSamples.Services
                 return null;
             }
         }
-        private SqlRow convertSampleToSQL(SqlRow _sqlDest, Sample _smpl)
+        private SqlRow convertSampleToSQL(Sample _smpl, int _id=-1)
         {
+            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableSamples);
+
             try
             {
-                if (_sqlDest == null) return null;
                 if (_smpl == null) return null;
 
-                _sqlDest.setAttribute("idLogo", _smpl.idLogo);
-                _sqlDest.setAttribute("linkSample", _smpl.linkSample);
-                _sqlDest.setAttribute("color", _smpl.color);
-                _sqlDest.setAttribute("name", _smpl.name);
+                sqlRowToInsert.SetAttribut("idLogo", _smpl.idLogo);
+                sqlRowToInsert.SetAttribut("linkSample", _smpl.linkSample);
+                sqlRowToInsert.SetAttribut("color", _smpl.color);
+                sqlRowToInsert.SetAttribut("name", _smpl.name);
+                if(_id >= 0)
+                    sqlRowToInsert.SetAttribut("id", _id);
+                else if(_smpl.id > 0)
+                    sqlRowToInsert.SetAttribut("id", _smpl.id);
+
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine("convert<<Object>>ToSQL - err: " + ex);
                 throw new OwnException();
             }
-            return _sqlDest;
+            return sqlRowToInsert;
         }
 
         #endregion

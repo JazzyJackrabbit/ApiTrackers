@@ -11,7 +11,7 @@ namespace ApiCells.Controllers
         public double frequence { get; set; }
         public double volume { get; set; }
         public double position { get; set; }
-        public string key { get; set; }
+        public string positionKey { get; set; }
 
         public int idUser { get; set; }
 
@@ -31,7 +31,7 @@ namespace ApiCells.Controllers
             cellToInsert.freqSample = frequence;
             cellToInsert.volume = volume;
             cellToInsert.position = position;
-            cellToInsert.key = key;
+            cellToInsert.positionKey = positionKey;
 
             return cellToInsert;
         }

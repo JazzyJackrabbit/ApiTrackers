@@ -19,7 +19,7 @@ namespace ApiTrackers.DTO_ApiParameters
             rmusic.id = id;
             rmusic.idUser = idUser;
             rmusic.idTracker = idTracker;
-            rmusic.setRight(right);
+            rmusic.SetRight(right);
             return rmusic;
         }
 

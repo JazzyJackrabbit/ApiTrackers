@@ -31,7 +31,7 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseArray(200, typeof(Sample), samples)
+                        Content = ObjectUtils.JsonResponseBuilder(200, samples)
                     };
                 }
                 else
@@ -39,7 +39,7 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error getting samples")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error getting samples")
                     };
                 }
             }
@@ -48,7 +48,7 @@ namespace ApiSamples.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -64,13 +64,13 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Sample), sample)
+                        Content = ObjectUtils.JsonResponseBuilder(200, sample)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "unfounded sample")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "unfounded sample")
                     };
             }
             catch (Exception ex)
@@ -78,7 +78,7 @@ namespace ApiSamples.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -96,13 +96,13 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Sample), sampleResp)
+                        Content = ObjectUtils.JsonResponseBuilder(200, sampleResp)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error creation sample")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error creation sample")
                     };
             }
             catch (Exception ex)
@@ -110,7 +110,7 @@ namespace ApiSamples.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -127,7 +127,7 @@ namespace ApiSamples.Controllers
                 if (id < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "id attribute missing.")
+                    Content = ObjectUtils.JsonResponseBuilder(404, "id attribute missing.")
                 };
 
                 Sample sample = mainService.bddSamples.deleteSample(id, idUser);
@@ -136,13 +136,13 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Sample), sample)
+                        Content = ObjectUtils.JsonResponseBuilder(200, sample)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "unfounded sample")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "unfounded sample")
                     };
             }
             catch (ForbiddenException ex)
@@ -150,7 +150,7 @@ namespace ApiSamples.Controllers
                 return new ContentResult()
                 {
                     StatusCode = ex.code,
-                    Content = Static.jsonResponseError(ex.code, ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(ex.code, ex.Message)
                 };
             }
             catch (Exception ex)
@@ -158,7 +158,7 @@ namespace ApiSamples.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -174,13 +174,13 @@ namespace ApiSamples.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Sample), sampleResp)
+                        Content = ObjectUtils.JsonResponseBuilder(200, sampleResp)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error modifying sample")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error modifying sample")
                     };
             }
             catch (Exception ex)
@@ -188,7 +188,7 @@ namespace ApiSamples.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }

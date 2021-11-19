@@ -38,7 +38,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseArray(200, typeof(Tracker), trackers)
+                        Content = ObjectUtils.JsonResponseBuilder(200, trackers)
                     };
                 }
                 else
@@ -46,7 +46,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error getting trackers")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error getting trackers")
                     };
                 }
             }
@@ -55,7 +55,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -71,13 +71,13 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Tracker), tracker)
+                        Content = ObjectUtils.JsonResponseBuilder(200, tracker)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "unfounded tracker")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "unfounded tracker")
                     };
             }
             catch (Exception ex)
@@ -85,7 +85,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         } 
@@ -106,13 +106,13 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Tracker), trackerResp)
+                        Content = ObjectUtils.JsonResponseBuilder(200, trackerResp)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error creation tracker")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error creation tracker")
                     };
             }
             catch (Exception ex)
@@ -120,7 +120,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -136,20 +136,20 @@ namespace ApiTrackers.Controllers
                 if (idUser < 0 && id < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "id and idUser attributes missing.")
+                    Content = ObjectUtils.JsonResponseBuilder(404, "id and idUser attributes missing.")
                 };
 
                 if (idUser < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "idUser attribute missing.")
+                    Content = ObjectUtils.JsonResponseBuilder(404, "idUser attribute missing.")
                 };
 
 
                 if (id < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "id attribute missing.")
+                    Content = ObjectUtils.JsonResponseBuilder(404, "id attribute missing.")
                 };
 
                 Tracker tracker = mainService.bddTracker.deleteTracker(id, idUser);
@@ -158,13 +158,13 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Tracker), tracker)
+                        Content = ObjectUtils.JsonResponseBuilder(200, tracker)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "unfounded tracker")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "unfounded tracker")
                     };
             }
             catch(Exception ex)
@@ -172,7 +172,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -187,19 +187,19 @@ namespace ApiTrackers.Controllers
                 int idUser = dto.idUser;
 
                 Tracker trackerToInsert = dto.toTracker();
-                Tracker trackerResp = mainService.bddTracker.updateTracker(trackerToInsert, dto.id, idUser);
+                Tracker trackerResp = mainService.bddTracker.updateTracker(trackerToInsert, idUser);
 
                 if (trackerResp != null)
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(Tracker), trackerResp)
+                        Content = ObjectUtils.JsonResponseBuilder(200, trackerResp)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error modifying tracker")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error modifying tracker")
                     };
             }
             catch (Exception ex)
@@ -207,7 +207,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }

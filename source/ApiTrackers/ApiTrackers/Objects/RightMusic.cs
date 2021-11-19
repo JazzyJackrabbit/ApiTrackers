@@ -9,13 +9,13 @@ namespace ApiTrackers.Objects
     public class RightMusic
     {
         [JsonProperty(PropertyName = "id")]
-        public int id;
+        public int id { get; set; }
         [JsonProperty(PropertyName = "idTracker")]
-        public int idTracker;
+        public int idTracker { get; set; }
         [JsonProperty(PropertyName = "idUser")]
-        public int idUser;
+        public int idUser { get; set; }
         [JsonProperty(PropertyName = "right")]
-        public RightForMusic right = RightForMusic.Read;
+        public RightForMusic right { get; set; } = RightForMusic.Read;
 
         public enum RightForMusic
         {
@@ -23,16 +23,16 @@ namespace ApiTrackers.Objects
             Read,
             Edit,
         }
-        public int setRight(RightForMusic _rightEnum)
+        public int SetRight(RightForMusic _rightEnum)
         {
             return (int)(right = _rightEnum);
         }
-        public RightForMusic setRight(int _val)
+        public RightForMusic SetRight(int _val)
         {
-            right = (RightForMusic)Static.convertToInteger(_val);
+            right = (RightForMusic)Utils.ConvertToInteger(_val);
             return right;
         }
-        public RightForMusic setRight(string _val)
+        public RightForMusic SetRight(string _val)
         {
             RightForMusic rfm = (RightForMusic)Enum.Parse(typeof(RightForMusic), _val, true);
             right = rfm;

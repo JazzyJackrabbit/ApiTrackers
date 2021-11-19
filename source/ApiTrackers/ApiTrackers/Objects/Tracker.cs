@@ -26,46 +26,47 @@ namespace ApiTrackers
             trackerContent.pistes[0].notes = new List<Note>();
         }
 
-        [JsonProperty(PropertyName = Static.JsonClassIndicator + "metadata")]
-        public TrackerMetadata trackerMetadata;
-        [JsonProperty(PropertyName = Static.JsonClassIndicator + "content")]
-        public TrackerContent trackerContent;
+        [JsonProperty(PropertyName = "metadata")]
+        public TrackerMetadata trackerMetadata { get; set; }
+        [JsonProperty(PropertyName = "content")]
+        public TrackerContent trackerContent { get; set; }
         [JsonProperty(PropertyName = "id")]
-        public int idTracker;
+        public int idTracker { get; set; }
         [JsonProperty(PropertyName = "idUser")]
-        public int idUser;
+        public int idUser { get; set; }
     }
     public class TrackerMetadata
     {
         [JsonProperty(PropertyName = "title")]
-        public string title;
+        public string title { get; set; }
         [JsonProperty(PropertyName = "artist")]
-        public string artist;
+        public string artist { get; set; }
         [JsonProperty(PropertyName = "copyrightInformation")]
-        public string copyrightInformation;
+        public string copyrightInformation { get; set; }
         [JsonProperty(PropertyName = "comments")]
-        public string comments;
+        public string comments { get; set; }
     }
     public class TrackerContent
     {
         [JsonProperty(PropertyName = "bpm")]
-        public string BPM;
+        public double BPM { get; set; }
         [JsonIgnore]
         public IList<Piste> pistes { get; set; }
 
 
         [JsonProperty(PropertyName = "notes", NullValueHandling = NullValueHandling.Include)]
-        public JArray noteArray { 
+        private IList<Note> notes { get; set; }
+/*        public JArray noteArray { 
             get {
                 string json = Static.ArrayToJsonString_Converter((new Note()).GetType(), pistes[0].notes);
                 return (JArray)JsonConvert.DeserializeObject(json);
             } set {
                 string json = Static.ArrayToJsonString_Converter((new Note()).GetType(), pistes[0].notes);
                 noteArray = (JArray)JsonConvert.DeserializeObject(json);
-                /*JArray ja = new JArray();
+                *//*JArray ja = new JArray();
                 foreach (Piste p in pistes)
-                    ja.Add(p);*/
+                    ja.Add(p);*//*
             }
-        }
+        }*/
     }
 }

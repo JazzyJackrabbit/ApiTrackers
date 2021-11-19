@@ -28,7 +28,7 @@ namespace ApiRightMusics.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 400,
-                        Content = Static.jsonResponseError(400, "Missing parameters.")
+                        Content = ObjectUtils.JsonResponseBuilder(400, "Missing parameters.")
                     };
                 else if(idUser < 0)         // Will Return   all users by tracker id 
                 {
@@ -37,13 +37,13 @@ namespace ApiRightMusics.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseArray(200, typeof(RightMusic), rightMusics_resp)
+                            Content = ObjectUtils.JsonResponseBuilder(200, rightMusics_resp)
                         };
                     else
                         return new ContentResult()
                         {
                             StatusCode = 400,
-                            Content = Static.jsonResponseError(400, "unfounded RightMusic datas.")
+                            Content = ObjectUtils.JsonResponseBuilder(400, "unfounded RightMusic datas.")
                         };
                 }
                 else if (idTracker < 0)     // Will Return   all trackers by user id 
@@ -53,13 +53,13 @@ namespace ApiRightMusics.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseArray(200, typeof(RightMusic), rightMusics_resp)
+                            Content = ObjectUtils.JsonResponseBuilder(200, rightMusics_resp)
                         };
                     else
                         return new ContentResult()
                         {
                             StatusCode = 400,
-                            Content = Static.jsonResponseError(400, "unfounded RightMusic datas.")
+                            Content = ObjectUtils.JsonResponseBuilder(400, "unfounded RightMusic datas.")
                         };
                 }
                 else                            // Will Return   the specific rightMusic object
@@ -69,13 +69,13 @@ namespace ApiRightMusics.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseObject(200, typeof(RightMusic), rightMusic_resp)
+                            Content = ObjectUtils.JsonResponseBuilder(200, rightMusic_resp)
                         }; 
                     else 
                         return new ContentResult()
                         {
                             StatusCode = 400,
-                            Content = Static.jsonResponseError(400, "unfounded RightMusic datas.")
+                            Content = ObjectUtils.JsonResponseBuilder(400, "unfounded RightMusic datas.")
                         };
                 }
             }
@@ -84,7 +84,7 @@ namespace ApiRightMusics.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
 
@@ -102,7 +102,7 @@ namespace ApiRightMusics.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(RightMusic), rightCheck)
+                        Content = ObjectUtils.JsonResponseBuilder(200, rightCheck)
                     };
                 else
                     throw new Exception();
@@ -113,7 +113,7 @@ namespace ApiRightMusics.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -132,7 +132,7 @@ namespace ApiRightMusics.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(RightMusic), rightCheck)
+                        Content = ObjectUtils.JsonResponseBuilder(200, rightCheck)
                     };
                 else
                     throw new Exception();
@@ -143,7 +143,7 @@ namespace ApiRightMusics.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }

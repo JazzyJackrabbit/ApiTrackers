@@ -9,16 +9,16 @@ namespace ApiTrackers.Objects
     public class Sample
     {
         [JsonProperty(PropertyName = "id")]
-        public int id;
+        public int id { get; set; }
         [JsonProperty(PropertyName = "name")]
-        public string name;
+        public string name { get; set; }
         [JsonProperty(PropertyName = "linkSample")]
-        public string linkSample;
+        public string linkSample { get; set; }
 
         [JsonProperty(PropertyName = "color")]
-        public string color;
+        public string color { get; set; }
         [JsonProperty(PropertyName = "idLogo")]
-        public int idLogo;
+        public int idLogo { get; set; }
 
         public Sample()
         {

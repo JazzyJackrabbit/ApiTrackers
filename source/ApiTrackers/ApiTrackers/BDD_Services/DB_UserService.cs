@@ -12,18 +12,15 @@ namespace ApiTrackers.Services
     {
         DB_MainService bdd;
         MainService main;
-        private int lastId = -1;
 
         public DB_UserService(MainService _main)
         {
             main = _main;
             bdd = _main.bdd;
-
-            lastId = bdd.db_config.sqlTableUsers.selectLastID(_main);
         }
 
-        public int getLastId(){return lastId;}
-        public int getNextId(){lastId++;return lastId;}
+        public int getLastId(){ return bdd.db_config.sqlTableUsers.selectLastID(main); }
+        public int getNextId(){ return bdd.db_config.sqlTableUsers.selectLastID(main) + 1; }
 
         #region ******** public methods ********
 
@@ -42,12 +39,11 @@ namespace ApiTrackers.Services
             User user = convertSQLToUser(row);
             return user;
         }
-        public User insertUser()
-        {
-            int id = getNextId();//selectLastIDPlusOne(bdd.sqlTableUsers);
-            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableUsers);
 
-            sqlRowToInsert.setAttribute("id", id);
+        public User insertUser(User _userModel)
+        {
+            int id = getNextId();
+            SqlRow sqlRowToInsert = convertUserToSQL(_userModel, id);
 
             if (bdd.insert(bdd.db_config.sqlTableUsers, sqlRowToInsert))
             {
@@ -57,36 +53,17 @@ namespace ApiTrackers.Services
             }
             return null;
         }
-
-        public User insertUser(User _userModel)
+        public User updateUser(User _userModel)
         {
-            int id = getNextId();
-            SqlRow sqlRowToInsert = new SqlRow(bdd.db_config.sqlTableUsers);
-
-            sqlRowToInsert = convertUserToSQL(sqlRowToInsert, _userModel);
-            sqlRowToInsert.setAttribute("id", id);
-
-            if (bdd.insert(bdd.db_config.sqlTableUsers, sqlRowToInsert))
-            {
-                int id2 = getLastId();
-                User checkUser = selectUser(id2);
-                if (checkUser != null)
-                    return checkUser;
-            }
-            return null;
-        }
-        public User updateUser(User _userModel, int id)
-        {
-            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableUsers, true, id);
+            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableUsers, true, _userModel.id);
             if (sqlRowToUpdate == null) return null;
 
-            sqlRowToUpdate = convertUserToSQL(sqlRowToUpdate, _userModel);
-            sqlRowToUpdate.setAttribute("id", id);
+            sqlRowToUpdate = convertUserToSQL(_userModel);
 
-            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableUsers, sqlRowToUpdate, id);
+            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableUsers, sqlRowToUpdate, _userModel.id);
             if (!checkUpdateCorrectly) return null;
 
-            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.db_config.sqlTableUsers, true, id);
+            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.db_config.sqlTableUsers, true, _userModel.id);
             User userUpdated = convertSQLToUser(sqlRowCheck);
 
             return userUpdated;
@@ -109,16 +86,12 @@ namespace ApiTrackers.Services
             try
             {
                 User user = new User();
-                user.id = Static.convertToInteger(_sqlrow.getAttribute( "id").value);
+                user.id = Utils.ConvertToInteger(_sqlrow.getAttribute( "id").value);
 
-                //test id
-                string idTest = Static.convertToString(_sqlrow.getAttribute( "id").value);
-                if (!int.TryParse(idTest, out _)) return null;
-
-                user.mail = Static.convertToString(_sqlrow.getAttribute( "mail").value);
-                user.passwordHash = Static.convertToString(_sqlrow.getAttribute( "passwordHash").value);
-                user.pseudo = Static.convertToString(_sqlrow.getAttribute( "pseudo").value);
-                user.recoverMails = Static.convertToInteger(_sqlrow.getAttribute( "recoverMails").value);
+                user.mail = Utils.ConvertToString(_sqlrow.getAttribute( "mail").value);
+                user.passwordHash = Utils.ConvertToString(_sqlrow.getAttribute( "passwordHash").value);
+                user.pseudo = Utils.ConvertToString(_sqlrow.getAttribute( "pseudo").value);
+                user.recoverMails = Utils.ConvertToInteger(_sqlrow.getAttribute( "recoverMails").value);
                     
                 return user;
             }
@@ -128,17 +101,23 @@ namespace ApiTrackers.Services
                 throw new OwnException();
             }
         }
-        private SqlRow convertUserToSQL(SqlRow _sqlDest, User _user)
+        private SqlRow convertUserToSQL(User _user, int _id=-1)
         {
+            SqlRow _sqlDest = new SqlRow(bdd.db_config.sqlTableUsers);
             try
             {
-                if (_sqlDest == null) return null;
                 if (_user == null) return null;
+                _sqlDest.SetAttribut("isEnable", 1);
+                _sqlDest.SetAttribut("adminMode", 0);
+                _sqlDest.SetAttribut( "recoverMails", _user.recoverMails);
+                _sqlDest.SetAttribut( "mail", _user.mail);
+                _sqlDest.SetAttribut( "passwordHash", _user.passwordHash);
+                _sqlDest.SetAttribut( "pseudo", _user.pseudo);
+                if(_user.id >= 0)
+                    _sqlDest.SetAttribut("id", _user.id);
+                else if(_id >= 0)
+                    _sqlDest.SetAttribut("id", _id);
 
-                _sqlDest.setAttribute( "recoverMails", _user.recoverMails);
-                _sqlDest.setAttribute( "mail", _user.mail);
-                _sqlDest.setAttribute( "passwordHash", _user.passwordHash);
-                _sqlDest.setAttribute( "pseudo", _user.pseudo);
             }
             catch (Exception ex)
             {

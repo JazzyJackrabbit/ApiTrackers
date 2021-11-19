@@ -11,10 +11,10 @@ namespace ApiTrackers.Objects
     {
 
         [JsonIgnore]
-        public int id;
+        public int id { get; set; }
 
         [JsonIgnore]
-        public List<Output> outputs = new List<Output>();  
+        public List<Output> outputs { get; set; } = new List<Output>();  
 
         public Surround setStereo()
         {

@@ -25,9 +25,9 @@ namespace ApiTrackers.Objects
         }
 
         [JsonProperty(PropertyName = "id")]
-        public int id;
+        public int id { get; set; }
 
         [JsonProperty(PropertyName = "name")]
-        public string name;
+        public string name { get; set; }
     }
 }

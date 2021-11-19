@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiTrackers.BDD_Services;
-using ApiTrackers.Services;
 using MySql.Data.MySqlClient;
 
 namespace ApiTrackers
@@ -35,7 +34,7 @@ namespace ApiTrackers
 
         }
 
-        public void executeNonQuery(string _sqlCommand)
+        public void executeNonQuery(string _sqlCommand, List<Tuple<string, Object>> _attributs = null)
         {
             try
             {
@@ -43,6 +42,14 @@ namespace ApiTrackers
                 MySqlCommand command = new MySqlCommand(_sqlCommand, sqlConnection);
                 command.Connection = sqlConnection;
                 sqlConnection.Open();
+                if (_attributs != null)
+                {
+                    foreach (Tuple<string, Object> data in _attributs)
+                    {
+                        command.Parameters.AddWithValue("@" + data.Item1, data.Item2);
+                    }
+                    command.Prepare();
+                }
                 command.ExecuteNonQuery();
                 sqlConnection.Close();
             }
@@ -53,7 +60,7 @@ namespace ApiTrackers
             }
          
         }
-        public List<SqlRow> executeReader(string _sqlCommand, SqlTable _sqlTable)
+        public List<SqlRow> executeReader(string _sqlCommand, SqlTable _sqlTable, List<Tuple<string,Object>> _attributs = null)
         {
             try
             {
@@ -61,6 +68,14 @@ namespace ApiTrackers
                 MySqlCommand command = new MySqlCommand(_sqlCommand, sqlConnection);
                 command.Connection = sqlConnection;
                 sqlConnection.Open();
+                if (_attributs != null)
+                {
+                    foreach (Tuple<string, Object> data in _attributs)
+                    {
+                        command.Parameters.AddWithValue("@" + data.Item1, data.Item2);
+                    }
+                    command.Prepare();
+                }
                 MySqlDataReader reader = command.ExecuteReader();
 
                 // traitment data rows
@@ -79,10 +94,10 @@ namespace ApiTrackers
                             {
                                 if (sqlAttributsModel[j].name == reader.GetName(i))
                                 {
-                                    row.attributs.Add(new SqlAttribut(
+                                    /*row.attributs.Add(new SqlAttribut(
                                         sqlAttributsModel[j].name,
-                                        reader[i])
-                                    );
+                                        reader[i])*/
+                                    row.AddAttribut(sqlAttributsModel[j].name, reader[i]);
                                 }
                             }
                         
@@ -105,35 +120,35 @@ namespace ApiTrackers
             try { 
                 string sqlTableName = _sqlTable.tableName;
                 List<SqlAttribut> sqlAttributsModel = _sqlTable.attributesModels;
-            
-                string commandString = "INSERT INTO " + sqlTableName + " ";
+                List<Tuple<string,Object>> attributs = new();
+
+                string commandString = "INSERT INTO " + sqlTableName;
                 string columns = "( ";
                 string values = "( ";
-                foreach (SqlAttribut sqlAttr in _sqlRow.attributs)
+                /*foreach (SqlAttribut sqlAttr in _sqlRow.attributs)*/
+                foreach(SqlAttribut sqlAttr in _sqlRow.attributs.Values)
                 {
 
-                    string value = "" + sqlAttr.value;
-                    if (double.TryParse(value, out var parsedNumber))
-                    {
-                        value = value.Replace(',', '.');
-                    }
+                    string value = "@" + sqlAttr.name;
+                    Utils.AddIfNotPresent(attributs ,new Tuple<string, Object>(sqlAttr.name, sqlAttr.value));
                
                     columns += "`" + sqlAttr.name + "`,";
-                    values += " '" + value + "',";
+                    values += value + ",";
                     
                 }
-                columns = Static.removeLastCharacter(columns);
-                values = Static.removeLastCharacter(values);
+                columns = ObjectUtils.removeLastCharacter(columns);
+                values = ObjectUtils.removeLastCharacter(values);
                 columns += ") VALUES ";
                 values += ") ";
 
                 commandString = commandString + columns + values;
-                executeNonQuery(commandString);
+                executeNonQuery(commandString, attributs);
 
                 return true;
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine("Internal Error: " + e);
                 return false;
             }
         }
@@ -175,6 +190,7 @@ namespace ApiTrackers
                 List<SqlAttribut> sqlAttributsModel = _sqlTable.attributesModels;
 
                 string columns = " ";
+                List<Tuple<string, Object>> attributs = new();
 
                 if (_allColumns)
                     columns += "*";
@@ -184,18 +200,22 @@ namespace ApiTrackers
                     {
                          columns += "`" + sqlAttr.name + "`,";
                     }
-                    columns = Static.removeLastCharacter(columns);
+                    columns = ObjectUtils.removeLastCharacter(columns);
                 }
                 columns += " ";
                 string commandString = "SELECT " + columns + " FROM " + sqlTableName + " ";
                 if (_hasFilter1)
                 {
-                    commandString += "WHERE " + filterAttr1_nametable + " = " + _filterAttr1 + " ";
+                    Utils.AddIfNotPresent(attributs, new Tuple<string, Object>(filterAttr1_nametable, _filterAttr1));
+                    commandString += "WHERE " + filterAttr1_nametable + " = @" + filterAttr1_nametable + " ";
                     if (_hasFilter2)
-                        commandString += " AND " + filterAttr2_nametable + " = " + _filterAttr2 + " ";
+                    {
+                        commandString += " AND " + filterAttr2_nametable + " = @" + filterAttr2_nametable + " ";
+                        Utils.AddIfNotPresent(attributs, new Tuple<string, Object>(filterAttr2_nametable, _filterAttr2));
+                    }
                 }
 
-                List<SqlRow> rows = executeReader(commandString, _sqlTable);
+                List<SqlRow> rows = executeReader(commandString, _sqlTable, attributs);
 
                 return rows;
             }
@@ -224,17 +244,22 @@ namespace ApiTrackers
             try
             {
                 string sqlTableName = _sqlTable.tableName;
+                List<Tuple<string, Object>> attributs = new();
 
                 string commandString = "DELETE FROM " + sqlTableName;
 
                 if (_hasWhereValue1)
                 {
-                    commandString += " WHERE " + _whereTableName1 + " = " + _whereValue1 + " ";
+                    attributs.Add(new Tuple<string, Object>(_whereTableName1, _whereValue1));
+                    commandString += " WHERE " + _whereTableName1 + " = @" + _whereTableName1 + " ";
                     if (_hasWhereValue2)
-                        commandString += " AND " + _whereTableName2 + " = " + _whereValue2 + " ";
+                    {
+                        Utils.AddIfNotPresent(attributs, new Tuple<string, Object>(_whereTableName2, _whereValue2));
+                        commandString += " AND " + _whereTableName2 + " = @" + _whereTableName2 + " ";
+                    }
                 }
 
-                executeNonQuery(commandString);
+                executeNonQuery(commandString, attributs);
 
                 return true;
             }
@@ -261,32 +286,36 @@ namespace ApiTrackers
             try
             {
                 List<SqlAttribut> sqlAttributsModel = _sqlTable.attributesModels;
+                List<Tuple<string, Object>> attributs = new();
 
                 string sqlTableName = _sqlTable.tableName;
                 string commandString = "UPDATE " + sqlTableName
                     + " SET  ";
 
-                foreach (SqlAttribut sqlAttr in _sqlRow.attributs)
+/*                foreach (SqlAttribut sqlAttr in _sqlRow.attributs)
+*/              foreach(SqlAttribut sqlAttr in _sqlRow.attributs.Values)
                 {
+                    if (sqlAttr.name.Equals("id"))
+                        continue;
+                    attributs.Add(new Tuple<string, Object>(sqlAttr.name, sqlAttr.value));
 
-                        string value = "" + sqlAttr.value;
-                        if (double.TryParse(value, out var parsedNumber))
-                        {
-                            value = value.Replace(',', '.');
-                        }
-                        commandString += ""+sqlAttr.name + " = '" + value + "',";
+                    commandString += ""+sqlAttr.name + " = @" + sqlAttr.name + ",";
               
                 }
-                commandString = Static.removeLastCharacter(commandString);
+                commandString = ObjectUtils.removeLastCharacter(commandString);
 
                 if (_hasfilter1)
                 {
-                    commandString += " WHERE " + _filterAttr1_nametable + " = '" + _filterAttr1 + "'";
+                    Utils.AddIfNotPresent(attributs, new Tuple<string, Object>(_filterAttr1_nametable, _filterAttr1));
+                    commandString += " WHERE " + _filterAttr1_nametable + " = @" + _filterAttr1_nametable;
                     if(_hasfilter2)
-                        commandString += " AND " + _filterAttr2_nametable + " = '" + _filterAttr2 + "'";
+                    {
+                        Utils.AddIfNotPresent(attributs, new Tuple<string, Object>(_filterAttr2_nametable, _filterAttr2));
+                        commandString += " AND " + _filterAttr2_nametable + " = @" + _filterAttr2_nametable;
+                    }
                 }
 
-                executeNonQuery(commandString);
+                executeNonQuery(commandString, attributs);
                 return true;
             }
             catch
@@ -300,6 +329,7 @@ namespace ApiTrackers
         #region ******** classes *********
         public class SqlAttribut
         {
+            MySqlParameter d = new MySqlParameter();
             public string name;
             public object value = null;
             public typeSql typ;
@@ -325,35 +355,68 @@ namespace ApiTrackers
 
         public class SqlRow
         {
+            /*public List<SqlAttribut> attributs = new List<SqlAttribut>();*/
+            public Dictionary<String, SqlAttribut> attributs = new Dictionary<string, SqlAttribut>();
+            //TODO refact 2
             public SqlRow() { }
             public SqlRow(SqlTable _sqlTableModelStructure) {
                 foreach (SqlAttribut attrModel in _sqlTableModelStructure.attributesModels)
-                    attributs.Add(new SqlAttribut(attrModel.name, null));
-            }
+                    /*attributs.Add(new SqlAttribut(attrModel.name, null));*/
+                    attributs.Add(attrModel.name, null);
 
-            public List<SqlAttribut> attributs = new List<SqlAttribut>();
+            }
 
             public SqlAttribut getAttribute(string _attributeName)
             {
+                return attributs.GetValueOrDefault(_attributeName, null);
                 //if (_sqlRow == null) return new SqlAttribut("", null);
-                foreach (SqlAttribut sqlAttr in attributs)
+               /* foreach (SqlAttribut sqlAttr in attributs)
                     if (sqlAttr.name == _attributeName)
                         if (sqlAttr == null)
                             return new SqlAttribut("", null);
                         else
                             return sqlAttr;
-                return new SqlAttribut("", null);
+                return new SqlAttribut("", null);*/
             }
-            public bool setAttribute(string _attributeName, object _value)
+            public bool SetAttribut(string _attributeName, object _value)
             {
                 //if (_sqlRow == null) return false;
-                foreach (SqlAttribut sqlAttr in attributs)
-                    if (sqlAttr.name == _attributeName)
-                    {
-                        sqlAttr.value = _value;
-                        return true;
-                    }
-                return false;
+                /* foreach (SqlAttribut sqlAttr in attributs)
+                     if (sqlAttr.name == _attributeName)
+                     {
+                         sqlAttr.value = _value;
+                         return true;
+                     }
+                 return false;*/
+                if (!attributs.ContainsKey(_attributeName))
+                    return false;
+
+                attributs[_attributeName] = new SqlAttribut(_attributeName, _value);
+
+                return true;
+            }
+
+            public bool SetAttribut(SqlAttribut _value)
+            {
+                //if (_sqlRow == null) return false;
+                /* foreach (SqlAttribut sqlAttr in attributs)
+                     if (sqlAttr.name == _attributeName)
+                     {
+                         sqlAttr.value = _value;
+                         return true;
+                     }
+                 return false;*/
+                if (!attributs.ContainsKey(_value.name))
+                    return false;
+
+                attributs[_value.name] =  _value;
+
+                return true;
+            }
+
+            public void AddAttribut(String _key, Object _value)
+            {
+                attributs.Add(_key, new SqlAttribut(_key, _value));
             }
         }
 

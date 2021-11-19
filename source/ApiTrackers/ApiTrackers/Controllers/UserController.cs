@@ -38,7 +38,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseArray(200, typeof(User), users)
+                        Content = ObjectUtils.JsonResponseBuilder(200, users)
                     };
                 }
                 else
@@ -46,7 +46,7 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error getting user")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error getting user")
                     };
                 }
             }
@@ -55,7 +55,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -71,13 +71,13 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(User), user)
+                        Content = ObjectUtils.JsonResponseBuilder(200, user)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "unfounded user")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "unfounded user")
                     };
             }
             catch (Exception ex)
@@ -85,7 +85,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -103,13 +103,13 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 200,
-                    Content = Static.jsonResponseObject(200, typeof(User), userResp)
+                    Content = ObjectUtils.JsonResponseBuilder(200, userResp)
                 };
             else
                 return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "error creation user")
+                    Content = ObjectUtils.JsonResponseBuilder(404, "error creation user")
                 };
             }
             catch (Exception ex)
@@ -117,7 +117,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -129,7 +129,7 @@ namespace ApiTrackers.Controllers
                 if (id < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "id attribute missing.")
+                    Content = ObjectUtils.JsonResponseBuilder(404, "id attribute missing.")
                 };
 
                 User user = mainService.bddUser.deleteUser(id);
@@ -138,13 +138,13 @@ namespace ApiTrackers.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(User), user)
+                        Content = ObjectUtils.JsonResponseBuilder(200, user)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "unfounded user")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "unfounded user")
                     };
             }
             catch (Exception ex)
@@ -152,7 +152,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }
@@ -162,19 +162,19 @@ namespace ApiTrackers.Controllers
             try { 
                 User userToInsert = dto.toUser();
        
-                User userResp = mainService.bddUser.updateUser(userToInsert, dto.id);
+                User userResp = mainService.bddUser.updateUser(userToInsert);
 
                 if (userResp != null)
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, typeof(User), userResp)
+                        Content = ObjectUtils.JsonResponseBuilder(200, userResp)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error modifying user")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error modifying user")
                     };
             }
             catch (Exception ex)
@@ -182,7 +182,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
         }

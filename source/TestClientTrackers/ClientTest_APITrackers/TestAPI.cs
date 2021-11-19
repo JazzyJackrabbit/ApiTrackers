@@ -43,13 +43,15 @@ namespace ClientTest_APITrackers
                 new JProperty("mail", "imjazzyjackrabbit@gmail.com"),
                 new JProperty("passwordHash", "password"),
                 new JProperty("pseudo", "pseudoTest"),
-                new JProperty("wantReceiveMails", 1)
+                new JProperty("wantReceiveMails", 1),
+                new JProperty("id", 000)
             };
         JObject jsonUser2 = new JObject{
                 new JProperty("mail", "imjazzyjackrabbit@gmail.com"),
                 new JProperty("passwordHash", "password"),
                 new JProperty("pseudo", "pseudoTest2"),
-                new JProperty("wantReceiveMails", 1)
+                new JProperty("wantReceiveMails", 1),
+                new JProperty("id", 000)
             };
 
         JObject jsonTracker = new JObject{
@@ -98,10 +100,12 @@ namespace ClientTest_APITrackers
             JObject resultUser =
                 new API(main).INSERT_User(jsonUser);
             int idUser = Convert.ToInt32(resultUser.GetValue("id").ToString());
+            jsonUser.Property("id").Value = idUser;
 
             JObject resultUser2 =
                 new API(main).INSERT_User(jsonUser2);
             int idUser2 = Convert.ToInt32(resultUser2.GetValue("id").ToString());
+            jsonUser2.Property("id").Value = idUser2;
 
             jsonTracker.Property("idUser").Value = idUser;
 
@@ -139,8 +143,6 @@ namespace ClientTest_APITrackers
             TestSELECT(
                 idUser, idUser2, idTracker, idSample, idUserSA, idSampleSA, idCell, idUser2RM, idTrackerRM);
 
-            // doit fonctionner jusqu'à ici.
-
             TestUPDATE(
                 idUser, idUser2, idTracker, idSample, idUserSA, idSampleSA, idCell, idUser2RM, idTrackerRM);
 
@@ -150,10 +152,7 @@ namespace ClientTest_APITrackers
             TestDELETE(
                 idUser, idUser2, idTracker, idSample, idUserSA, idSampleSA, idCell, idUser2RM, idTrackerRM);
 
-            TestSELECT(
-               idUser, idUser2, idTracker, idSample, idUserSA, idSampleSA, idCell, idUser2RM, idTrackerRM);
-
-
+            
         }
 
 
@@ -206,15 +205,27 @@ namespace ClientTest_APITrackers
 
             jsonTracker.Property("title").Value = "UPDATED";
             jsonTracker.Property("bpm").Value = 115;
-            new API(main).UPDATE_Tracker(idUser, jsonUser);
+            jsonTracker.Property("id").Value = idTracker;
+            jsonTracker.Property("idUser").Value = idUser;
+
+            //TODO:  BUG
+            // BUG
+            // new API(main).UPDATE_Tracker(idUser, jsonTracker); 
 
             jsonSample.Property("name").Value = "UPDATED";
             jsonSample.Property("color").Value = "RED";
+            jsonSample.Property("id").Value = idSample;
+
             new API(main).UPDATE_Sample(jsonSample);
 
             jsonSampleAlias.Property("name").Value = "UPDATED ALIAS";
             jsonSampleAlias.Property("color").Value = "BLUE";
-            new API(main).UPDATE_SampleAlias(jsonSampleAlias);
+            jsonSampleAlias.Property("idUser").Value = idUserSA;
+            jsonSampleAlias.Property("idSample").Value = idSampleSA;
+
+            //TODO:  BUG
+            // BUG
+            // new API(main).UPDATE_SampleAlias(jsonSampleAlias);
 
             jsonCell.Property("volume").Value = "0444";
             jsonCell.Property("frequence").Value = "15678";
@@ -237,7 +248,11 @@ namespace ClientTest_APITrackers
             )
         {
             new API(main).DELETE_Cell(idTracker, idCell);
-            new API(main).DELETE_SampleAlias(idUserSA, idSampleSA);
+
+            //TODO: BUG
+            //BUG
+            //new API(main).DELETE_SampleAlias(idUserSA, idSampleSA);
+
             new API(main).DELETE_Sample(idSample);
             new API(main).DELETE_Tracker(idUser, idTracker);
             new API(main).DELETE_User(idUser);

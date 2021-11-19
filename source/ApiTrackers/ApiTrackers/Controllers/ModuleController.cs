@@ -1,16 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
 using ApiTrackers.DTO_ApiParameters.Module;
 using ApiTrackers.Objects;
-using System.Net.Http;
-using System.IO;
-using System.Text;
-using System.Linq;
-using System.Web;
-using System.Diagnostics;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace ApiTrackers.Controllers
 {

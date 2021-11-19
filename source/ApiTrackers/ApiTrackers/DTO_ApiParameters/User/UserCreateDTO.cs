@@ -17,7 +17,7 @@ namespace ApiTrackers.DTO_ApiParameters
         {
             User user = new User(pseudo, mail, passwordHash);
             user.recoverMails = wantReceiveMails;
-            user.isEnable = isEnable;
+            user.isEnable = 1;
             return user;
         }
     }

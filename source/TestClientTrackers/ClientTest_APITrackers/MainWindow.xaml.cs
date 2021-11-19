@@ -493,99 +493,16 @@ namespace ClientTest_APITrackers
 
         private void TestsClick(object sender, RoutedEventArgs e)
         {
-            logLine("= = = = ^^^ START TEST ^^^ = = = = = = = = = = = = = = = = = = ");
-            logLine("= = = = ^^^ START TEST ^^^ = = = = = = = = = = = = = = = = = = = = ");
-            logLine("= = = = ^^^ START TEST ^^^ = = = = = = = = = = = = = = = = = = = = ");
-            logLine("= = = = ^^^ START TEST ^^^ = = = = = = = = = = = = = = = = = = = = ");
-            logLine("= = = = ^^^ START TEST ^^^  = = = = = = = = = = = = = = = = = = = ");
-
-            JObject jsonUser = new JObject{
-                //new JProperty("id", 1),
-                new JProperty("mail", "imjazzyjackrabbit@gmail.com"),
-                new JProperty("permissions", "Edit"),
-                new JProperty("passwordHash", "password"),
-                new JProperty("pseudo", "pseudoTest"),
-                new JProperty("wantReceiveMails", 1)
-            };
-            JObject jsonUser2 = new JObject{
-                new JProperty("mail", "imjazzyjackrabbit@gmail.com"),
-                new JProperty("permissions", "Edit"),
-                new JProperty("passwordHash", "password"),
-                new JProperty("pseudo", "pseudoTest2"),
-                new JProperty("wantReceiveMails", 1)
-            };
-
-
-            JObject resultUser =
-                new API(this).INSERT_User(jsonUser);
-            int idUser = Convert.ToInt32(resultUser.GetValue("id").ToString());
-
-            JObject resultUser2 =
-                            new API(this).INSERT_User(jsonUser2);
-            int idUser2 = Convert.ToInt32(resultUser2.GetValue("id").ToString());
-
-
-            JObject jsonTracker = new JObject{
-                new JProperty("id", 1),
-                new JProperty("idUser", idUser),
-                new JProperty("artist", "artistTest"),
-                new JProperty("title", "titleTest"),
-                new JProperty("bpm", "bpmTest"),
-                new JProperty("comments", "commentsTest"),
-                new JProperty("coprightInformations", "test")
-            };
-
-
-            JObject resultTracker =
-                new API(this).INSERT_Tracker(idUser, jsonTracker);
-            int idTracker = Convert.ToInt32(resultTracker.GetValue("id").ToString());
-
-
-            JObject jsonSample = new JObject{
-                new JProperty("id", 1),
-                new JProperty("idLogo", 1),
-                new JProperty("name", "nameTestOriginal"),
-                new JProperty("color", "colornameTestOriginal"),
-                new JProperty("linkSample", "link Sample")
-            };
-
-            JObject resultSample = new API(this).INSERT_Sample(jsonSample);
-            int idSample = Convert.ToInt32(resultSample.GetValue("id").ToString());
-
-
-            JObject jsonSampleAlias = new JObject{
-                    new JProperty("idUser", idUser),
-                    new JProperty("idLogo", 1),
-                    new JProperty("name", "nameTestALIAS"),
-                    new JProperty("color", "colorTestALIAS"),
-                    new JProperty("idSample", 1)
-            };
-
-
-            JObject resultSampleAlias = new API(this).INSERT_SampleAlias(jsonSampleAlias);
-
-
-
-            JObject jsonCell = new JObject
-            {
-                new JProperty("volume", 0.80),
-                new JProperty("frequence", 0.85),
-                new JProperty("idTracker", idTracker),
-                new JProperty("id", 1),
-                new JProperty("idUser", idUser)
-            };
-
-
-            new API(this).INSERT_Cell(idTracker, jsonCell);
-
-            JObject jsonRightMusic = new JObject{
-                    new JProperty("idTracker", idTracker),
-                    new JProperty("idUser", idUser2),
-                    new JProperty("right", "Edit"),
-            };
-
-            JObject resultRM = new API(this).INSERT_RightMusic(jsonRightMusic);
-
+            try { 
+                new TestAPI(this);
+            }
+            catch (Exception ex) { logErr(ex); };
         }
+
+        private void ClearConsoleClick(object sender, RoutedEventArgs e)
+        {
+            tb_console.Text = "";
+        }
+
     }
 }

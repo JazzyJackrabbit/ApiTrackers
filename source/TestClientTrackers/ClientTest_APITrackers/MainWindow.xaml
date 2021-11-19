@@ -183,6 +183,7 @@
             <TextBox x:Name="tb_server" Background="#FFF" TextChanged="tb_server_TextChanged" HorizontalAlignment="Left" Margin="9,244,0,0" Text="https://localhost:44328/" TextWrapping="Wrap" VerticalAlignment="Top" Width="279" Cursor="IBeam"/>
             <Button x:Name="btn_upload" Content="Upload" Visibility="Hidden" Click="UploadClick" Background="#257" HorizontalAlignment="Left" Margin="27,177,0,0" VerticalAlignment="Top" Height="45" Width="94" Cursor="Hand"/>
             <Button x:Name="btn_tests" Content="TESTS" Click="TestsClick" Background="#257" HorizontalAlignment="Left" Margin="514,7,0,0" VerticalAlignment="Top" Height="70" Width="104"/>
+            <Button x:Name="btn_clearconsole" Content="clear console" Click="ClearConsoleClick" Background="#257" HorizontalAlignment="Left" Margin="484,222,0,0" VerticalAlignment="Top" Height="41" Width="144" Cursor="Hand"/>
         </Grid>
         <Grid/>
     </Grid>

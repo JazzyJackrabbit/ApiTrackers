@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
-using static ApiTrackers.DB_MainService;
+using static ApiTrackers.SqlDatabase;
 using ApiTrackers.Objects;
 using System.IO;
 using System.Text;
@@ -19,9 +19,9 @@ namespace ApiTrackers.Controllers
     [Route("Trackers")]
     public class TrackerController : ControllerBase
     {
-        public MainService mainService; //
+        public Main mainService; //
 
-        public TrackerController(MainService _mainService)
+        public TrackerController(Main _mainService)
         {
             mainService = _mainService;
         }
@@ -30,7 +30,9 @@ namespace ApiTrackers.Controllers
         [Route("")]
         public ContentResult GetTrackers()
         {
-            try { 
+            try {
+                mainService.bdd.connectOpen();
+
                 List<Tracker> trackers = mainService.bddTracker.selectTrackers();
 
                 if (trackers != null)
@@ -58,13 +60,19 @@ namespace ApiTrackers.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         public ContentResult GetTracker(int id)
         {
-            try { 
+            try {
+                mainService.bdd.connectOpen();
+
                 Tracker tracker = mainService.bddTracker.selectTracker(id);
 
                 if (tracker != null)
@@ -88,13 +96,18 @@ namespace ApiTrackers.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         } 
 
         [Route("")]
         [HttpPost]
         public ContentResult CreateTracker([FromBody] TrackerCreateDTO dto)
         {
-            try {
+            try{
+                mainService.bdd.connectOpen();
 
                 int idUser = dto.idUser;
 
@@ -123,6 +136,10 @@ namespace ApiTrackers.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpDelete]
@@ -131,7 +148,7 @@ namespace ApiTrackers.Controllers
         {
             try
             {
-                //TODO AUTHENT TOKEN
+                mainService.bdd.connectOpen();
 
                 if (idUser < 0 && id < 0) return new ContentResult()
                 {
@@ -175,6 +192,10 @@ namespace ApiTrackers.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpPut]
         [Route("")]
@@ -183,7 +204,8 @@ namespace ApiTrackers.Controllers
            
             try
             {
-                //TODO   check  token authent    idUser == 
+                mainService.bdd.connectOpen();
+
                 int idUser = dto.idUser;
 
                 Tracker trackerToInsert = dto.toTracker();
@@ -209,6 +231,10 @@ namespace ApiTrackers.Controllers
                     StatusCode = 500,
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
        

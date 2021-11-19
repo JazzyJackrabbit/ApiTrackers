@@ -50,4 +50,11 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="SampleAlias.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

@@ -8,15 +8,18 @@
         Title="ListWindow" Height="450" Width="800">
     <Grid x:Name="grid_content_Parent">
         <Grid>
-            <Grid x:Name="grid_content">
-                <ListView x:Name="lv" FontSize="16">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-
+            <Grid x:Name="grid_content" Background="#ddd">
+                <ScrollViewer x:Name="scrollviewer" Margin="70,0,0,0" Background="#bbb">
+                    <StackPanel x:Name="lv"  />
+                </ScrollViewer>
+                <Grid HorizontalAlignment="Left" Width="70">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50*"></RowDefinition>
+                        <RowDefinition Height="50*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Content="^" Grid.Row="0" Click="Button_Click" Background="#7ac" VerticalAlignment="Top" Width="70" Height="60"/>
+                    <Button Content="v" Grid.Row="1" Click="Button_Click_1" Background="#7ac" VerticalAlignment="Bottom" Width="70" Height="60"/>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

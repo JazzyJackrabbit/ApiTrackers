@@ -1,69 +1,86 @@
-﻿using ApiTrackers.Exceptions;
+﻿using ApiTrackers.DB_ORM;
+using ApiTrackers.DB_Services.ORM;
+using ApiTrackers.Exceptions;
 using ApiTrackers.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static ApiTrackers.DB_MainService;
+using static ApiTrackers.SqlDatabase;
 
 namespace ApiTrackers.Services
 {
     public class DB_TrackerService
     {
 
-        DB_MainService bdd;
-        MainService main;
+        SqlDatabase bdd;
+        Main main;
+        SqlTable table;
+        SqlCommand command;
 
-        public DB_TrackerService(MainService _main)
+        public DB_TrackerService(Main _main)
         {
             main = _main;
             bdd = _main.bdd;
-
+            table = bdd.tableTrackers;
+            command = table.command;
         }
 
-        public int getLastId() { return bdd.db_config.sqlTableTrackers.selectLastID(main); }
-        public int getNextId() { return bdd.db_config.sqlTableTrackers.selectLastID(main) + 1; }
+        public int getLastId() { return command.ExecuteReaderMaxId(table.name); }
+        public int getNextId() { return command.ExecuteReaderMaxId(table.name) + 1; }
 
         #region ******** public methods ********
 
         public List<Tracker> selectTrackers()
         {
-            List<SqlRow> rows = bdd.select(bdd.db_config.sqlTableTrackers, true);
+
+            List<SqlRow> rows = command.Select().all(false);
             List<Tracker> trackers = new List<Tracker>();
-            if (rows == null) return null;
+            if (rows == null)
+            {
+                return null;
+            }
             foreach (SqlRow row in rows)
                 trackers.Add(convertSQLToTracker(row));
+
             return trackers;
         }
         public Tracker selectTracker(int _id)
         {
-            SqlRow row = bdd.selectOnlyRow(bdd.db_config.sqlTableTrackers, true, _id);
+
+            SqlRow row = command.Select().row(true, _id);
             Tracker tracker = convertSQLToTracker(row);
+
+
             return tracker;
         }
 
         public Tracker insertTracker(Tracker _trackerModel)
         {
-            
+
             int id = getNextId();
 
-            SqlRow sqlRowToInsert = convertTrackerToSQL(_trackerModel);
-            sqlRowToInsert.SetAttribut("id", id);
+            SqlRow sqlRowToInsert = convertTrackerToSQL(_trackerModel, id);
 
-            if (bdd.insert(bdd.db_config.sqlTableTrackers, sqlRowToInsert))
+            if (command.Insert().insert(sqlRowToInsert))
             {
-                int id2 = getLastId();
-                Tracker checkTracker = selectTracker(id2);
+                Tracker checkTracker = selectTracker(id);
                 if (checkTracker != null)
+                {
                     return checkTracker;
+                }
             }
+
             return null;
         }
 
         public Tracker updateTracker(Tracker _trackerModel, int _idUser)
         {
-            SqlRow sqlRowToUpdate = bdd.selectOnlyRow(bdd.db_config.sqlTableTrackers, true, _trackerModel.idTracker);
-            if (sqlRowToUpdate == null) return null; //Check the existance 
+            SqlRow sqlRowToUpdate = command.Select().row(true, _trackerModel.id);
+            if (sqlRowToUpdate == null)
+            {
+                return null;
+            }
 
             sqlRowToUpdate = convertTrackerToSQL(_trackerModel);
 
@@ -71,30 +88,37 @@ namespace ApiTrackers.Services
                 //if ()  //TODO rightMusics users
                 throw new ForbiddenException();
 
-            bool checkUpdateCorrectly = bdd.update(bdd.db_config.sqlTableTrackers, sqlRowToUpdate, _trackerModel.idTracker);
-            if (!checkUpdateCorrectly) return null;
+            bool checkUpdateCorrectly = command.Update().update(sqlRowToUpdate, _trackerModel.id);
+            if (!checkUpdateCorrectly)
+            {
+                return null;
+            }
 
-            SqlRow sqlRowCheck = bdd.selectOnlyRow(bdd.db_config.sqlTableTrackers, true, _trackerModel.idTracker);
+            SqlRow sqlRowCheck = command.Select().row(true, _trackerModel.id);
             Tracker trackerUpdated = convertSQLToTracker(sqlRowCheck);
 
             return trackerUpdated;
         }
         public Tracker deleteTracker(int _id, int _idUser)
         {
-            SqlRow rowToDelete = bdd.selectOnlyRow(bdd.db_config.sqlTableTrackers, true, _id);
+
+            SqlRow rowToDelete = command.Select().row(true, _id);
             Tracker tracker = convertSQLToTracker(rowToDelete);
 
             if (tracker == null)
+            {
                 throw new Exception();
+            }
 
             // ? >> bdd.setAttribute(rowToDelete, "id", _id);
 
             if (tracker.idUser == _idUser)
             {
-                bdd.delete(bdd.db_config.sqlTableTrackers, _id); //delete now
+                command.Delete().delete(_id); //delete now
             }
             else
                 throw new ForbiddenException();
+
             return tracker;
         }
 
@@ -108,17 +132,17 @@ namespace ApiTrackers.Services
             try
             {
                 Tracker tracker = new Tracker();
-                tracker.idTracker = Utils.ConvertToInteger(_sqlrow.getAttribute("id").value);
-                tracker.idUser = Utils.ConvertToInteger(_sqlrow.getAttribute("idUser").value);
-                tracker.trackerContent.BPM = Utils.ConvertToInteger(_sqlrow.getAttribute("bpm").value);
-                tracker.trackerMetadata.artist = Utils.ConvertToString(_sqlrow.getAttribute("artist").value);
-                tracker.trackerMetadata.title = Utils.ConvertToString(_sqlrow.getAttribute("title").value);
-                tracker.trackerMetadata.comments = Utils.ConvertToString(_sqlrow.getAttribute("comments").value);
-                tracker.trackerMetadata.copyrightInformation = Utils.ConvertToString(_sqlrow.getAttribute("copyrightInformation").value);
+                tracker.id = Utils.ConvertToInteger(_sqlrow.GetAttribut("id").value);
+                tracker.idUser = Utils.ConvertToInteger(_sqlrow.GetAttribut("idUser").value);
+                tracker.trackerContent.BPM = Utils.ConvertToInteger(_sqlrow.GetAttribut("bpm").value);
+                tracker.trackerMetadata.artist = Utils.ConvertToString(_sqlrow.GetAttribut("artist").value);
+                tracker.trackerMetadata.title = Utils.ConvertToString(_sqlrow.GetAttribut("title").value);
+                tracker.trackerMetadata.comments = Utils.ConvertToString(_sqlrow.GetAttribut("comments").value);
+                tracker.trackerMetadata.copyrightInformation = Utils.ConvertToString(_sqlrow.GetAttribut("copyrightInformation").value);
 
                 // get pistes
                 List<Piste> pistes = new List<Piste>();
-                List<Note> notes = main.bddCells.selectCells(tracker.idTracker);
+                List<Note> notes = main.bddCells.selectCells(tracker.id);
                 tracker.trackerContent.pistes[0].notes = notes;
 
                 return tracker;
@@ -129,9 +153,9 @@ namespace ApiTrackers.Services
                 return null;
             }
         }
-        private SqlRow convertTrackerToSQL(Tracker _tracker)
+        private SqlRow convertTrackerToSQL(Tracker _tracker, int _id=-1)
         {
-            SqlRow tracker = new SqlRow(bdd.db_config.sqlTableTrackers);
+            SqlRow tracker = new(table);
             try
             {
                 if (_tracker == null) return null;
@@ -142,9 +166,10 @@ namespace ApiTrackers.Services
                 tracker.SetAttribut("comments", _tracker.trackerMetadata.comments);
                 tracker.SetAttribut("copyrightInformation", _tracker.trackerMetadata.copyrightInformation);
                 tracker.SetAttribut("idUser", _tracker.idUser);
-
-                if (_tracker.idTracker >= 0)
-                    tracker.SetAttribut("id", _tracker.idTracker);
+                if (_id >= 0)
+                    tracker.SetAttribut("id", _id);
+                else if (_tracker.id >= 0)
+                    tracker.SetAttribut("id", _tracker.id);
 
             }
             catch (Exception ex)

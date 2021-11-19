@@ -39,8 +39,8 @@ namespace ClientTest_APITrackers
 
         public void clearInterface()
         {
-            tb_idTracker.Text = "";
-            tb_idUser.Text = "";
+            //tb_idTracker.Text = "";
+            //tb_idUser.Text = "";
             tb_right.Text = "";
         }
         public void setInterface(JObject json)
@@ -94,7 +94,7 @@ namespace ClientTest_APITrackers
                 setInterface(
                 main.api().INSERT_RightMusic(getFromInterface()));
             }
-            catch { clearInterface(); }
+            catch (Exception xe) { main.logErr(xe.ToString()); clearInterface(); }
         }
 
         private void UpdateClick(object sender, RoutedEventArgs e)
@@ -105,7 +105,9 @@ namespace ClientTest_APITrackers
                 main.api().UPDATE_RightMusic(getFromInterface())
             );
             }
-            catch {
+            catch (Exception x)
+            {
+                main.logErr(x.ToString());
                 clearInterface();
             }
         }
@@ -117,12 +119,12 @@ namespace ClientTest_APITrackers
                 JArray json = (JArray)main.api().SELECT_RightMusics_byTracker(Convert.ToInt32(tb_idTracker.Text));
 
                 ListWindow luw = main.getListWindow();
-                luw.lv.Items.Clear();
+                luw.lv.Children.Clear();
                 foreach (JToken jo in json)
                 {
-                    JObject jobj = (JObject)jo.ToObject((new JObject()).GetType());
-                    luw.lv.Items.Add(("" + jobj).Replace("\n", ""));
-                }
+                    JObject jobj = (JObject)jo.ToObject(new JObject().GetType());
+                    luw.addOnList(jobj);
+                } 
                  main.showListWindow();
             }
             catch { clearInterface(); }
@@ -135,15 +137,55 @@ namespace ClientTest_APITrackers
                 JArray json = (JArray)main.api().SELECT_RightMusics_byUser(Convert.ToInt32(tb_idUser.Text));
 
                 ListWindow luw = main.getListWindow();
-                luw.lv.Items.Clear();
+                luw.lv.Children.Clear();
                 foreach (JToken jo in json)
                 {
                     JObject jobj = (JObject)jo.ToObject((new JObject()).GetType());
-                    luw.lv.Items.Add(("" + jobj).Replace("\n", ""));
+                    luw.addOnList(jobj);
                 }
                  main.showListWindow();
             }
             catch { clearInterface(); }
+        }
+
+        private void btn_idLeftUser_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idUser.Text = "" + (Convert.ToInt32(tb_idUser.Text) - 1);
+                SelectClick(sender, e);
+            }
+            catch { }
+        }
+
+        private void btn_idLeftTracker_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idTracker.Text = "" + (Convert.ToInt32(tb_idTracker.Text) - 1);
+                SelectClick(sender, e);
+            }
+            catch { }
+        }
+
+        private void btn_idRightUser_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idUser.Text = "" + (Convert.ToInt32(tb_idUser.Text) + 1);
+                SelectClick(sender, e);
+            }
+            catch { }
+        }
+
+        private void btn_idRightTracker_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_idTracker.Text = "" + (Convert.ToInt32(tb_idTracker.Text) + 1);
+                SelectClick(sender, e);
+            }
+            catch {  }
         }
     }
 }

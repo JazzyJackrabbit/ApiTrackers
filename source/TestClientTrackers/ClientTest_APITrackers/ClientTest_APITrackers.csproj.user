@@ -7,6 +7,11 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="UploadWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="CellControlWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -17,6 +22,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="RightMusic.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SampleAlias.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Sample.xaml">
@@ -32,6 +40,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="TrackerRowUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UploadWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="User__Window.xaml">

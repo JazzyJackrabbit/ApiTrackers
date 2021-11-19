@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ifq0g3MaxVr1XxE5Te5sPEuMAup4p0EjqYs5rRmeMDclF/wcNg0PJ4eaT8C5IYq2SXkzbJCmSiUtnBjdxTqXSQ==",
+  "dgSpecHash": "pMqpz8K/0TpJP3clZOLO2jq+9DPqjIZRtWhe7g1JNhyS5ExZchatMw0YMPPngU/DxcsU4tsN/g2IRN5AbitNIw==",
   "success": true,
   "projectFilePath": "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj",
   "expectedPackageFiles": [
@@ -180,7 +180,8 @@
     "C:\\Users\\Alexandre\\.nuget\\packages\\xam.plugin.simpleaudioplayer\\1.5.0\\xam.plugin.simpleaudioplayer.1.5.0.nupkg.sha512",
     "C:\\Users\\Alexandre\\.nuget\\packages\\xceed.wpf.controls\\7.0.21101.19010\\xceed.wpf.controls.7.0.21101.19010.nupkg.sha512",
     "C:\\Users\\Alexandre\\.nuget\\packages\\xceed.wpf.datagrid\\7.0.21101.19010\\xceed.wpf.datagrid.7.0.21101.19010.nupkg.sha512",
-    "C:\\Users\\Alexandre\\.nuget\\packages\\xceed.wpf.datagrid.themepack.5\\7.0.21101.19010\\xceed.wpf.datagrid.themepack.5.7.0.21101.19010.nupkg.sha512"
+    "C:\\Users\\Alexandre\\.nuget\\packages\\xceed.wpf.datagrid.themepack.5\\7.0.21101.19010\\xceed.wpf.datagrid.themepack.5.7.0.21101.19010.nupkg.sha512",
+    "C:\\Users\\Alexandre\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.12\\microsoft.netcore.app.host.win-x64.5.0.12.nupkg.sha512"
   ],
   "logs": [
     {

@@ -189,7 +189,8 @@ namespace ClientTest_APITrackers
             else
             {
                 main.cellControlWindow.tb_id.Text = idCell.ToString();
-                
+                main.cellControlWindow.tb_idTracker.Text = main.getTrackerId_TRACKER_INTERFACE().ToString();
+
                 main.editCell(main.getTrackerId_TRACKER_INTERFACE(), idCell);
 
                 main.openCellInterface();

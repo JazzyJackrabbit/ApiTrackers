@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
-using static ApiTrackers.DB_MainService;
+using static ApiTrackers.SqlDatabase;
 using ApiTrackers.Objects;
 using System.IO;
 using System.Text;
 using ApiTrackers.ApiParams;
 using ApiTrackers.DTO_ApiParameters;
 using ApiTrackers.Exceptions;
+using System.Net;
 
 namespace ApiTrackers.Controllers
 {
@@ -19,9 +20,9 @@ namespace ApiTrackers.Controllers
     [Route("Users")]
     public class UserController : ControllerBase
     {
-        public MainService mainService; //
+        public Main mainService; //
 
-        public UserController(MainService _mainService)
+        public UserController(Main _mainService)
         {
             mainService = _mainService;
         }
@@ -30,7 +31,10 @@ namespace ApiTrackers.Controllers
         [Route("")]
         public ContentResult GetUsers()
         {
-            try { 
+            try {
+
+                mainService.bdd.connectOpen();
+
                 List<User> users = mainService.bddUser.selectUsers();
 
                 if (users != null)
@@ -58,13 +62,19 @@ namespace ApiTrackers.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         public ContentResult GetUser(int id)
         {
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
                 User user = mainService.bddUser.selectUser(id);
 
                 if (user != null)
@@ -88,6 +98,10 @@ namespace ApiTrackers.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpPost]
@@ -95,9 +109,11 @@ namespace ApiTrackers.Controllers
         public ContentResult CreateUser([FromBody] UserCreateDTO dto)
         {
             try { 
-            User user = dto.toUser();
+ 
+                mainService.bdd.connectOpen();
+                User user = dto.toUser();
 
-            User userResp = mainService.bddUser.insertUser(user);
+                User userResp = mainService.bddUser.insertUser(user);
 
             if (userResp != null)
                 return new ContentResult()
@@ -120,12 +136,19 @@ namespace ApiTrackers.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpDelete]
         [Route("")]
         public ContentResult DeleteUser([FromQuery] int id = -1)
         {
-            try {
+            try
+            {
+
+                mainService.bdd.connectOpen();
                 if (id < 0) return new ContentResult()
                 {
                     StatusCode = 404,
@@ -155,11 +178,18 @@ namespace ApiTrackers.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpPut]
         [Route("")]
         public ContentResult UpdateUser([FromBody] UserUpdateDTO dto){
-            try { 
+
+            try
+            {
+                mainService.bdd.connectOpen();
                 User userToInsert = dto.toUser();
        
                 User userResp = mainService.bddUser.updateUser(userToInsert);
@@ -184,6 +214,10 @@ namespace ApiTrackers.Controllers
                     StatusCode = 500,
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 

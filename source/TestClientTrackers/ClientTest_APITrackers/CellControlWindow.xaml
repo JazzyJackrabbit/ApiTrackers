@@ -12,10 +12,10 @@
             <Slider x:Name="sl_freq" ValueChanged="sl_freq_ValueChanged"  Orientation="Vertical" Margin="21,17,0,0" Height="188" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40"/>
             <Label Content="Vol&#xA;" Margin="84,210,0,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="42"/>
             <Label Content="Freq&#xA;" Margin="18,210,0,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="66"/>
-            <TextBox Background="#ffb" x:Name="tb_id" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="292,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154" Height="29" Cursor="IBeam"/>
+            <TextBox Background="#ffb" HorizontalContentAlignment="Center" x:Name="tb_id" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="311,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="77" Height="29" Cursor="IBeam" Text="1" RenderTransformOrigin="0.83,0.374"/>
             <Label Content="id&#xA;" Margin="209,67,0,0" HorizontalAlignment="Left" Width="46" Height="29" VerticalAlignment="Top"/>
             <Label Content="idTracker" Margin="209,99,0,0" HorizontalAlignment="Left" Width="64" Height="27" VerticalAlignment="Top"/>
-            <TextBox Background="#ffb" x:Name="tb_idTracker" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="292,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="113" Height="29" Cursor="IBeam"/>
+            <TextBox Background="#ffb"  HorizontalContentAlignment="Center" x:Name="tb_idTracker" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="311,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="77" Height="30" Cursor="IBeam" Text="1"/>
             <Label Content="idSample" Margin="209,150,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="64"/>
             <TextBox Background="#fff" x:Name="tb_idSample" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Margin="292,150,0,0" Text="..." TextWrapping="Wrap" VerticalAlignment="Top" Width="154" Height="29" Cursor="IBeam"/>
             <Label Content="idPiste" Margin="209,250,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="64"/>
@@ -78,6 +78,46 @@
                         <SkewTransform AngleY="-0.466"/>
                         <RotateTransform/>
                         <TranslateTransform Y="0.325"/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button Content="&lt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_idRIGHT_click" Margin="388,68,0,0" VerticalAlignment="Top" Width="21" Height="24" Cursor="Hand" RenderTransformOrigin="0.5,0.5">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button Content="&lt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_idTRACKERRIGHT_click" Margin="388,102,0,0" VerticalAlignment="Top" Width="21" Height="24" Cursor="Hand" RenderTransformOrigin="0.5,0.5">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button Content="&gt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_idLEFT_click" Margin="290,68,0,0" VerticalAlignment="Top" Width="21" Height="24" Cursor="Hand" RenderTransformOrigin="0.5,0.5">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button Content="&gt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_idTRACKERLEFT_click" Margin="290,102,0,0" VerticalAlignment="Top" Width="21" Height="24" Cursor="Hand" RenderTransformOrigin="0.5,0.5">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
                     </TransformGroup>
                 </Button.RenderTransform>
             </Button>

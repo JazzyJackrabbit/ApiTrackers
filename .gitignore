@@ -4,3 +4,11 @@ libSharpMod
 /source/ApiTrackers/.vs
 
 /source/TestClientTrackers/ClientTest_APITrackers/bin
+/source/TestClientTrackers/ClientTest_APITrackers/obj
+
+/source/ApiTrackers/ApiTrackers/SMTPClient/MailConfig.json
+
+/source/TestClientTrackers/ClientTest_APITrackers/obj/Debug/net5.0-windows/
+source/ApiTrackers/Backup/
+source/ApiTrackers/UpgradeLog.htm
+source/TestClientTrackers/.vs/ClientTest_APITrackers/v16/.suo

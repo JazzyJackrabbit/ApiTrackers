@@ -5,6 +5,8 @@ using ApiTrackers;
 using ApiTrackers.Exceptions;
 using ApiTrackers.DTO_ApiParameters;
 using System.Collections.Generic;
+using MailingTest;
+using MySql.Data.MySqlClient;
 
 namespace ApiRightMusics.Controllers
 {
@@ -12,9 +14,9 @@ namespace ApiRightMusics.Controllers
     [Route("RightMusics")]
     public class RightMusicController : ControllerBase
     {
-        public MainService mainService; //
+        public Main mainService; //
 
-        public RightMusicController(MainService _mainService)
+        public RightMusicController(Main _mainService)
         {
             mainService = _mainService;
         }
@@ -23,7 +25,10 @@ namespace ApiRightMusics.Controllers
         [Route("")]
         public ContentResult GetRightMusic([FromQuery] int idUser = -1, [FromQuery] int idTracker = -1)
         {
-            try { 
+            try {
+
+                mainService.bdd.connectOpen();
+
                 if (idUser < 0 && idTracker < 0) 
                     return new ContentResult()
                     {
@@ -65,7 +70,7 @@ namespace ApiRightMusics.Controllers
                 else                            // Will Return   the specific rightMusic object
                 {
                     RightMusic rightMusic_resp = mainService.bddRightMusics.selectRightMusic(idTracker, idUser);
-                    if(rightMusic_resp!=null)
+                    if (rightMusic_resp!=null)
                         return new ContentResult()
                         {
                             StatusCode = 200,
@@ -87,6 +92,10 @@ namespace ApiRightMusics.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
 
         }
         [Route("")]
@@ -95,26 +104,68 @@ namespace ApiRightMusics.Controllers
         {
             try
             {
-                RightMusic right = dto.toRightMusic();
-                RightMusic rightCheck = mainService.bddRightMusics.createRightMusic(right.right, right.idTracker, right.idUser);
+                mainService.bdd.connectOpen();
+                MySqlTransaction mysqltransaction = mainService.bdd.getSqlConnection().BeginTransaction();
 
-                if (rightCheck != null)
+                try
+                {
+                    RightMusic rightCheck = mainService.bddRightMusics.createRightMusic(dto.toRightMusic());
+
+                    mysqltransaction.Commit();
+
+                    // Check 
+                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker);
+                    User userowner = mainService.bddUser.selectUser(tracker.idUser);
+                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser);
+                    
+                    // Sending Mail
+                    MailService mailService = new();
+                    mailService.sendMail_GivenWriteAccess(tracker, userowner, usergiven);
+
                     return new ContentResult()
                     {
                         StatusCode = 200,
                         Content = ObjectUtils.JsonResponseBuilder(200, rightCheck)
                     };
-                else
-                    throw new Exception();
 
+                }
+                catch (Exception ex1)
+                {
+                    try
+                    {
+                        mysqltransaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+                        if (mysqltransaction.Connection != null)
+                        {
+                            Console.WriteLine("An exception of type " + ex2.GetType() +
+                            " was encountered while attempting to roll back the transaction.");
+                        }
+
+                    }
+
+                    Console.WriteLine("An exception of type " + ex1.GetType() + " was encountered while inserting the data.");
+                    Console.WriteLine("Neither record was written to database.");
+
+                    return new ContentResult()
+                    {
+                        StatusCode = 500,
+                        Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex1.Message)
+                    };
+                }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 return new ContentResult()
                 {
                     StatusCode = 500,
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 
@@ -122,29 +173,71 @@ namespace ApiRightMusics.Controllers
         [HttpPut]
         public ContentResult PutRightMusic([FromBody] RightMusicChangeDTO dto)
         {
-
             try
             {
-                RightMusic right = dto.toRightMusic();
-                RightMusic rightCheck = mainService.bddRightMusics.changeRightMusic(right.right, right.idTracker, right.idUser);
+                mainService.bdd.connectOpen();
+                MySqlTransaction mysqltransaction = mainService.bdd.getSqlConnection().BeginTransaction();
 
-                if (rightCheck != null)
+                try
+                {
+                    RightMusic rightCheck = mainService.bddRightMusics.UpdateRightMusic(dto.toRightMusic());
+
+                    // Check 
+                    Tracker tracker = mainService.bddTracker.selectTracker(rightCheck.idTracker);
+                    User userowner = mainService.bddUser.selectUser(tracker.idUser);
+                    User usergiven = mainService.bddUser.selectUser(rightCheck.idUser);
+
+                    // Sending Mail
+                    MailService mailService = new();
+                    mailService.sendMail_GivenWriteAccess(tracker, userowner, usergiven);
+
+                    mysqltransaction.Commit();
+
                     return new ContentResult()
                     {
                         StatusCode = 200,
                         Content = ObjectUtils.JsonResponseBuilder(200, rightCheck)
                     };
-                else
-                    throw new Exception();
 
+                }
+                catch (Exception ex1)
+                {
+                    try
+                    {
+                        mysqltransaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+                        if (mysqltransaction.Connection != null)
+                        {
+                            Console.WriteLine("An exception of type " + ex2.GetType() +
+                            " was encountered while attempting to roll back the transaction.");
+                        }
+
+                    }
+
+                    Console.WriteLine("An exception of type " + ex1.GetType() + " was encountered while inserting the data.");
+                    Console.WriteLine("Neither record was written to database.");
+
+                    return new ContentResult()
+                    {
+                        StatusCode = 500,
+                        Content = Static.jsonResponseError(500, "Internal Error: " + ex1.Message)
+                    };
+                }
             }
             catch (Exception ex)
             {
+                mainService.bdd.connectClose();
                 return new ContentResult()
                 {
                     StatusCode = 500,
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
       

@@ -12,7 +12,7 @@ namespace ApiTrackers
         public Tracker parentTracker;
 
         [JsonProperty(PropertyName = "idTracker", NullValueHandling = NullValueHandling.Include)]
-        public int idTracker { get { return parentTracker.idTracker; } set { idTracker = parentTracker.idTracker; } }
+        public int idTracker { get { return parentTracker.id; } set { idTracker = parentTracker.id; } }
 
         [JsonProperty(PropertyName = "position")]
         public double position { get; set; }

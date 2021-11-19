@@ -12,9 +12,9 @@ namespace ApiSamples.Controllers
     [Route("Samples")]
     public class SampleController : ControllerBase
     {
-        public MainService mainService; //
+        public Main mainService; //
 
-        public SampleController(MainService _mainService)
+        public SampleController(Main _mainService)
         {
             mainService = _mainService;
         }
@@ -23,7 +23,9 @@ namespace ApiSamples.Controllers
         [Route("")]
         public ContentResult GetSamples()
         {
-            try { 
+            try {
+                mainService.bdd.connectOpen();
+
                 List<Sample> samples = mainService.bddSamples.selectSamples();
 
                 if (samples != null)
@@ -51,13 +53,19 @@ namespace ApiSamples.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         public ContentResult GetSample(int id)
         {
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
                 Sample sample = mainService.bddSamples.selectSample(id);
 
                 if (sample != null)
@@ -80,6 +88,11 @@ namespace ApiSamples.Controllers
                     StatusCode = 500,
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
+
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 
@@ -87,7 +100,10 @@ namespace ApiSamples.Controllers
         [HttpPost]
         public ContentResult CreateSample([FromBody] SampleCreateDTO dto)
         {
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
+
                 Sample sampleToInsert = dto.toSample();
 
                 Sample sampleResp = mainService.bddSamples.insertSample(sampleToInsert);
@@ -113,6 +129,10 @@ namespace ApiSamples.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [HttpDelete]
@@ -121,6 +141,8 @@ namespace ApiSamples.Controllers
         {
             try
             {
+                mainService.bdd.connectOpen();
+
                 int idUser = 1;
                 //TODO AUTHENT TOKEN
 
@@ -161,12 +183,18 @@ namespace ApiSamples.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpPut]
         [Route("")]
         public ContentResult UpdateSample([FromBody] SampleUpdateDTO dto)
         {
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
                 Sample sampleToInsert = dto.toSample();
                  Sample sampleResp = mainService.bddSamples.updateSample(sampleToInsert, dto.id);
 
@@ -190,6 +218,10 @@ namespace ApiSamples.Controllers
                     StatusCode = 500,
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 

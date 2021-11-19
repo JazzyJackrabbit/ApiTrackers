@@ -26,7 +26,7 @@ namespace ApiCells.Controllers
             cellToInsert.effect.id = idEffect;
 
             cellToInsert.surround.id = 0;
-            cellToInsert.parentTracker.idTracker = idTracker;
+            cellToInsert.parentTracker.id = idTracker;
 
             cellToInsert.freqSample = frequence;
             cellToInsert.volume = volume;

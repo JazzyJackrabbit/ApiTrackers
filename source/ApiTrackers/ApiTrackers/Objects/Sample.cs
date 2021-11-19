@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,9 @@ namespace ApiTrackers.Objects
         public string color { get; set; }
         [JsonProperty(PropertyName = "idLogo")]
         public int idLogo { get; set; }
+
+        [JsonIgnore]
+        public Stream streamModule;
 
         public Sample()
         {

@@ -38,7 +38,6 @@ namespace ApiTrackers.Objects
             right = rfm;
             return rfm;
         }
-      
 
     }
 

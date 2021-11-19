@@ -45,16 +45,40 @@ namespace ClientTest_APITrackers
         public SubCellControl makeNoteInsert()
         {
             int _idCell = main.trackerCtrlWindow.insertCell(getIDTrackerInterface());
+            if (_idCell < 0) return null;
+
+            int idSample = 1;
+            string url = null;
+            try { 
+                idSample = Convert.ToInt32(((JObject)main.api().SELECT_Cell(getIDTrackerInterface(), _idCell)).GetValue("idSample"));
+            }
+            catch
+            {
+               
+            }
+            try
+            {
+                url = ((JObject)main.api().SELECT_Sample(idSample)).GetValue("linkSample").ToString();
+            }
+            catch
+            {
+                try { 
+                url = ((JObject)((JArray)main.api().SELECT_Sample(idSample))[0]).GetValue("linkSample").ToString();
+                }
+                catch { }
+            }
+
+            try
+            {
 
 
-            int idSample = Convert.ToInt32(((JObject)main.api().SELECT_Cell(getIDTrackerInterface(), _idCell)).GetValue("idSample"));
-            string url = ((JObject)main.api().SELECT_Sample(idSample)).GetValue("linkSample").ToString();
-
-
-            SubCellControl tcUC = new SubCellControl(main, _idCell, 0, url);
-            tcUC.grid_visible.Visibility = Visibility.Visible;
-            listbox_notes.Items.Add(tcUC);
-            return tcUC;
+                SubCellControl tcUC = new SubCellControl(main, _idCell, 0, url);
+                tcUC.grid_visible.Visibility = Visibility.Visible;
+                listbox_notes.Items.Add(tcUC);
+                return tcUC;
+            }
+            catch { }
+            return null;
         }
         /*
         public SubCellControl makeNoteOnInterfaceOnly(int _idCell, double _vol, double _key)

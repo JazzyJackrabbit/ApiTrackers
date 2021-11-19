@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using ApiTrackers.Objects;
 using ApiTrackers;
 using ApiTrackers.Exceptions;
-using ApiTrackers.DTO_ApiParameters;
 using System.Collections.Generic;
 
 namespace ApiCells.Controllers
@@ -12,9 +10,9 @@ namespace ApiCells.Controllers
     [Route("Cells")]
     public class CellController : ControllerBase
     {
-        public MainService mainService; //
+        public Main mainService; //
 
-        public CellController(MainService _mainService)
+        public CellController(Main _mainService)
         {
             mainService = _mainService;
         }
@@ -23,8 +21,9 @@ namespace ApiCells.Controllers
         [Route("")]
         public ContentResult GetCells([FromQuery] int idTracker = -1, [FromQuery] int id = -1)
         {
-            //TODO idTracker
-            try {
+            try
+            {
+                mainService.bdd.connectOpen();
 
                 if (id < 0)
                 {
@@ -73,17 +72,22 @@ namespace ApiCells.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
 
         [Route("")]
         [HttpPost]
         public ContentResult CreateCell([FromBody] CellCreateDTO dto)
         {
-            //TODO idTracker
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
                 Note cellToInsert = dto.toCell();
 
-                int idTracker = cellToInsert.parentTracker.idTracker;
+                int idTracker = cellToInsert.parentTracker.id;
 
                 Note cellResp = mainService.bddCells.insertCell(cellToInsert);
 
@@ -103,23 +107,25 @@ namespace ApiCells.Controllers
             catch (Exception ex)
             {
                 return new ContentResult()
-        {
-            StatusCode = 500,
-                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
-                };
-    }
-}
+                    {
+                        StatusCode = 500,
+                        Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
+                    };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
+        }
 
         [HttpDelete]
         [Route("")]
         public ContentResult DeleteCell([FromQuery] int id = -1)
         {
-            //TODO idTracker
-
             try
             {
+                mainService.bdd.connectOpen();
                 int idUser = 1;
-                //TODO AUTHENT TOKEN
 
                 if(id<0) return new ContentResult()
                 {
@@ -129,7 +135,7 @@ namespace ApiCells.Controllers
 
                 Note cell = mainService.bddCells.deleteCell(id, idUser);
 
-                int idTracker = cell.parentTracker.idTracker;
+                int idTracker = cell.parentTracker.id;
 
                 if (cell != null)
                     return new ContentResult()
@@ -160,17 +166,22 @@ namespace ApiCells.Controllers
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
+            finally
+            {
+                mainService.bdd.connectClose();
+            }
         }
         [HttpPut]
         [Route("")]
         public ContentResult UpdateCell([FromBody] CellUpdateDTO dto)
         {
-            //TODO idTracker
-            try { 
+            try
+            {
+                mainService.bdd.connectOpen();
                 Note cellToInsert = dto.toCell();
                 Note cellResp = mainService.bddCells.updateCell(cellToInsert, dto.id);
 
-                int idTracker = cellToInsert.parentTracker.idTracker;
+                int idTracker = cellToInsert.parentTracker.id;
 
                 if (cellResp != null)
                     return new ContentResult()
@@ -192,6 +203,10 @@ namespace ApiCells.Controllers
                     StatusCode = 500,
                     Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
+            }
+            finally
+            {
+                mainService.bdd.connectClose();
             }
         }
 

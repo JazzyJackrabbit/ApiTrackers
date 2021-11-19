@@ -1,4 +1,4 @@
-﻿using SharpMod.Song;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace ApiTrackers
         [JsonProperty(PropertyName = "content")]
         public TrackerContent trackerContent { get; set; }
         [JsonProperty(PropertyName = "id")]
-        public int idTracker { get; set; }
+        public int id { get; set; }
         [JsonProperty(PropertyName = "idUser")]
         public int idUser { get; set; }
     }
@@ -53,13 +53,11 @@ namespace ApiTrackers
         [JsonIgnore]
         public IList<Piste> pistes { get; set; }
 
-
         [JsonProperty(PropertyName = "notes", NullValueHandling = NullValueHandling.Include)]
         private IList<Note> notes { get; set; }
 /*        public JArray noteArray { 
             get {
-                string json = Static.ArrayToJsonString_Converter((new Note()).GetType(), pistes[0].notes);
-                return (JArray)JsonConvert.DeserializeObject(json);
+                return Static.ConvertToJArray<Note>(pistes[0].notes);
             } set {
                 string json = Static.ArrayToJsonString_Converter((new Note()).GetType(), pistes[0].notes);
                 noteArray = (JArray)JsonConvert.DeserializeObject(json);

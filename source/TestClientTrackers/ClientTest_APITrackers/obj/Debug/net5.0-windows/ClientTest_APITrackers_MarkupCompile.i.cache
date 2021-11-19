@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\Dev\GITHUB\ApiTrackers\ApiTrackers\source\TestClientTrackers\ClientTest_APITrackers\obj\Debug\net5.0-windows\
+D:\Cours\Webservices\apitracker\source\TestClientTrackers\ClientTest_APITrackers\obj\Debug\net5.0-windows\
 ClientTest_APITrackers
 none
 false
 TRACE;DEBUG;NET;NET5_0;NETCOREAPP
-D:\Dev\GITHUB\ApiTrackers\ApiTrackers\source\TestClientTrackers\ClientTest_APITrackers\App.xaml
-10-574242219
+D:\Cours\Webservices\apitracker\source\TestClientTrackers\ClientTest_APITrackers\App.xaml
+12-16943239
 
-171062569752
-2681762550366
-CellControlWindow.xaml;ListWindow.xaml;MainWindow.xaml;RightMusic.xaml;Sample.xaml;SubCellControl.xaml;SubCellEmptyControl.xaml;Tracker.xaml;TrackerRowUserControl.xaml;User__Window.xaml;
+21754573992
+193-1891726104
+CellControlWindow.xaml;ListWindow.xaml;MainWindow.xaml;RightMusic.xaml;Sample.xaml;SampleAlias.xaml;SubCellControl.xaml;SubCellEmptyControl.xaml;Tracker.xaml;TrackerRowUserControl.xaml;UploadWindow.xaml;User__Window.xaml;
 
 False
 

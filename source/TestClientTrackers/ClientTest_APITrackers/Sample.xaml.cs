@@ -30,7 +30,7 @@ namespace ClientTest_APITrackers
 
         public void clearInterface()
         {
-            tb_id.Text = "";
+            //tb_id.Text = "";
             tb_idLogo.Text = "";
             tb_name.Text = "";
             tb_color.Text = "";
@@ -134,11 +134,11 @@ namespace ClientTest_APITrackers
                 JArray json = (JArray)main.api().SELECT_Samples();
 
                 ListWindow luw = main.getListWindow();
-                luw.lv.Items.Clear();
+                luw.lv.Children.Clear();
                 foreach (JToken jo in json)
                 {
                     JObject jobj = (JObject)jo.ToObject((new JObject()).GetType());
-                    luw.lv.Items.Add(("" + jobj).Replace("\n", ""));
+                    luw.addOnList(jobj);
                 }
                  main.showListWindow(); 
             }
@@ -153,18 +153,49 @@ namespace ClientTest_APITrackers
 
         public MemoryStream loadAudio(string url)
         {
-            byte[] b = getAudioFromURL(url);
-            audioStream = new MemoryStream(b);
-            audioPlayer = new System.Media.SoundPlayer(audioStream);
-
-            return audioStream;
+            try { 
+                byte[] b = getAudioFromURL(url);
+                audioStream = new MemoryStream(b);
+                audioPlayer = new System.Media.SoundPlayer(audioStream);
+                return audioStream;
+            }
+            catch
+            {
+                try
+                {
+                    audioStream = loadAudio(tb_defaultPathLocal.Text + "\\" + url);
+                    return audioStream;
+                }
+                catch
+                {
+                    audioStream = loadAudio(tb_defaultPathLocal.Text);
+                    return audioStream;
+                }
+            }
         }
         public MemoryStream playAudio_Load(string url)
         {
             //if(audioStream==null||audioStream.Length==0)
-            MemoryStream m = loadAudio(url);
-            audioPlayer.Play();
-            return m;
+            try
+            {
+                MemoryStream m = loadAudio(url);
+                audioPlayer.Play();
+
+                return m;
+            }
+            catch 
+            {
+                try { 
+                    MemoryStream m = loadAudio(tb_defaultPathLocal.Text + "\\" + url);
+                    audioPlayer.Play();
+                    return m;
+                }
+                catch {
+                    MemoryStream m = loadAudio(tb_defaultPathLocal.Text);
+                    audioPlayer.Play();
+                    return m;
+                }
+            }
         }
         public void playAudio_Pitch_Load(string url)
         {
@@ -205,6 +236,7 @@ namespace ClientTest_APITrackers
         public void stopAudio()
         {
             audioPlayer.Stop();
+
         }
 
         public byte[] getAudioFromURL(string url)
@@ -271,6 +303,30 @@ namespace ClientTest_APITrackers
             {
                 main.logErr(ex);
             }
+        }
+
+        private void btn_idLeft_click(object sender, RoutedEventArgs e)
+        {
+            try { 
+                tb_id.Text = "" + (Convert.ToInt32(tb_id.Text) - 1);
+                btn_select_click(sender, e);
+            }
+            catch { }
+        }
+
+        private void btn_ifRight_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tb_id.Text = "" + (Convert.ToInt32(tb_id.Text) + 1);
+                btn_select_click(sender, e);
+            }
+            catch { }
+        }
+
+        private void tb_defaultPathLocal_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
         }
     }
 }

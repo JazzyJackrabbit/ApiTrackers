@@ -8,10 +8,10 @@
         Title="RightMusic" Height="171" Width="410">
     <Grid x:Name="grid_content" Background="#bbb" Margin="0,0,0,-48">
         <Grid>
-            <TextBox x:Name="tb_idUser" Background="#fff" HorizontalAlignment="Left" Margin="82,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.127,0.696"/>
+            <TextBox x:Name="tb_idUser" Background="#ffa" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="99,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78" RenderTransformOrigin="-0.127,0.696" Text="1" Cursor="Hand"/>
             <Label Content="idUser" HorizontalAlignment="Left" Margin="10,19,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="tb_idTracker" Background="#fff" HorizontalAlignment="Left" Margin="82,48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.127,0.696"/>
-            <Label Content="idTracker" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="tb_idTracker" Background="#ffa" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="99,48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78" RenderTransformOrigin="-0.127,0.696" Text="1" Cursor="IBeam"/>
+            <Label Content="idTracker" HorizontalAlignment="Left"  Margin="10,48,0,0" VerticalAlignment="Top"/>
             <Label Content="right" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top"/>
             <TextBox x:Name="tb_right" Background="#fff" HorizontalAlignment="Left" Margin="82,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.127,0.696"/>
             <Label Content="&quot;rightValue&quot; db table&#xD;&#xA;            -&quot;Nothing&quot;,&#xD;&#xA;            -&quot;Read&quot;,&#xD;&#xA;            -&quot;Edit&quot;," HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.521,1.886"/>
@@ -20,6 +20,28 @@
             <Button Content="Insert" Click="InsertClick" HorizontalAlignment="Left" Margin="224,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.637,0.454"/>
             <Button Content="Sl by idTracker"  Background="#777" FontSize="10" Click="SelectAllByTrackerClick" HorizontalAlignment="Left" Margin="207,46,0,0" VerticalAlignment="Top" Width="103" Height="28"/>
             <Button Content="Sl by idUser"  Background="#777" FontSize="10" Click="SelectAllByUserClick" HorizontalAlignment="Left" Margin="207,17,0,0" VerticalAlignment="Top" Width="103" Height="28" Cursor="Hand"/>
+            <Button Content="&lt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_idLeftUser_click" Margin="75,18,0,0" VerticalAlignment="Top" Width="21" Height="24" Cursor="Hand"/>
+            <Button Content="&lt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_idRightUser_click" Margin="180,18,0,0" VerticalAlignment="Top" Width="21" Height="24" Cursor="Hand" RenderTransformOrigin="0.5,0.5">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button Content="&lt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_idLeftTracker_click" Margin="75,48,0,0" VerticalAlignment="Top" Width="21" Height="24" Cursor="Hand"/>
+            <Button Content="&lt;" HorizontalAlignment="Left"  Padding="0,0,0,0" Click="btn_idRightTracker_click" Margin="180,48,0,0" VerticalAlignment="Top" Width="21" Height="24" Cursor="Hand" RenderTransformOrigin="0.5,0.5">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
         </Grid>
 
     </Grid>

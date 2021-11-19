@@ -19,9 +19,9 @@
             trackerToInsert.trackerMetadata.title = title;
             trackerToInsert.trackerMetadata.comments = comments;
             trackerToInsert.trackerMetadata.copyrightInformation = coprightInformations;
-
+            //todo: tocheck: trackerToInsert.idTracker = id;
             trackerToInsert.idUser = idUser;
-            trackerToInsert.idTracker = id;
+            trackerToInsert.id = id;
 
             return trackerToInsert;
         }

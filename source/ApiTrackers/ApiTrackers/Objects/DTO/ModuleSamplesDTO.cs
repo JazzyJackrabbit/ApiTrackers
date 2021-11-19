@@ -34,6 +34,8 @@ namespace ApiTrackers.Objects
             player.Init<NoAudio>("temp.wav");
             SharpMik.Module m = player.LoadModule(module);
 
+            if (m == null) return null;
+
             foreach (SAMPLE sample in m.samples)
             {
                 try { 
@@ -90,54 +92,6 @@ namespace ApiTrackers.Objects
 
             };
 
-
-            // module.samples[].
-
-
-
-            //if (module.instruments == null) return new List<Sample>();
-            /*foreach (SharpMik.INSTRUMENT instru in module.instruments)
-            {
-                instru.samplenote = instru.samplenote;
-                instru.samplenote = instru.samplenote;
-
-                int posISample = 0;
-                  foreach (SharpMik.SAMPLE sample in  module.samples)
-                    {
-                    foreach (ushort sampleN in instru.samplenumber)
-                        if (sampleN == posISample)
-                        {
-                            Byte[] sampleBytes = instru.samplenote;
-                            string sampleName = sample.samplename;
-                            short panning = sample.panning;
-                            short volume = sample.volume;
-
-                            Tuple<string, string> fileTuple = filepath(_samplesPath, sampleName);
-                            string pathSample = fileTuple.Item1;
-                            string filenameSample = fileTuple.Item2;
-
-                            if (_makeFiles)
-                                if (!saveDirectorySample(sampleBytes, pathSample))
-                                {
-                                    pathSample = "Unknown";
-                                }
-                                else
-                                    pathSample = "Unknown";
-
-                            Sample sampl = new Sample();
-                            sampl.name = sampleName;
-                            sampl.idLogo = 100; // module
-                            sampl.color = "#dddddd";
-                            sampl.linkSample = pathSample;
-                            sampl.localInstrumentId = posISample;
-
-                            samples.Add(sampl);
-                            posISample++;
-
-                        }
-                  }
-            }
-            */
             return tempSamples;
 
         }

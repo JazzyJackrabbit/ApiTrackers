@@ -9,6 +9,7 @@ namespace ApiTrackers.DTO_ApiParameters
         public string mail { get; set; }
         public string passwordHash { get; set; }
         public int wantReceiveMails { get; set; }
+        public int adminMode { get; set; } = 0;
         public int isEnable { get; set; }
 
 
@@ -16,6 +17,7 @@ namespace ApiTrackers.DTO_ApiParameters
         {
             User user = new User(pseudo, mail, passwordHash);
             user.recoverMails = wantReceiveMails;
+            user.adminMode = adminMode;
             user.isEnable = isEnable;
             return user;
         }

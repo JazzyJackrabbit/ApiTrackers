@@ -25,8 +25,10 @@ namespace ApiTrackers.Objects
         public string passwordHash;
        
         [JsonProperty(PropertyName = "recoverMails")]
-        public int recoverMails = 1; // 0=false  1=true
+        public int recoverMails = 1; // 0=false ; 1=true
 
+        [JsonProperty(PropertyName = "adminMode")]
+        public int adminMode { get; set; }
 
         public User(string _pseudo, string _mail, string _passwordHash)
         {

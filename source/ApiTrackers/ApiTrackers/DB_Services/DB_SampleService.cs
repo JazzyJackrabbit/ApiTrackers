@@ -55,7 +55,6 @@ namespace ApiSamples.Services
             //TODO if idUser => user => admin ?
             int _canControlSamples = 1;
 
-
             int id = getNextId();
             SqlRow sqlRowToInsert = new SqlRow(bdd.tableSamples, false);
 

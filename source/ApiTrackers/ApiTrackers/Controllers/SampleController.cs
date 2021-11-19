@@ -145,7 +145,6 @@ namespace ApiSamples.Controllers
                 mainService.bdd.connectOpen();
 
                 int idUser = 1;
-                //TODO AUTHENT TOKEN
 
                 if (id < 0) return new ContentResult()
                 {

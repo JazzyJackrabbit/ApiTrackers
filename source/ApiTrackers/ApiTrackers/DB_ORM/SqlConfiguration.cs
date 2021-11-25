@@ -73,7 +73,7 @@ namespace ApiTrackers.BDD_Services
                 new SqlAttribut("id","id", typeSql.tInt),
                 new SqlAttribut("idUser","idUser",typeSql.tInt),
                 new SqlAttribut("idTracker","idTracker",typeSql.tInt),
-                new SqlAttribut("canEdit","canEdit",typeSql.tInt),
+                new SqlAttribut("rightValue","rightValue",typeSql.tInt),
             });
         }
     }

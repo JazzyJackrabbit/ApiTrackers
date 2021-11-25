@@ -38,7 +38,9 @@ namespace ApiTrackers.Objects
 
             cells = new List<Note>();
 
-            for(int p = 0; p < moduleSharpMik.patterns.Length; p++)
+            if (moduleSharpMik == null) return cells;
+
+            for (int p = 0; p < moduleSharpMik.patterns.Length; p++)
             {
                 ushort patternsId = moduleSharpMik.patterns[p];
             }

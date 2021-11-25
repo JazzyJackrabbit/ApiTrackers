@@ -10,6 +10,7 @@ using System.Text;
 using System.Linq;
 using System.Web;
 using System.Diagnostics;
+using Newtonsoft.Json.Linq;
 
 namespace ApiTrackers.Controllers
 {
@@ -42,11 +43,19 @@ namespace ApiTrackers.Controllers
                  User userTest = mainService.bddUser.selectUser(1);
                  Module module = new Module(userTest, id_ModArchive);
 
+                List<Sample> samplesMdl = module.getSamples();
 
+                if(samplesMdl == null)
+                    return new ContentResult()
+                    {
+                        StatusCode = 500,
+                        Content = ObjectUtils.JsonResponseBuilder(500, "Samples not found error.")
+                    };
+                
 
                 mainService.bddTracker.insertTracker(module.getTracker());
 
-                foreach(Sample sample in module.getSamples()) { 
+                foreach(Sample sample in samplesMdl) { 
                     mainService.bddSamples.insertSample(sample);
                 }
 
@@ -54,11 +63,12 @@ namespace ApiTrackers.Controllers
                     mainService.bddCells.insertCell(note);
                 
 
+                //JObject samplesJson = new JObject()
 
                 return new ContentResult()
                 {
                     StatusCode = 200,
-                    Content = Static.jsonResponseObject(200, "==> ")
+                    Content = ObjectUtils.JsonResponseBuilder(200, samplesMdl)
                 };
 
             }
@@ -67,7 +77,7 @@ namespace ApiTrackers.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
             finally

@@ -53,7 +53,7 @@ namespace ApiTrackers.DB_ORM
                     {
                         columns += "`" + sqlAttr.name + "`,";
                     }
-                    columns = Static.removeLastCharacter(columns);
+                    columns = ObjectUtils.removeLastCharacter(columns);
                 }
                 columns += " ";
                 string commandString = "SELECT " + columns + " FROM " + sqlTableName + " ";

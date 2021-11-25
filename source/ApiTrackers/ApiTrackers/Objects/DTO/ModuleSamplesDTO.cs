@@ -34,6 +34,7 @@ namespace ApiTrackers.Objects
             player.Init<NoAudio>("temp.wav");
             SharpMik.Module m = player.LoadModule(module);
 
+            if (m == null) return null;
             foreach (SAMPLE sample in m.samples)
             {
                 try { 
@@ -52,7 +53,7 @@ namespace ApiTrackers.Objects
                     {  
                         MemoryStream wavSample = new MemoryStream();
 
-                        Static.WriteWavHeader(wavSample, false, 1, 16, 20000, buffer.Length);
+                        Utils.WriteWavHeader(wavSample, false, 1, 16, 20000, buffer.Length);
 
 
                         for (int i = 0; i < buffer.Length; i++)
@@ -65,7 +66,7 @@ namespace ApiTrackers.Objects
 
                         wavSample.Position = -0;
 
-                        filenameonly = Static.MakeValidFileName(sampleName) + ".wav";
+                        filenameonly = Utils.MakeValidFileName(sampleName) + ".wav";
                         filepathsample = _samplesPath + @"\" + filenameonly;
 
                         sampleApi.streamModule = wavSample;

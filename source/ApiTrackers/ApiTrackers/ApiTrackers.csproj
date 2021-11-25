@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\SharpMik\SharpMik\SharpMikNAudio.csproj" />
+    <ProjectReference Include="D:\Dev\SharpMik-lib c#-changed 1\SharpMik\SharpMikNAudio.csproj" />
   </ItemGroup>
 
 </Project>

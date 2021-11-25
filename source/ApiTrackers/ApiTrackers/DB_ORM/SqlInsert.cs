@@ -23,6 +23,7 @@ namespace ApiTrackers.DB_ORM
         {
             try
             {
+                if (_row == null) return false;
 
                 List<SqlAttribut> sqlAttributsModel = table.attributesModels;
 

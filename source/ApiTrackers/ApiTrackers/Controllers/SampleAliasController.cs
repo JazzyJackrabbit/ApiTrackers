@@ -30,7 +30,7 @@ namespace ApiSampleAliass.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 400,
-                        Content = Static.jsonResponseError(400, "Missing idUser parameter.")
+                        Content = ObjectUtils.JsonResponseBuilder(400, "Missing idUser parameter.")
                     };
 
                 if (idSample < 0) // by User
@@ -42,7 +42,7 @@ namespace ApiSampleAliass.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseArray<SampleAlias>(200, samplesAlias)
+                            Content = ObjectUtils.JsonResponseBuilder(200, samplesAlias)
                         };
                     }
                     else
@@ -50,7 +50,7 @@ namespace ApiSampleAliass.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 404,
-                            Content = Static.jsonResponseError(404, "error getting sampleAliass")
+                            Content = ObjectUtils.JsonResponseBuilder(404, "error getting sampleAliass")
                         };
                     }
                 }
@@ -63,7 +63,7 @@ namespace ApiSampleAliass.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 200,
-                            Content = Static.jsonResponseObject(200, sampleAlias)
+                            Content = ObjectUtils.JsonResponseBuilder(200, sampleAlias)
                         };
                     }
                     else
@@ -71,7 +71,7 @@ namespace ApiSampleAliass.Controllers
                         return new ContentResult()
                         {
                             StatusCode = 404,
-                            Content = Static.jsonResponseError(404, "error getting sampleAliass")
+                            Content = ObjectUtils.JsonResponseBuilder(404, "error getting sampleAliass")
                         };
                     }
                 }
@@ -81,7 +81,7 @@ namespace ApiSampleAliass.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
             finally
@@ -106,13 +106,13 @@ namespace ApiSampleAliass.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, sampleAliasResp)
+                        Content = ObjectUtils.JsonResponseBuilder(200, sampleAliasResp)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error creation sampleAlias")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error creation sampleAlias")
                     };
             }
             catch (Exception ex)
@@ -120,7 +120,7 @@ namespace ApiSampleAliass.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
             finally
@@ -143,17 +143,17 @@ namespace ApiSampleAliass.Controllers
                 if (idSample < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "idSample attribute missing.")
+                    Content = ObjectUtils.JsonResponseBuilder(404, "idSample attribute missing.")
                 };
                 if (idUserTarget < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "idUserTarget attribute missing.")
+                    Content = ObjectUtils.JsonResponseBuilder(404, "idUserTarget attribute missing.")
                 };
                 if (idUserTarget < 0 && idSample < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "idUserTarget and idSample attributes missing.")
+                    Content = ObjectUtils.JsonResponseBuilder(404, "idUserTarget and idSample attributes missing.")
                 };
 
 
@@ -163,13 +163,13 @@ namespace ApiSampleAliass.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, sampleAlias)
+                        Content = ObjectUtils.JsonResponseBuilder(200, sampleAlias)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "unfounded sampleAlias")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "unfounded sampleAlias")
                     };
             }
             catch (ForbiddenException ex)
@@ -177,7 +177,7 @@ namespace ApiSampleAliass.Controllers
                 return new ContentResult()
                 {
                     StatusCode = ex.code,
-                    Content = Static.jsonResponseError(ex.code, ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(ex.code, ex.Message)
                 };
             }
             catch (Exception ex)
@@ -185,7 +185,7 @@ namespace ApiSampleAliass.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
             finally
@@ -208,13 +208,13 @@ namespace ApiSampleAliass.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 200,
-                        Content = Static.jsonResponseObject(200, sampleAliasResp)
+                        Content = ObjectUtils.JsonResponseBuilder(200, sampleAliasResp)
                     };
                 else
                     return new ContentResult()
                     {
                         StatusCode = 404,
-                        Content = Static.jsonResponseError(404, "error modifying sampleAlias")
+                        Content = ObjectUtils.JsonResponseBuilder(404, "error modifying sampleAlias")
                     };
             }
             catch (Exception ex)
@@ -222,7 +222,7 @@ namespace ApiSampleAliass.Controllers
                 return new ContentResult()
                 {
                     StatusCode = 500,
-                    Content = Static.jsonResponseError(500, "Internal Error: " + ex.Message)
+                    Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex.Message)
                 };
             }
             finally

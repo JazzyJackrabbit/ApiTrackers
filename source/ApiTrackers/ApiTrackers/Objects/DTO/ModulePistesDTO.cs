@@ -29,6 +29,7 @@ namespace ApiTrackers.Objects
 
             pistes.Add(new Piste());
 
+            if (_tracker == null) return null;
             _tracker.trackerContent.pistes = pistes;
 
             return pistes;

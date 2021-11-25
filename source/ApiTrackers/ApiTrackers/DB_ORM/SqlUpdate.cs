@@ -50,7 +50,7 @@ namespace ApiTrackers.DB_ORM
                     commandString += "" + sqlAttr.name + " = @" + sqlAttr.name + ",";
 
                 }
-                commandString = Static.removeLastCharacter(commandString);
+                commandString = ObjectUtils.removeLastCharacter(commandString);
 
                 if (_hasfilter1)
                 {

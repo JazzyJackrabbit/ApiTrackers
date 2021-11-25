@@ -34,6 +34,8 @@ namespace ApiTrackers.Objects
             player.Init<NoAudio>("temp.wav");
             SharpMik.Module moduleSharpMik = player.LoadModule(module);
 
+            if (moduleSharpMik == null) return null;
+
             string songName = moduleSharpMik.songname;
             string modType = moduleSharpMik.modtype;
             short speed = moduleSharpMik.initspeed;

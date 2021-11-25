@@ -158,22 +158,22 @@ namespace ApiSamples.Services
                 return null;
             }
                 
-            int idSample = Static.convertToInteger(_sqlrow.GetAttribut("id").value);
-            int idUser = Static.convertToInteger(_sqlrow.GetAttribut("idUser").value);
+            int idSample = Utils.ConvertToInteger(_sqlrow.GetAttribut("id").value);
+            int idUser = Utils.ConvertToInteger(_sqlrow.GetAttribut("idUser").value);
             SampleAlias sample = new SampleAlias(idUser, idSample); 
             
             //test id
-            string idTest = Static.convertToString(_sqlrow.GetAttribut("id").value);
+            string idTest = Utils.ConvertToString(_sqlrow.GetAttribut("id").value);
             if (!int.TryParse(idTest, out _))
             {
                 return null;
             }
 
-            sample.color = Static.convertToString(_sqlrow.GetAttribut("color").value);
-            sample.idLogo = Static.convertToInteger(_sqlrow.GetAttribut("idLogo").value);
-            sample.name = Static.convertToString(_sqlrow.GetAttribut("name").value);
+            sample.color = Utils.ConvertToString(_sqlrow.GetAttribut("color").value);
+            sample.idLogo = Utils.ConvertToInteger(_sqlrow.GetAttribut("idLogo").value);
+            sample.name = Utils.ConvertToString(_sqlrow.GetAttribut("name").value);
 
-            sample.idSample = Static.convertToInteger(_sqlrow.GetAttribut("idSample").value);
+            sample.idSample = Utils.ConvertToInteger(_sqlrow.GetAttribut("idSample").value);
 
             sample.sample = main.bddSamples.selectSample(sample.idSample);
 

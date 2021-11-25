@@ -222,7 +222,7 @@ namespace ApiRightMusics.Controllers
                     return new ContentResult()
                     {
                         StatusCode = 500,
-                        Content = Static.jsonResponseError(500, "Internal Error: " + ex1.Message)
+                        Content = ObjectUtils.JsonResponseBuilder(500, "Internal Error: " + ex1.Message)
                     };
                 }
             }

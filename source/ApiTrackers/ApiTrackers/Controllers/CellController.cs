@@ -119,8 +119,8 @@ namespace ApiCells.Controllers
         }
 
         [HttpDelete]
-        [Route("")]
-        public ContentResult DeleteCell([FromQuery] int id = -1)
+        [Route("{id}")]
+        public ContentResult DeleteCell(int id = -1)
         {
             try
             {

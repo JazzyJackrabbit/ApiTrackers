@@ -143,10 +143,9 @@ namespace ApiTrackers.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
-        public ContentResult DeleteTracker(int id = -1)
+        [Route("")]
+        public ContentResult DeleteTracker([FromQuery] int id = -1, [FromQuery] int idUser = -1)
         {
-            int idUser = 1; // TODO: get token and verification
             try
             {
                 mainService.bdd.connectOpen();

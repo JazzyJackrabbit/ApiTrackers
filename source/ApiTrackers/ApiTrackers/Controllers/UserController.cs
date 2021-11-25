@@ -146,8 +146,8 @@ namespace ApiTrackers.Controllers
             }
         }
         [HttpDelete]
-        [Route("{id}")]
-        public ContentResult DeleteUser(int id = -1)
+        [Route("")]
+        public ContentResult DeleteUser([FromQuery] int id = -1)
         {
             try
             {

@@ -80,7 +80,7 @@ namespace ClientTest_APITrackers
 
         internal JObject DELETE_Cell(int idTracker, int idCell)
         {
-            string url = ServerUrl + "Cells?idTracker=" + idTracker + "&id=" + idCell, resp = "";
+            string url = ServerUrl + "Cells/" + idCell, resp = "";
             main.logLine(">>> URL : " + url);
             HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
             var response = client.DeleteAsync(url).Result;
@@ -163,7 +163,7 @@ namespace ClientTest_APITrackers
 
         internal JObject DELETE_Tracker(int idUser, int idTracker)
         {
-            string url = ServerUrl + "Trackers?idUser="+idUser+"&id="+ idTracker; string resp = "";
+            string url = ServerUrl + "Trackers/"+ idTracker; string resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().DeleteAsync(url).Result;
             if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
@@ -256,7 +256,7 @@ namespace ClientTest_APITrackers
         }
         internal JObject DELETE_User(int idUser)
         {
-            string url = ServerUrl + "Users?id=" + idUser; string resp = "";
+            string url = ServerUrl + "Users/" + idUser; string resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().DeleteAsync(url).Result;
             if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
@@ -340,7 +340,7 @@ namespace ClientTest_APITrackers
         }
         internal JObject DELETE_Sample(int _id)
         {
-            string url = ServerUrl + "Samples?id=" + _id; string resp = "";
+            string url = ServerUrl + "Samples/" + _id; string resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().DeleteAsync(url).Result;
             if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }

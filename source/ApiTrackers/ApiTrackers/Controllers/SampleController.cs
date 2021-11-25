@@ -136,8 +136,8 @@ namespace ApiSamples.Controllers
         }
 
         [HttpDelete]
-        [Route("")]
-        public ContentResult DeleteSample([FromQuery] int id = -1)
+        [Route("{id}")]
+        public ContentResult DeleteSample( int id = -1)
         {
             try
             {

@@ -78,7 +78,7 @@ namespace ApiRightMusics.Services
         public RightMusic UpdateRightMusic(RightMusic _right)
         {
 
-            RightMusic right = selectRightMusic(_right.idTracker, _right.idUser);
+             RightMusic right = selectRightMusic(_right.idTracker, _right.idUser);
             if (right != null)
             {
                 updateRightMusic(_right.right, _right.idTracker, _right.idUser, _right.id);
@@ -165,7 +165,7 @@ namespace ApiRightMusics.Services
                 rightMusic.id = Utils.ConvertToInteger(_sqlrow.GetAttribut("id").value);       
                 rightMusic.idUser = Utils.ConvertToInteger(_sqlrow.GetAttribut("idUser").value);
                 rightMusic.idTracker = Utils.ConvertToInteger(_sqlrow.GetAttribut("idTracker").value);
-                int i = Convert.ToInt32(_sqlrow.GetAttribut("canEdit").value);
+                int i = Convert.ToInt32(_sqlrow.GetAttribut("rightValue").value);
                 rightMusic.SetRight(i);
 
                 return rightMusic;
@@ -185,7 +185,7 @@ namespace ApiRightMusics.Services
                 _sqlDest.SetAttribut("id", _id);
                 _sqlDest.SetAttribut("idUser", _idUser);
                 _sqlDest.SetAttribut("idTracker", _idTracker);
-                _sqlDest.SetAttribut("canEdit", convertRightFM_toInt(_rightforMusic));
+                _sqlDest.SetAttribut("rightValue", convertRightFM_toInt(_rightforMusic));
             }
             catch (Exception ex)
             {

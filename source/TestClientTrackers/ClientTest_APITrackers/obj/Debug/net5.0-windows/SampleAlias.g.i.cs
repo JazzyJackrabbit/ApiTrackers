@@ -133,7 +133,7 @@ namespace ClientTest_APITrackers {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/ClientTest_APITrackers;V1.0.0.0;component/samplealias.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/ClientTest_APITrackers;component/samplealias.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\SampleAlias.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -133,7 +133,7 @@ namespace ApiCells.Services
                 cell.position = Utils.ConvertToInteger(_sqlrow.GetAttribut("position").value);
                 cell.volume = Utils.ConvertToDouble(_sqlrow.GetAttribut("volume").value);
                 cell.effect.id = Utils.ConvertToInteger(_sqlrow.GetAttribut("effect").value);         //todo
-                cell.freqSample = Utils.ConvertToDouble(_sqlrow.GetAttribut("frequence").value);
+                cell.frequence = Utils.ConvertToDouble(_sqlrow.GetAttribut("frequence").value);
                 cell.positionKey = Utils.ConvertToString(_sqlrow.GetAttribut("positionKey").value);
 
                 return cell;
@@ -159,7 +159,7 @@ namespace ApiCells.Services
                 _sqlDest.SetAttribut("position", _cell.position);
                 _sqlDest.SetAttribut("volume", _cell.volume);
                 _sqlDest.SetAttribut("effect", _cell.effect.id);
-                _sqlDest.SetAttribut("frequence", _cell.freqSample);
+                _sqlDest.SetAttribut("frequence", _cell.frequence);
                 _sqlDest.SetAttribut("positionKey", _cell.positionKey);
 
                 if(_id >= 0)

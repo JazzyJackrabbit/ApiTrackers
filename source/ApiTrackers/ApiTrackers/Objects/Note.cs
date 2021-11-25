@@ -19,7 +19,7 @@ namespace ApiTrackers
         [JsonIgnore]
         public Sample sample;
         [JsonProperty(PropertyName = "frequence")]
-        public double freqSample { get; set; }
+        public double frequence { get; set; }
         [JsonProperty(PropertyName = "volume")]
         public double volume { get; set; }
         [JsonIgnore]
@@ -48,7 +48,7 @@ namespace ApiTrackers
             parentTracker = _parentTracker;
             piste                 = _parentPiste;
             position = _position;
-            freqSample = 1;
+            frequence = 1;
             volume = 1;
             effect = new Effect();
             sample = new Sample();
@@ -61,7 +61,7 @@ namespace ApiTrackers
             parentTracker = new Tracker();
             piste = new Piste();
             position = 0;
-            freqSample = 1;
+            frequence = 1;
             volume = 1;
             effect = new Effect();
             sample = new Sample();

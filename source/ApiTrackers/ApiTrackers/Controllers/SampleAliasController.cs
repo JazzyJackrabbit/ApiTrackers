@@ -130,8 +130,8 @@ namespace ApiSampleAliass.Controllers
         }
 
         [HttpDelete]
-        [Route("")]
-        public ContentResult DeleteSampleAlias([FromQuery] int id = -1)
+        [Route("{idSample}/User/{idUserTarget}")]
+        public ContentResult DeleteSampleAlias(int idSample = -1, int idUserTarget =-1)
         {
             try
             {
@@ -140,13 +140,24 @@ namespace ApiSampleAliass.Controllers
                 int idUser = 1;
                 //TODO AUTHENT TOKEN
 
-                if (id < 0) return new ContentResult()
+                if (idSample < 0) return new ContentResult()
                 {
                     StatusCode = 404,
-                    Content = Static.jsonResponseError(404, "id attribute missing.")
+                    Content = Static.jsonResponseError(404, "idSample attribute missing.")
+                };
+                if (idUserTarget < 0) return new ContentResult()
+                {
+                    StatusCode = 404,
+                    Content = Static.jsonResponseError(404, "idUserTarget attribute missing.")
+                };
+                if (idUserTarget < 0 && idSample < 0) return new ContentResult()
+                {
+                    StatusCode = 404,
+                    Content = Static.jsonResponseError(404, "idUserTarget and idSample attributes missing.")
                 };
 
-                SampleAlias sampleAlias = mainService.bddSamplesAlias.deleteSampleAlias(id, idUser);
+
+                SampleAlias sampleAlias = mainService.bddSamplesAlias.deleteSampleAlias(idSample, idUserTarget, idUser);
 
                 if (sampleAlias != null)
                     return new ContentResult()
@@ -191,7 +202,6 @@ namespace ApiSampleAliass.Controllers
                 mainService.bdd.connectOpen();
 
                 SampleAlias sampleAliasToInsert = dto.toSampleAlias();
-                sampleAliasToInsert.id = dto.id;
                 SampleAlias sampleAliasResp = mainService.bddSamplesAlias.updateSampleAlias(sampleAliasToInsert);
 
                 if (sampleAliasResp != null)

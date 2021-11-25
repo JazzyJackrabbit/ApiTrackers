@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj": {}
+    "D:\\Cours\\Webservices\\apitracker\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj": {}
   },
   "projects": {
-    "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj": {
+    "D:\\Cours\\Webservices\\apitracker\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj",
+        "projectUniqueName": "D:\\Cours\\Webservices\\apitracker\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj",
         "projectName": "ClientTest_APITrackers",
-        "projectPath": "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj",
-        "packagesPath": "C:\\Users\\Alexandre\\.nuget\\packages\\",
-        "outputPath": "D:\\Dev\\GITHUB\\ApiTrackers\\ApiTrackers\\source\\TestClientTrackers\\ClientTest_APITrackers\\obj\\",
+        "projectPath": "D:\\Cours\\Webservices\\apitracker\\source\\TestClientTrackers\\ClientTest_APITrackers\\ClientTest_APITrackers.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "D:\\Cours\\Webservices\\apitracker\\source\\TestClientTrackers\\ClientTest_APITrackers\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Alexandre\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -117,12 +117,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[5.0.12, 5.0.12]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -131,7 +125,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,7 +1,0 @@
-﻿{
-  "smtp_server": "smtp.gmail.com",
-  "smtp_port": 587,
-  "smtp_mail": "mail goes here",
-  "smtp_pass": "password goes here",
-  "smtp_name": "Tracker Project"
-}

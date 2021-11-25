@@ -85,7 +85,7 @@ namespace ClientTest_APITrackers {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/ClientTest_APITrackers;V1.0.0.0;component/rightmusic.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/ClientTest_APITrackers;component/rightmusic.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\RightMusic.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

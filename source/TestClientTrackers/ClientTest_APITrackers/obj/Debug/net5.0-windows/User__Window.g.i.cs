@@ -165,7 +165,7 @@ namespace ClientTest_APITrackers {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/ClientTest_APITrackers;V1.0.0.0;component/user__window.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/ClientTest_APITrackers;component/user__window.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\User__Window.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

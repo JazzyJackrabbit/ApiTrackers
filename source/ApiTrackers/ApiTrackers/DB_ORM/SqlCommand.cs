@@ -67,8 +67,8 @@ namespace ApiTrackers.DB_ORM
                 using (MySqlDataReader reader = mysqlcommand.ExecuteReader())
                 {
                     if (reader.HasRows)
-                        if (reader.Read())
-                            id = Convert.ToInt32( reader.GetValue(0) );
+                        if (reader.Read() && !reader.IsDBNull(0))
+                            id = reader.GetInt16(0);
 
                     reader.Close();
                 }

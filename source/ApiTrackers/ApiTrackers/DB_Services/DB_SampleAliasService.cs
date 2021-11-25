@@ -28,7 +28,10 @@ namespace ApiSamples.Services
         }
 
         public int getLastId() { return command.ExecuteReaderMaxId(table.name); }
-        public int getNextId() { return command.ExecuteReaderMaxId(table.name) + 1; }
+        public int getNextId() {
+            int id = command.ExecuteReaderMaxId(table.name);
+            return   id == 0 ? 0 : id + 1; 
+        }
 
         #region ******** public methods ********
 
@@ -72,66 +75,58 @@ namespace ApiSamples.Services
 
         public SampleAlias insertSampleAlias(SampleAlias _sampleAlias)
         {
-            try { 
-                int id = getNextId();
-                SqlRow sqlRowToInsert = new SqlRow(bdd.tableSamplesAlias, false);
+            int id = getNextId();
 
+            SqlRow sqlRowToInsert = convertSampleAliasToSQL(_sampleAlias, id);
 
-                sqlRowToInsert = convertSampleAliasToSQL(sqlRowToInsert, _sampleAlias);
-                sqlRowToInsert.SetAttribut("id", id);
-
-                    if (command.Insert().insert(sqlRowToInsert))
-                    {
-                        SampleAlias checkSampleA = selectSamplesAliasById(id);
-                            if (checkSampleA != null)
-                                return checkSampleA;
-                    }
-                return null;
+            if (command.Insert().insert(sqlRowToInsert))
+            {
+                SampleAlias checkSampleA = selectSamplesAliasById(id);
+                    if (checkSampleA != null)
+                        return checkSampleA;
             }
-            catch {
-                throw new TODOEXCEPTION();
-            }
+            return null;
         }
 
         public SampleAlias updateSampleAlias(SampleAlias _sampleAlias)
         {
 
-            int id = _sampleAlias.id;
 
-            SqlRow sqlRowToUpdate = command.Select().row(true, id);
+            SqlRow sqlRowToUpdate = command.Select().row(true, _sampleAlias.idUser, "idUser",_sampleAlias.idSample, "idSample");
             if (sqlRowToUpdate == null)
             {
                 return null;
             }
+            sqlRowToUpdate = convertSampleAliasToSQL(_sampleAlias);
 
-            sqlRowToUpdate = convertSampleAliasToSQL(sqlRowToUpdate, _sampleAlias);
-            sqlRowToUpdate.SetAttribut("id", id);
-
-            bool checkUpdateCorrectly = command.Update().update(sqlRowToUpdate, id);
+            bool checkUpdateCorrectly = command.Update().update(sqlRowToUpdate, _sampleAlias.idUser, "idUser", _sampleAlias.idSample, "idSample");
             if (!checkUpdateCorrectly)
             {
                 return null;
             }
 
-            SqlRow sqlRowCheck = command.Select().row(true, id);
+            SqlRow sqlRowCheck = command.Select().row(true,_sampleAlias.idUser, "idUser", _sampleAlias.idSample, "idSample");
             SampleAlias sampleUpdated = convertSQLToSampleAlias(sqlRowCheck);
 
             return sampleUpdated;
         }
-        public SampleAlias deleteSampleAlias(int _idUser, int _idSample)
+        public SampleAlias deleteSampleAlias(int _idSample, int _idUserTarget, int _idUser)
         {
 
-            int _canControlSamples = 1;
+            bool _canControlSamples = false;
+
+            _canControlSamples = main.bddUser.selectUser(_idUser).adminMode == User.AdminMode.SuperAdmin
+                || _idUser == _idUserTarget;
 
             SqlRow rowToDelete = command.Select().row(true, _idUser, "idUser", _idSample, "idSample");
                 
             SampleAlias sampleA = convertSQLToSampleAlias(rowToDelete);
 
-            if (_canControlSamples == 1)
+            if (_canControlSamples)
                 if (sampleA != null) {
-                    command.Delete().delete(_idUser, "idUser", _idSample, "idSample");
+                    command.Delete().delete(_idUserTarget, "idUser", _idSample, "idSample");
 
-                    SqlRow rowCheckIsDelete = command.Select().row(true, _idUser, "idUser", _idSample, "idSample");
+                    SqlRow rowCheckIsDelete = command.Select().row(true, _idUserTarget, "idUser", _idSample, "idSample");
 
                     if (rowCheckIsDelete == null)
                     {
@@ -184,9 +179,10 @@ namespace ApiSamples.Services
 
             return sample;
         }
-        private SqlRow convertSampleAliasToSQL(SqlRow _sqlDest, SampleAlias _smpl)
+        private SqlRow convertSampleAliasToSQL(SampleAlias _smpl, int _id=-1)
         {
-            if (_sqlDest == null) return null;
+            SqlRow _sqlDest = new SqlRow(bdd.tableSamplesAlias, false);
+
             if (_smpl == null) return null;
 
             _sqlDest.SetAttribut("idLogo", _smpl.idLogo);
@@ -194,7 +190,10 @@ namespace ApiSamples.Services
             _sqlDest.SetAttribut("color", _smpl.color);
             _sqlDest.SetAttribut("name", _smpl.name);
             _sqlDest.SetAttribut("idUser", _smpl.idUser);
-            _sqlDest.SetAttribut("id", _smpl.id);
+            if(_smpl.id >= 0)
+                _sqlDest.SetAttribut("id", _smpl.id);
+            if(_id >= 0)
+                _sqlDest.SetAttribut("id", _id);
 
             return _sqlDest;
         }

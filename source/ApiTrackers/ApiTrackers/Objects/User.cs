@@ -7,6 +7,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace ApiTrackers.Objects
 {
+
     public class User
     {
         [JsonProperty(PropertyName = "id")]
@@ -27,6 +28,14 @@ namespace ApiTrackers.Objects
         [JsonProperty(PropertyName = "recoverMails")]
         public int recoverMails { get; set; }  = 1; // 0=false  1=true
 
+        public AdminMode adminMode { get; set; } = AdminMode.None;
+
+        public enum AdminMode
+        {
+            None,
+            Admin,
+            SuperAdmin,
+        }
 
         public User(string _pseudo, string _mail, string _passwordHash)
         {
@@ -48,5 +57,8 @@ namespace ApiTrackers.Objects
             passwordHash = _passwordHash;
             recoverMails = _wantRecoverMails;
         }
+
+
     }
+
 }

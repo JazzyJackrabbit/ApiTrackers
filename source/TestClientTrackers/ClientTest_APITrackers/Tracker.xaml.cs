@@ -418,8 +418,6 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                int idTr = Convert.ToInt32(tb_idTracker.Text);
-
                 JObject json = getFromInterface();
                 JObject json_2 = (JObject)main.api().INSERT_Tracker(main.getTrackerId_TRACKER_INTERFACE(), json);
                 setOnInterface(json_2);
@@ -435,9 +433,7 @@ namespace ClientTest_APITrackers
         {
             try
             {
-                int idTr = Convert.ToInt32(tb_idTracker.Text);
-
-                JObject json = main.api().DELETE_Tracker(main.getTrackerId_TRACKER_INTERFACE(), idTr);
+                JObject json = main.api().DELETE_Tracker(1, main.getTrackerId_TRACKER_INTERFACE());
             }
             catch (Exception ex)
             {

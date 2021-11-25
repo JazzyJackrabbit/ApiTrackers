@@ -28,7 +28,7 @@ namespace ApiCells.Controllers
             cellToInsert.surround.id = 0;
             cellToInsert.parentTracker.id = idTracker;
 
-            cellToInsert.freqSample = frequence;
+            cellToInsert.frequence = frequence;
             cellToInsert.volume = volume;
             cellToInsert.position = position;
             cellToInsert.positionKey = positionKey;

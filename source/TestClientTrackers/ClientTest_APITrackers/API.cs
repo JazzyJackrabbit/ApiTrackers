@@ -483,7 +483,7 @@ namespace ClientTest_APITrackers
 
         internal JObject DELETE_SampleAlias(int idUser, int idSample)
         {
-            string url = ServerUrl + "SamplesAlias?idUser=" + idUser + "&idSample=" + idSample, resp = "";
+            string url = ServerUrl + "SamplesAlias/" + idSample + "/User/" + idUser, resp = "";
             main.logLine(">>> URL : " + url);
             var response = new HttpClient().DeleteAsync(url).Result;
             if (!response.IsSuccessStatusCode) { main.logErr(new StreamReader(response.Content.ReadAsStream()).ReadToEnd().ToString()); throw new Exception(response.StatusCode + ": " + response.ReasonPhrase); }
@@ -495,7 +495,7 @@ namespace ClientTest_APITrackers
 
         internal JObject UPDATE_SampleAlias(JObject json)
         {
-            string url = ServerUrl + "RightMusics", resp = "";
+           string url = ServerUrl + "SamplesAlias", resp = "";
             main.logLine(">>> URL : " + url);
             main.logSuite(">>> JObject : " + json.ToString());
             HttpClient client = new HttpClient(); client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");

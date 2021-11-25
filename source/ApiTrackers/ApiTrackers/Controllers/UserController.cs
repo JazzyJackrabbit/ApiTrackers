@@ -13,6 +13,7 @@ using ApiTrackers.ApiParams;
 using ApiTrackers.DTO_ApiParameters;
 using ApiTrackers.Exceptions;
 using System.Net;
+using MySql.Data.MySqlClient;
 
 namespace ApiTrackers.Controllers
 {
@@ -72,11 +73,13 @@ namespace ApiTrackers.Controllers
         [Route("{id}")]
         public ContentResult GetUser(int id)
         {
+            mainService.bdd.connectOpen();
+            MySqlTransaction transaction =  mainService.bdd.sqlConnection.BeginTransaction(System.Data.IsolationLevel.Serializable);
+
             try
             {
-                mainService.bdd.connectOpen();
-                User user = mainService.bddUser.selectUser(id);
-
+                User user= mainService.bddUser.selectUser(id);
+                transaction.Commit();
                 if (user != null)
                     return new ContentResult()
                     {
@@ -92,6 +95,7 @@ namespace ApiTrackers.Controllers
             }
             catch (Exception ex)
             {
+                transaction.Rollback();
                 return new ContentResult()
                 {
                     StatusCode = 500,

@@ -18,7 +18,7 @@ namespace ApiTrackers.Services
         {
             main = _main;
             bdd = _main.bdd;
-            table = bdd.tableCells;
+            table = bdd.tableUsers;
             command = table.command;
         }
 

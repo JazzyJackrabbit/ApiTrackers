@@ -23,7 +23,7 @@ namespace ApiSamples.Services
         {
             main = _main;
             bdd = _main.bdd;
-            table = bdd.tableCells;
+            table = bdd.tableSamples;
             command = table.command;
         }
 

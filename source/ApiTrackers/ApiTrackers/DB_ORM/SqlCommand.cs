@@ -88,7 +88,6 @@ namespace ApiTrackers.DB_ORM
             {
                 MySqlCommand mysqlcommand = new(_sqlCommand, connection);
                 List<SqlRow> sqlRowsResp = new();
-                MySqlDataReader reader = mysqlcommand.ExecuteReader();
 
 
                 if (_attributs != null)
@@ -103,6 +102,7 @@ namespace ApiTrackers.DB_ORM
                 // traitment data rows
                 string sqlTableName = _table.name;
                 List<SqlAttribut> sqlAttributsModel = _table.attributesModels;
+                MySqlDataReader reader = mysqlcommand.ExecuteReader();
 
                 int posI = 0;
                 if (reader.HasRows)
@@ -125,8 +125,9 @@ namespace ApiTrackers.DB_ORM
                         ++posI;
                     }
 
-                reader.Close();
 
+
+                reader.Close();
                 return sqlRowsResp;
             }
             catch (MySqlException ex)
@@ -152,6 +153,8 @@ namespace ApiTrackers.DB_ORM
                     }
                     command.Prepare();
                 }
+
+                command.ExecuteNonQuery();
             }
             catch (MySqlException ex)
             {

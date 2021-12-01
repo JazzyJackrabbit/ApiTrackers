@@ -1,8 +1,8 @@
-First Commit !
+API TRACKER V0.1 
 
-infos coming soon.
+Api for data music tracker in the "Fire Tracker" Format !!
 
-link of the lib:
+link of the libs:
 https://drive.google.com/file/d/1BfJRoyvBWCGtsYJTAp5U8OkaCzbsEKP4/view?usp=sharing
 
 please import the SharpMod_sourceCode / SharpMod.Win / SharpMod.Win.csproj   
